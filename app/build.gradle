@@ -153,4 +153,7 @@ dependencies {
 
     //Image cropper
     implementation 'com.github.CanHub:Android-Image-Cropper:4.3.2'
+
+    //Store
+    implementation "com.dropbox.mobile.store:store4:4.0.5"
 }
