@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.ui.theme
+package com.pawlowski.sportnite.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
