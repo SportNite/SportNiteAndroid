@@ -156,4 +156,7 @@ dependencies {
 
     //Store
     implementation "com.dropbox.mobile.store:store4:4.0.5"
+
+    //Mockk
+    testImplementation "io.mockk:mockk:1.13.2"
 }
