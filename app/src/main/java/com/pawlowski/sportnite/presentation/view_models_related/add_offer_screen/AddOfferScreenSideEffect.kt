@@ -1,0 +1,3 @@
+package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
+
+sealed interface AddOfferScreenSideEffect
