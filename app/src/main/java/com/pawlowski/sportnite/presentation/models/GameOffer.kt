@@ -2,12 +2,12 @@ package com.pawlowski.sportnite.presentation.models
 
 import com.pawlowski.sportnite.utils.UiDate
 
-data class Meeting(
-    val opponent: Player,
-    val sport: Sport,
+data class GameOffer(
+    val owner: Player,
+    val date: UiDate,
     val placeOrAddress: String,
     val city: String,
-    val date: UiDate,
     val additionalNotes: String,
-    val meetingUid: String
+    val sport: Sport,
+    val offerUid: String
 )
