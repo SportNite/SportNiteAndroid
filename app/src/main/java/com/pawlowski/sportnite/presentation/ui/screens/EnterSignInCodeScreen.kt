@@ -9,10 +9,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.LoginLottieAnimation
 import com.pawlowski.sportnite.presentation.ui.reusable_components.TextDivider
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeUiState
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.IEnterSignInCodeScreenViewModel
@@ -21,7 +23,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterSignInCodeScreen(
-    viewModel: IEnterSignInCodeScreenViewModel,
+    viewModel: IEnterSignInCodeScreenViewModel = hiltViewModel<EnterSignInCodeScreenViewModel>(),
     onNavigateToAccountDetailsScreen: () -> Unit = {},
     onNavigateToHomeScreen: () -> Unit = {},
     onNavigateBack: () -> Unit = {},
