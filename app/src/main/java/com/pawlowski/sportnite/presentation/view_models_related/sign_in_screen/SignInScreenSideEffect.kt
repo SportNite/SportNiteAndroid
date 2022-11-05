@@ -1,3 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen
 
+import com.pawlowski.sportnite.utils.UiText
+
 sealed interface SignInScreenSideEffect
+{
+    object NavigateToNextScreen: SignInScreenSideEffect
+    data class DisplayErrorToast(val message: UiText): SignInScreenSideEffect
+}
