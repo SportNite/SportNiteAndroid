@@ -37,6 +37,11 @@ fun EnterSignInCodeScreen(
             uiState.value.phoneNumber
         }
     }
+    val isSendAgainAvailableState = remember {
+        derivedStateOf {
+            uiState.value.isSendAgainAvailable
+        }
+    }
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.container.sideEffectFlow.collect { event ->
@@ -104,7 +109,10 @@ fun EnterSignInCodeScreen(
 
             Button(modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 15.dp), onClick = { viewModel.sendVerificationCodeAgainClick() }) {
+                .padding(horizontal = 15.dp),
+                onClick = { viewModel.sendVerificationCodeAgainClick() },
+                enabled = isSendAgainAvailableState.value
+            ) {
                 Text(text = "Wyślij kod jeszcze raz")
             }
 
