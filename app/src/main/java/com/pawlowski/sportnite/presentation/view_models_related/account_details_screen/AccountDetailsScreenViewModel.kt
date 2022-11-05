@@ -3,6 +3,8 @@ package com.pawlowski.sportnite.presentation.view_models_related.account_details
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -11,24 +13,25 @@ class AccountDetailsScreenViewModel @Inject constructor(): IAccountDetailsScreen
     override val container: Container<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect> =
         container(AccountDetailsScreenUiState())
 
-    override fun changeNameAndSurnameInput(newValue: String) {
-        TODO("Not yet implemented")
+    override fun changeNameAndSurnameInput(newValue: String) = intent {
+        reduce { state.copy(nameAndSurnameInput = newValue) }
     }
 
-    override fun changeDateInput(newValue: String) {
-        TODO("Not yet implemented")
+    override fun changeDateInput(newValue: String) = intent {
+        //reduce { state.copy(dateOfBirthInput = UiDa) }
+        TODO()
     }
 
-    override fun changeIsMaleInput(newValue: Boolean) {
-        TODO("Not yet implemented")
+    override fun changeIsMaleInput(newValue: Boolean) = intent {
+        reduce { state.copy(isMaleInput = newValue) }
     }
 
-    override fun changePhotoInput(newValue: String) {
-        TODO("Not yet implemented")
+    override fun changePhotoInput(newValue: String) = intent {
+        reduce { state.copy(photo = newValue) }
     }
 
-    override fun changeTimeAvailabilityInput(newValue: String) {
-        TODO("Not yet implemented")
+    override fun changeTimeAvailabilityInput(newValue: String) = intent {
+        reduce { state.copy(timeAvailabilityInput = newValue) }
     }
 
     override fun continueClick() {

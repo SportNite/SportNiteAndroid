@@ -3,6 +3,9 @@ package com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_c
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -14,15 +17,18 @@ class EnterSignInCodeScreenViewModel @Inject constructor(
         EnterSignInCodeUiState(phoneNumber = "33333333")
     )
 
-    override fun changeCodeInput(newValue: String) {
-        TODO("Not yet implemented")
+    override fun changeCodeInput(newValue: String) = intent {
+        reduce {
+            state.copy(codeInput = newValue)
+        }
     }
 
     override fun sendVerificationCodeAgainClick() {
         TODO("Not yet implemented")
     }
 
-    override fun confirmCodeClick() {
-        TODO("Not yet implemented")
+    override fun confirmCodeClick() = intent {
+        //TODO("Not yet implemented")
+        postSideEffect(EnterSignInCodeSideEffect.MoveToAccountDetailsScreen)
     }
 }

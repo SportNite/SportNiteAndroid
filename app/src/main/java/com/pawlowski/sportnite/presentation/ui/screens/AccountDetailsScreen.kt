@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,13 +23,14 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.ProfilePictur
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
+import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.IAccountDetailsScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountDetailsScreen(
-    viewModel: IAccountDetailsScreenViewModel = hiltViewModel(),
+    viewModel: IAccountDetailsScreenViewModel = hiltViewModel<AccountDetailsScreenViewModel>(),
     onNavigateBack: () -> Unit = {},
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -83,7 +85,10 @@ fun AccountDetailsScreen(
             Spacer(modifier = Modifier.height(30.dp))
             ProfilePictureWithEditIcon(
                 modifier = Modifier
-                    .align(CenterHorizontally),
+                    .align(CenterHorizontally)
+                    .clickable {
+                               //TODO()
+                    },
                 photoUrl = photoUrlState.value,
                 size = 120.dp
             )

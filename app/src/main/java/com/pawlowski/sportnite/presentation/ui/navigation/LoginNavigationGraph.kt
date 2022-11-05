@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.pawlowski.sportnite.presentation.ui.screens.AccountDetailsScreen
 import com.pawlowski.sportnite.presentation.ui.screens.EnterSignInCodeScreen
 import com.pawlowski.sportnite.presentation.ui.screens.SignInScreen
 
@@ -29,11 +30,14 @@ fun LoginNavigationGraph(
         {
             EnterSignInCodeScreen(onNavigateBack = {
                 navController.popBackStack()
+            },
+            onNavigateToAccountDetailsScreen = {
+                navController.navigate("AccountDetails")
             })
         }
         composable(route = "AccountDetails")
         {
-
+            AccountDetailsScreen(onNavigateBack = { navController.popBackStack() })
         }
         composable(route = "LoggedInRoot")
         {
