@@ -16,9 +16,6 @@ import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.I
 import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,6 +84,8 @@ fun SignInScreen(
                 .padding(horizontal = 15.dp), onClick = { viewModel.sendVerificationCodeClick() }) {
                 Text(text = "Wyślij potwierdzenie SMS")
             }
+
+
         }
     }
 }
@@ -99,11 +98,9 @@ fun SignInScreenPreview()
     SignInScreen(viewModel = object :
         OrbitMviPreviewViewModel<SignInScreenUiState, SignInScreenSideEffect>(),
         ISignInScreenViewModel {
-        override fun stateForPreview(): StateFlow<SignInScreenUiState> {
-            return MutableStateFlow(
-                SignInScreenUiState(
+        override fun stateForPreview(): SignInScreenUiState {
+            return SignInScreenUiState(
 
-            )
             )
         }
 
