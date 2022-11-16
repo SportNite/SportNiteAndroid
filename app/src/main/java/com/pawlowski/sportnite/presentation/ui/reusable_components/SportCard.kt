@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.presentation.models.Sport
@@ -20,7 +21,12 @@ fun SportCard(sport: Sport) {
         .height(80.dp)
         .width(130.dp)) {
         Box(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(modifier = Modifier.fillMaxSize(), model = sport.sportBackgroundUrl, contentDescription = "")
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = sport.sportBackgroundUrl,
+                contentDescription = "",
+                contentScale = ContentScale.FillBounds
+            )
             Text(
                 modifier= Modifier.align(Alignment.BottomCenter),
                 text = sport.sportName.asString(),

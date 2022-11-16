@@ -33,15 +33,36 @@ fun LoginNavigationGraph(
             },
             onNavigateToAccountDetailsScreen = {
                 navController.navigate("AccountDetails")
+                {
+                    launchSingleTop = true
+                }
             })
         }
         composable(route = "AccountDetails")
         {
-            AccountDetailsScreen(onNavigateBack = { navController.popBackStack() })
+            AccountDetailsScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToNextScreen = {
+                    navController.navigate("LoggedInRoot") {
+                        launchSingleTop = true
+                        popUpTo("SignIn") {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(route = "LoggedInRoot")
         {
-
+            LoggedInRootComposable(onNavigateToSignInScreen = {
+                navController.navigate("SignIn")
+                {
+                    launchSingleTop = true
+                    popUpTo("SignIn") {
+                        inclusive = true
+                    }
+                }
+            })
         }
     }
 }

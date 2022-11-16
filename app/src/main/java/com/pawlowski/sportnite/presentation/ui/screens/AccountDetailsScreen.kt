@@ -3,18 +3,13 @@ package com.pawlowski.sportnite.presentation.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
@@ -32,6 +27,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 fun AccountDetailsScreen(
     viewModel: IAccountDetailsScreenViewModel = hiltViewModel<AccountDetailsScreenViewModel>(),
     onNavigateBack: () -> Unit = {},
+    onNavigateToNextScreen: () -> Unit = {}
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val photoUrlState = remember {
@@ -63,6 +59,16 @@ fun AccountDetailsScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collect { event ->
+            when(event) {
+                is AccountDetailsScreenSideEffect.NavigateToNextScreen -> {
+                    onNavigateToNextScreen()
+                }
+            }
+        }
+    }
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
             IconButton(onClick = { onNavigateBack() }) {
@@ -87,7 +93,7 @@ fun AccountDetailsScreen(
                 modifier = Modifier
                     .align(CenterHorizontally)
                     .clickable {
-                               //TODO()
+                        //TODO()
                     },
                 photoUrl = photoUrlState.value,
                 size = 120.dp

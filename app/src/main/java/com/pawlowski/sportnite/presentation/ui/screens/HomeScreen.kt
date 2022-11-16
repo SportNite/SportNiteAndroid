@@ -24,12 +24,13 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
 import com.pawlowski.sportnite.presentation.ui.utils.*
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenUiState
+import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
-fun HomeScreen(viewModel: IHomeScreenViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>()) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val userState = remember {
         derivedStateOf {
