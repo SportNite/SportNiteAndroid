@@ -8,5 +8,11 @@ class UiDate(val offsetDateTimeDate: OffsetDateTime) {
         TODO()
     }
 
+    fun asLocalDateTimeString(): String
+    {
+        //TODO()
+        return "24.11.1989 17:00"
+    }
+
 
 }
