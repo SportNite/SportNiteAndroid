@@ -10,7 +10,9 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInScreenViewModel @Inject constructor(): ISignInScreenViewModel, ViewModel() {
+class SignInScreenViewModel @Inject constructor(
+
+): ISignInScreenViewModel, ViewModel() {
     override val container: Container<SignInScreenUiState, SignInScreenSideEffect> = container(
         SignInScreenUiState()
     )
@@ -25,7 +27,6 @@ class SignInScreenViewModel @Inject constructor(): ISignInScreenViewModel, ViewM
         reduce {
             state.copy(isLoading = true)
         }
-        //TODO("Not yet implemented")
         reduce {
             state.copy(isLoading = false)
         }

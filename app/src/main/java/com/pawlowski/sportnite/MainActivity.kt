@@ -6,18 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.pawlowski.sportnite.presentation.ui.navigation.RootComposable
-import com.pawlowski.sportnite.presentation.ui.screens.SignInScreen
 import com.pawlowski.sportnite.presentation.ui.theme.SportNiteTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        setActivityInstance(this)
         super.onCreate(savedInstanceState)
         setContent {
             SportNiteTheme {
@@ -33,17 +30,35 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
+    companion object {
+        private var mainActivity: MainActivity? = null
+        private val LOCK = Any()
+        fun getInstance(): MainActivity? = synchronized(LOCK) {
+            mainActivity
+        }
+        private fun setActivityInstance(activity: MainActivity?) {
+            synchronized(LOCK) {
+                mainActivity = activity
+            }
+        }
+    }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    SportNiteTheme {
-        Greeting("Android")
+    override fun onResume() {
+        super.onResume()
+        setActivityInstance(this)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        setActivityInstance(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setActivityInstance(null)
     }
 }
+
+
+
