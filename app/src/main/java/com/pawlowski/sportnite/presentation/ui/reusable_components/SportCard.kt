@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.reusable_components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,10 +17,16 @@ import coil.compose.AsyncImage
 import com.pawlowski.sportnite.presentation.models.Sport
 
 @Composable
-fun SportCard(sport: Sport) {
+fun SportCard(
+    sport: Sport,
+    onSportClick: (Sport) -> Unit ={}
+) {
     Card(modifier = Modifier
         .height(80.dp)
-        .width(130.dp)) {
+        .width(130.dp)
+        .clickable {
+            onSportClick(sport)
+        }) {
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),

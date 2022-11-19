@@ -72,7 +72,8 @@ fun HomeScreen(viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewMod
 fun SportsRow(
     modifier: Modifier = Modifier,
     headersPadding: PaddingValues = PaddingValues(),
-    sports: List<Sport>
+    sports: List<Sport>,
+    onSportClick: (Sport) -> Unit = {}
 )
 {
     Column(modifier = modifier) {
@@ -85,7 +86,12 @@ fun SportsRow(
         LazyRow {
             item { Spacer(modifier = Modifier.width(5.dp)) }
             items(3) {
-                SportCard(sport = getSportForPreview())
+                SportCard(
+                    sport = getSportForPreview(),
+                    onSportClick = {
+                        onSportClick(it)
+                    }
+                )
                 Spacer(modifier = Modifier.width(4.dp))
             }
         }

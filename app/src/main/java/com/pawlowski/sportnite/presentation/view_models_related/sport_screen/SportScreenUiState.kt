@@ -7,7 +7,7 @@ import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.utils.UiData
 
 data class SportScreenUiState(
-    val sport: Sport?,
+    val sport: Sport,
     val myMeetings: UiData<List<Meeting>> = UiData.Loading(),
     val otherPlayers: UiData<List<GameOffer>> = UiData.Loading(),
     val gameOffers: UiData<List<GameOffer>> = UiData.Loading(),

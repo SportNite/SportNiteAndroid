@@ -49,3 +49,45 @@ fun getMeetingsListForPreview(): List<Meeting> {
 fun getUserForPreview(): User {
     return User("Mariusz Kowalski", "")
 }
+
+fun getGameOfferForPreview(): GameOffer
+{
+    return GameOffer(
+        owner = getPlayerForPreview(),
+        date = UiDate(OffsetDateTime.of(2023, 10, 24, 17, 0, 0, 0, ZoneOffset.UTC)),
+        placeOrAddress = "Błonia Sport",
+        city = "Kraków",
+        additionalNotes = "Rezerwacja 2h, na mączce",
+        sport = getSportForPreview(),
+        offerUid = "iddddddd"
+    )
+}
+
+fun getGameOfferToAcceptForPreview(): GameOfferToAccept
+{
+    return GameOfferToAccept(
+        offer = getGameOfferForPreview(),
+        offerToAcceptUid = "offerToAcceptUid",
+        from = getPlayerForPreview()
+    )
+}
+
+fun getGameOfferToAcceptListForPreview(): List<GameOfferToAccept>
+{
+    return listOf(
+        getGameOfferToAcceptForPreview(),
+        getGameOfferToAcceptForPreview(),
+        getGameOfferToAcceptForPreview(),
+        getGameOfferToAcceptForPreview()
+    )
+}
+
+fun getGameOfferListForPreview(): List<GameOffer>
+{
+    return listOf(
+        getGameOfferForPreview(),
+        getGameOfferForPreview(),
+        getGameOfferForPreview(),
+        getGameOfferForPreview()
+    )
+}
