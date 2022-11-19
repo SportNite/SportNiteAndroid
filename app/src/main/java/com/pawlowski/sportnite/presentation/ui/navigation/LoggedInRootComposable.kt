@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pawlowski.sportnite.presentation.ui.screens.HomeScreen
+import com.pawlowski.sportnite.presentation.ui.screens.SportScreen
 
 @Composable
 fun LoggedInRootComposable(
@@ -13,7 +14,16 @@ fun LoggedInRootComposable(
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "Home") {
         composable("Home") {
-            HomeScreen()
+            HomeScreen(
+                onNavigateToSportScreen = {
+                    navController.navigate("Sport") {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+        composable("Sport") {
+            SportScreen()
         }
     }
 }

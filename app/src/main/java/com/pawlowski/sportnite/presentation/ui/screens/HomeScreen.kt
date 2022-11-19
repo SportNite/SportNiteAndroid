@@ -30,7 +30,10 @@ import com.pawlowski.sportnite.utils.UiData
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
-fun HomeScreen(viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>()) {
+fun HomeScreen(
+    viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
+    onNavigateToSportScreen: (Sport) -> Unit = {}
+) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val userState = remember {
         derivedStateOf {
@@ -62,7 +65,10 @@ fun HomeScreen(viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewMod
 
             SportsRow(
                 headersPadding = PaddingValues(horizontal = 10.dp),
-                sports = listOf()
+                sports = listOf(),
+                onSportClick = {
+                    onNavigateToSportScreen(it)
+                }
             )
         }
     }

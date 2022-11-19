@@ -15,19 +15,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.GameOfferCard
-import com.pawlowski.sportnite.presentation.ui.utils.*
+import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferListForPreview
+import com.pawlowski.sportnite.presentation.ui.utils.getMeetingsListForPreview
+import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISportScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState
+import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
-fun SportScreen(viewModel: ISportScreenViewModel = hiltViewModel()) {
+fun SportScreen(viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>()) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val sportState = remember {
         derivedStateOf {
@@ -51,6 +53,15 @@ fun SportScreen(viewModel: ISportScreenViewModel = hiltViewModel()) {
                 meetings = getMeetingsListForPreview(),
                 headersPadding = PaddingValues(horizontal = 10.dp)
             )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            GameOffersColumn(
+                offers = getGameOfferListForPreview().take(4),
+                headerText = "Oferty na grę",
+                headersPadding = PaddingValues(horizontal = 10.dp)
+            )
+            Spacer(modifier = Modifier.height(5.dp))
         }
     }
 }
