@@ -29,14 +29,18 @@ import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.Spo
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
-fun SportScreen(viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>()) {
+fun SportScreen(
+    viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>(),
+    modifier: Modifier = Modifier
+) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val sportState = remember {
         derivedStateOf {
             uiState.value.sport
         }
     }
-    Surface(modifier = Modifier.fillMaxSize()) {
+
+    Surface(modifier = modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             SportHeader(sport = sportState.value)
             Spacer(modifier = Modifier.height(5.dp))

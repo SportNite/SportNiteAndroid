@@ -1,8 +1,9 @@
 package com.pawlowski.sportnite.presentation.ui.navigation
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -68,8 +69,6 @@ fun LoggedInRootComposable(
             }
         }
     }) { padding ->
-        padding
-        //TODO: Apply padding to screens
         NavHost(navController = navController, startDestination = "Home") {
             composable("Home") {
                 HomeScreen(
@@ -77,11 +76,14 @@ fun LoggedInRootComposable(
                         navController.navigate("Sport") {
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    modifier = Modifier.padding(padding)
                 )
             }
             composable("Sport") {
-                SportScreen()
+                SportScreen(
+                    modifier = Modifier.padding(padding)
+                )
             }
         }
     }

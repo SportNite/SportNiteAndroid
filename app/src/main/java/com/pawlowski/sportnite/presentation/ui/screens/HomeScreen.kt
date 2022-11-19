@@ -32,6 +32,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 @Composable
 fun HomeScreen(
     viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
+    modifier: Modifier = Modifier,
     onNavigateToSportScreen: (Sport) -> Unit = {}
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -49,7 +50,7 @@ fun HomeScreen(
                 null
         }
     }
-    Surface(Modifier.fillMaxSize()) {
+    Surface(modifier.fillMaxSize()) {
         Column {
             Spacer(modifier = Modifier.height(10.dp))
             ProfileSegment(
