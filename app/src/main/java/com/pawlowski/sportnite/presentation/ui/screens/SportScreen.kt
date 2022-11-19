@@ -1,9 +1,11 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,71 +43,79 @@ fun SportScreen(
     }
 
     Surface(modifier = modifier.fillMaxSize()) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            SportHeader(sport = sportState.value)
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(text = sportState.value.sportName.asString(), fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(5.dp))
-            GameOffersColumn(
+        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+            item {
+                SportHeader(sport = sportState.value)
+            }
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = sportState.value.sportName.asString(), fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+            gameOffersColumnItem(
                 offers = getGameOfferListForPreview().take(3),
                 headerText = "Do akceptacji",
                 headersPadding = PaddingValues(horizontal = 10.dp)
             )
-            Spacer(modifier = Modifier.height(5.dp))
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+            }
 
-            IncomingMeetingsRow(
-                meetings = getMeetingsListForPreview(),
-                headersPadding = PaddingValues(horizontal = 10.dp)
-            )
+            item {
+                IncomingMeetingsRow(
+                    meetings = getMeetingsListForPreview(),
+                    headersPadding = PaddingValues(horizontal = 10.dp)
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+            }
 
-            Spacer(modifier = Modifier.height(5.dp))
-
-            GameOffersColumn(
+            gameOffersColumnItem(
                 offers = getGameOfferListForPreview().take(4),
                 headerText = "Oferty na grę",
                 headersPadding = PaddingValues(horizontal = 10.dp)
             )
-            Spacer(modifier = Modifier.height(5.dp))
+
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+            }
         }
     }
 }
 
-@Composable
-fun GameOffersColumn(
+fun LazyListScope.gameOffersColumnItem(
     offers: List<GameOffer>,
     headerText: String = "Oferty na grę",
     headersPadding: PaddingValues = PaddingValues()
 ) {
-    LazyColumn {
-        item {
-            Row(modifier = Modifier.padding(headersPadding)) {
-                Text(
-                    text = headerText
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "Zobacz wszystkie",
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-        item {
-            Spacer(modifier = Modifier.height(5.dp))
-        }
-        items(offers) {
-            Spacer(modifier = Modifier.height(8.dp))
-            val isExpanded = remember {
-                mutableStateOf(false)
-            }
-            GameOfferCard(
-                gameOffer = it,
-                isExpanded = { isExpanded.value },
-                onExpandClick = {
-                    isExpanded.value = !isExpanded.value
-                }
+    item {
+        Row(modifier = Modifier.padding(headersPadding)) {
+            Text(
+                text = headerText
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "Zobacz wszystkie",
+                color = MaterialTheme.colorScheme.primary
             )
         }
-
+    }
+    item {
+        Spacer(modifier = Modifier.height(5.dp))
+    }
+    items(offers) {
+        Spacer(modifier = Modifier.height(8.dp))
+        val isExpanded = rememberSaveable(offers) {
+            mutableStateOf(false)
+        }
+        GameOfferCard(
+            gameOffer = it,
+            isExpanded = { isExpanded.value },
+            onExpandClick = {
+                isExpanded.value = !isExpanded.value
+            }
+        )
     }
 }
 
