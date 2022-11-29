@@ -47,7 +47,7 @@ fun getMeetingsListForPreview(): List<Meeting> {
 }
 
 fun getUserForPreview(): User {
-    return User("Mariusz Kowalski", "")
+    return User("Mariusz Kowalski", "https://images.unsplash.com/photo-1620000617482-821324eb9a14?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2ZpbGUlMjBpbWFnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60")
 }
 
 fun getGameOfferForPreview(): GameOffer

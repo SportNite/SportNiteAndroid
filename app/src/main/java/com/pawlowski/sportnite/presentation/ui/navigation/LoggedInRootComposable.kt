@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.presentation.ui.screens.AddOfferScreen
 import com.pawlowski.sportnite.presentation.ui.screens.HomeScreen
 import com.pawlowski.sportnite.presentation.ui.screens.SportScreen
 
@@ -62,7 +63,11 @@ fun LoggedInRootComposable(
     floatingActionButton = {
         if(currentRoute.value == "Sport")
         {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {
+                navController.navigate("AddOffer") {
+                    launchSingleTop = true
+                }
+            }) {
                 Icon(painter = painterResource(id = R.drawable.add_icon),
                     contentDescription = ""
                 )
@@ -84,6 +89,11 @@ fun LoggedInRootComposable(
                 SportScreen(
                     modifier = Modifier.padding(padding)
                 )
+            }
+            composable("AddOffer") {
+                AddOfferScreen(onNavigateBack = {
+                    navController.popBackStack()
+                })
             }
         }
     }
