@@ -19,6 +19,8 @@ import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
+import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
+import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
 import com.pawlowski.sportnite.utils.UiDate
@@ -78,21 +80,8 @@ fun AddOfferScreen(
             DateInputField(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 onClick = {
-                    MaterialDialog(context).show {
-                        dateTimePicker(show24HoursView = true, requireFutureDateTime = true) { _, datetime ->
-                            val year = datetime.get(Calendar.YEAR)
-                            val month = datetime.get(Calendar.MONTH)
-                            val day = datetime.get(Calendar.DAY_OF_MONTH)
-                            val hour = datetime.get(Calendar.HOUR_OF_DAY)
-                            val minute = datetime.get(Calendar.MINUTE)
-                            val offsetDateTime = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, ZoneId
-                                .systemDefault()
-                                .rules
-                                .getOffset(
-                                    Instant.now()
-                                ))
-                            viewModel.changeDateTimeInput(UiDate(offsetDateTime))
-                        }
+                    showDateTimePicker(context) {
+                        viewModel.changeDateTimeInput(UiDate(it))
                     }
                 },
                 icon = {

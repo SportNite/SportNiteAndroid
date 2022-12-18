@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,10 +17,13 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputFiel
 import com.pawlowski.sportnite.presentation.ui.reusable_components.GenderInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.ProfilePictureWithEditIcon
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
+import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.IAccountDetailsScreenViewModel
+import com.pawlowski.sportnite.utils.UiDate
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,13 +118,17 @@ fun AccountDetailsScreen(
             )
 
             Spacer(modifier = Modifier.height(15.dp))
-
+            val context = LocalContext.current
             DateInputField(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    showDatePicker(context = context) {
+                        viewModel.changeDateInput(UiDate(it))
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                dateText = "Data urodzenia"
+                dateText = dateOfBirthInputState.value?.asLocalDateString()?:"Data urodzenia"
             )
 
             Spacer(modifier = Modifier.height(15.dp))
@@ -183,7 +191,7 @@ fun AccountDetailsScreenPreview() {
             TODO("Not yet implemented")
         }
 
-        override fun changeDateInput(newValue: String) {
+        override fun changeDateInput(newValue: UiDate) {
             TODO("Not yet implemented")
         }
 

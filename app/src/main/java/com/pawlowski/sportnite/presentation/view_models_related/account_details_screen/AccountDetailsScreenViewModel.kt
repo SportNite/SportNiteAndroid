@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.utils.UiDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -18,9 +19,10 @@ class AccountDetailsScreenViewModel @Inject constructor(): IAccountDetailsScreen
         reduce { state.copy(nameAndSurnameInput = newValue) }
     }
 
-    override fun changeDateInput(newValue: String) = intent {
-        //reduce { state.copy(dateOfBirthInput = UiDa) }
-        TODO()
+    override fun changeDateInput(newValue: UiDate) = intent {
+        reduce {
+            state.copy(dateOfBirthInput = newValue)
+        }
     }
 
     override fun changeIsMaleInput(newValue: Boolean) = intent {
