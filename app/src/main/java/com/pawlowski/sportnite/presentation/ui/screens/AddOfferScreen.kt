@@ -3,21 +3,62 @@ package com.pawlowski.sportnite.presentation.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
+import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
+import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
+import com.pawlowski.sportnite.utils.UiDate
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddOfferScreen(
+    viewModel: IAddOfferScreenViewModel = hiltViewModel<AddOfferScreenViewModel>(),
     onNavigateBack: () -> Unit = {}
 ) {
+
+    val uiState = viewModel.container.stateFlow.collectAsState()
+    val placeOrAddressState = remember {
+        derivedStateOf {
+            uiState.value.placeOrAddressInput
+        }
+    }
+
+    val meetingDateTimeState = remember {
+        derivedStateOf {
+            uiState.value.meetingDateTime
+        }
+    }
+
+    val cityInputState = remember {
+        derivedStateOf {
+            uiState.value.cityInput
+        }
+    }
+
+    val additionalNotesState = remember {
+        derivedStateOf {
+            uiState.value.additionalNotesInput
+        }
+    }
+
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -33,17 +74,34 @@ fun AddOfferScreen(
                 )
             }
             Spacer(modifier = Modifier.height(15.dp))
-
+            val context = LocalContext.current
             DateInputField(
                 modifier = Modifier.padding(horizontal = 15.dp),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    MaterialDialog(context).show {
+                        dateTimePicker(show24HoursView = true, requireFutureDateTime = true) { _, datetime ->
+                            val year = datetime.get(Calendar.YEAR)
+                            val month = datetime.get(Calendar.MONTH)
+                            val day = datetime.get(Calendar.DAY_OF_MONTH)
+                            val hour = datetime.get(Calendar.HOUR_OF_DAY)
+                            val minute = datetime.get(Calendar.MINUTE)
+                            val offsetDateTime = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, ZoneId
+                                .systemDefault()
+                                .rules
+                                .getOffset(
+                                    Instant.now()
+                                ))
+                            viewModel.changeDateTimeInput(UiDate(offsetDateTime))
+                        }
+                    }
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar_icon),
                         contentDescription = ""
                     )
                 },
-                dateText = "Kliknij aby wybrać czas spotkania"
+                dateText = meetingDateTimeState.value?.asLocalDateTimeString()?:"Kliknij aby wybrać czas spotkania"
             )
             Spacer(modifier = Modifier.height(15.dp))
 
@@ -59,9 +117,9 @@ fun AddOfferScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
-                value = "",
+                value = cityInputState.value,
                 onValueChange = {
-
+                    viewModel.changeCityInput(it)
                 },
                 label = {
                     Text(text = "Miasto")
@@ -75,9 +133,9 @@ fun AddOfferScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
-                value = "",
+                value = placeOrAddressState.value,
                 onValueChange = {
-
+                    viewModel.changePlaceOrAddressInput(it)
                 },
                 label = {
                     Text(text = "Miejsce lub adres")
@@ -92,9 +150,9 @@ fun AddOfferScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
-                value = "",
+                value = additionalNotesState.value,
                 onValueChange = {
-
+                    viewModel.changeAdditionalNotesInput(it)
                 },
                 label = {
                     Text(text = "Dodatkowe informacje")
@@ -107,8 +165,10 @@ fun AddOfferScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             Button(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
-                onClick = { /*TODO*/ }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                onClick = { viewModel.addOfferClick() }
             ) {
                 Text(text = "Dodaj ofertę")
             }
