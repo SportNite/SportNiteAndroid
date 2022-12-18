@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id "com.apollographql.apollo"
 }
 
 android {
@@ -48,6 +49,10 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+}
+
+apollo {
+    generateKotlinModels.set(true)
 }
 
 dependencies {
@@ -159,4 +164,9 @@ dependencies {
 
     //Mockk
     testImplementation "io.mockk:mockk:1.13.2"
+
+    //Apollo GraphQL
+    implementation "com.apollographql.apollo3:apollo-runtime:3.7.2"
+    implementation "com.apollographql.apollo:apollo-coroutines-support:2.4.6"
+
 }

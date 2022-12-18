@@ -88,7 +88,7 @@ fun SportsRow(
         Row(modifier = Modifier.padding(headersPadding)) {
             Text(text = "Twoje sporty")
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "Zobacz wszystkie")
+            Text(text = "Zobacz wszystkie", color = MaterialTheme.colorScheme.primary)
         }
         Spacer(modifier = Modifier.height(5.dp))
         LazyRow {
@@ -146,7 +146,7 @@ fun IncomingMeetingsRow(
         Row(modifier = Modifier.padding(headersPadding)) {
             Text(text = "Nadchodzące spotkania")
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "Zobacz wszystkie")
+            Text(text = "Zobacz wszystkie", color = MaterialTheme.colorScheme.primary)
         }
         Spacer(modifier = Modifier.height(5.dp))
         LazyRow {

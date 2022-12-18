@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.di
 
 import android.app.Application
 import android.content.Context
+import com.apollographql.apollo3.ApolloClient
 import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.sportnite.MainActivity
 import com.pawlowski.sportnite.data.auth.AuthManager
@@ -37,4 +38,10 @@ class AppModule {
     @Singleton
     @Provides
     fun authManager(authManager: AuthManager): IAuthManager = authManager
+
+    @Singleton
+    @Provides
+    fun apolloClient(): ApolloClient = ApolloClient.Builder()
+        .serverUrl(serverUrl = "")
+        .build()
 }
