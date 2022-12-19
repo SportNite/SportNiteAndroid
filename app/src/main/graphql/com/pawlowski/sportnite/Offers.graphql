@@ -1,0 +1,14 @@
+query Offers {
+  offers {
+    nodes {
+      offerId,
+      userId,
+      description,
+      dateTime,
+      latitude,
+      longitude,
+      sport,
+      isAvailable,
+    }
+  }
+}

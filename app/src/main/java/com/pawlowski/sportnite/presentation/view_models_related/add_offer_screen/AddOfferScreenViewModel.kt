@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
 import androidx.lifecycle.ViewModel
+import com.apollographql.apollo3.ApolloClient
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.utils.UiDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +54,9 @@ class AddOfferScreenViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun addOfferClick() {
-        TODO("Not yet implemented")
+    override fun addOfferClick() = intent {
+        //val response = apolloClient.mutation(CreateOfferMutation(CreateOfferInput(dateTime = "2022-12-22 15", latitude = 10.5, longitude = 10.5, sport = SportType.TENNIS, placeId = 0))).execute()
+        //Log.d("response", response.data?.createOffer?.offerId?.toString()?:"")
     }
+
 }
