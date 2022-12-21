@@ -9,5 +9,5 @@ data class AddOfferScreenUiState(
     val cityInput: String = "",
     val placeOrAddressInput: String = "",
     val additionalNotesInput: String = "",
-    val isLoading: Boolean = true
+    val isLoading: Boolean = false
     )

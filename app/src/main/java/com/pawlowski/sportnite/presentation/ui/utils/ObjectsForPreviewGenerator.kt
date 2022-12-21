@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.presentation.ui.utils
 
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.models.*
+import com.pawlowski.sportnite.type.SportType
 import com.pawlowski.sportnite.utils.UiDate
 import com.pawlowski.sportnite.utils.UiText
 import java.time.OffsetDateTime
@@ -21,7 +22,7 @@ fun getSportForPreview(): Sport {
     return Sport(
         sportName = UiText.NonTranslatable("Tenis ziemny"),
         sportBackgroundUrl = "https://images.unsplash.com/photo-1499510318569-1a3d67dc3976?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80",
-        sportId = "idddd",
+        sportId = "tennis",
         sportIconId = R.drawable.tennis_icon
     )
 }

@@ -1,11 +1,9 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,9 +19,11 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputFiel
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
 import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
 import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
+import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
 import com.pawlowski.sportnite.utils.UiDate
+import kotlinx.coroutines.flow.collectLatest
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -35,6 +35,20 @@ fun AddOfferScreen(
     viewModel: IAddOfferScreenViewModel = hiltViewModel<AddOfferScreenViewModel>(),
     onNavigateBack: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collectLatest { event ->
+            when(event) {
+                is AddOfferScreenSideEffect.ShowToast -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+                is AddOfferScreenSideEffect.ShowToastAndChangeScreen -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                    onNavigateBack()
+                }
+            }
+        }
+    }
 
     val uiState = viewModel.container.stateFlow.collectAsState()
     val placeOrAddressState = remember {
@@ -58,6 +72,18 @@ fun AddOfferScreen(
     val additionalNotesState = remember {
         derivedStateOf {
             uiState.value.additionalNotesInput
+        }
+    }
+
+    val sportState = remember {
+        derivedStateOf {
+            uiState.value.sport
+        }
+    }
+
+    val isLoadingState = remember {
+        derivedStateOf {
+            uiState.value.isLoading
         }
     }
 
@@ -96,7 +122,7 @@ fun AddOfferScreen(
 
             SportInputField(
                 modifier = Modifier.padding(horizontal = 15.dp),
-                chosenSport = null,
+                chosenSport = sportState.value,
                 onClick = {
                     //TODO
                 }
@@ -157,6 +183,7 @@ fun AddOfferScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
+                enabled = !isLoadingState.value,
                 onClick = { viewModel.addOfferClick() }
             ) {
                 Text(text = "Dodaj ofertę")
