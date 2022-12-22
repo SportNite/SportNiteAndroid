@@ -45,7 +45,7 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<GameOfferToAccept>> {
+    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
         TODO("Not yet implemented")
     }
 
