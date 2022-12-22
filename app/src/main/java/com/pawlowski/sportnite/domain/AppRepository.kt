@@ -4,10 +4,7 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
-import com.pawlowski.sportnite.CreateOfferMutation
-import com.pawlowski.sportnite.CreateResponseMutation
-import com.pawlowski.sportnite.OffersQuery
-import com.pawlowski.sportnite.ResponsesQuery
+import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
 import com.pawlowski.sportnite.data.mappers.toGameOfferList
 import com.pawlowski.sportnite.data.mappers.toSportType
@@ -112,6 +109,12 @@ class AppRepository @Inject constructor(
         })
     }
 
+    override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
+        return executeApolloMutation(request = {
+            apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
+        })
+    }
+
     private suspend fun <T: Operation.Data>executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
         onDataSuccessfullyReceived: (T) -> Unit = {},
@@ -131,9 +134,5 @@ class AppRepository @Inject constructor(
                 Resource.Error(message = UiText.NonTranslatable(response?.errors?.firstOrNull()?.message?:"Request error"))
             }
         }
-    }
-
-    override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        TODO("Not yet implemented")
     }
 }
