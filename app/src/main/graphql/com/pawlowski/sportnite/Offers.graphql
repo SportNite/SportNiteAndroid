@@ -1,14 +1,22 @@
 query Offers {
-  offers {
+  offers(where: {
+    isAvailable: {
+      eq: true
+    }
+  }) {
     nodes {
       offerId,
       userId,
       description,
       dateTime,
-      latitude,
-      longitude,
       sport,
       isAvailable,
+      city,
+      street,
+      user {
+        name,
+        userId
+      }
     }
   }
 }

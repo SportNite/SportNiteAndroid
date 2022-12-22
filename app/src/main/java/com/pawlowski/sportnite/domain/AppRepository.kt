@@ -2,8 +2,13 @@ package com.pawlowski.sportnite.domain
 
 import android.util.Log
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.CreateOfferMutation
+import com.pawlowski.sportnite.OffersQuery
+import com.pawlowski.sportnite.ResponsesQuery
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
+import com.pawlowski.sportnite.data.mappers.toGameOfferList
+import com.pawlowski.sportnite.data.mappers.toSportType
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.utils.Resource
@@ -12,6 +17,7 @@ import com.pawlowski.sportnite.utils.UiText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,8 +27,9 @@ class AppRepository @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher
 ): IAppRepository {
-    override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
-        TODO("Not yet implemented")
+    override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
+        emit(UiData.Loading())
+        //TODO
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -41,12 +48,29 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
-        TODO("Not yet implemented")
+    override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
+        emit(UiData.Loading())
+        val response = try {
+            apolloClient.query(OffersQuery()).execute()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        response?.data?.toGameOfferList()?.let {
+            emit(UiData.Success(isFresh = true, data = it))
+        }
     }
 
-    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
-        TODO("Not yet implemented")
+    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> = flow {
+        emit(UiData.Loading())
+        //Optional.presentIfNotNull(sportFilter?.toSportType())
+        val response = try {
+            apolloClient.query(ResponsesQuery(sportFilter!!.toSportType())).execute()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        response?.data
     }
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {

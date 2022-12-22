@@ -1,0 +1,5 @@
+mutation CreateResponse($responseInput: CreateResponseInput!) {
+  createResponse(input: $responseInput) {
+    responseId
+  }
+}

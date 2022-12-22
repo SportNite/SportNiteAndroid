@@ -1,0 +1,5 @@
+mutation DeleteOffer($offerId: UUID!) {
+  deleteOffer(id: $offerId) {
+    offerId
+  }
+}

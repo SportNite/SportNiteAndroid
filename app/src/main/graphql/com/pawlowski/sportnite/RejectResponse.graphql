@@ -1,0 +1,5 @@
+mutation RejectResponse($responseId: UUID!) {
+  rejectResponse(id: $responseId) {
+    responseId
+  }
+}

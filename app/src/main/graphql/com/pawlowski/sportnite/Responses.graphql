@@ -1,0 +1,27 @@
+query Responses($sportFilter: SportType!) {
+  myOffers(where: {
+    sport: {
+      eq: $sportFilter
+    }
+  }) {
+    nodes {
+      responses {
+        responseId,
+        offerId,
+        user {
+          userId,
+          name
+        },
+        description,
+        offer {
+          description,
+          dateTime,
+          sport,
+          isAvailable,
+          city,
+          street
+        }
+      }
+    }
+  }
+}

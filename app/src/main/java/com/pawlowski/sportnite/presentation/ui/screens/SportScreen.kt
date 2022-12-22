@@ -28,6 +28,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISp
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
+import com.pawlowski.sportnite.utils.UiData
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -39,6 +40,24 @@ fun SportScreen(
     val sportState = remember {
         derivedStateOf {
             uiState.value.sport
+        }
+    }
+
+    val offersDataState = remember {
+        derivedStateOf {
+            uiState.value.gameOffers
+        }
+    }
+
+    val offersValueState = remember {
+        derivedStateOf {
+            val offersValue = offersDataState.value
+            if(offersValue is UiData.Success)
+            {
+                offersValue.data
+            }
+            else
+                listOf()
         }
     }
 
@@ -72,7 +91,7 @@ fun SportScreen(
             }
 
             gameOffersColumnItem(
-                offers = getGameOfferListForPreview().take(4),
+                offers = offersValueState.value.take(4),
                 headerText = "Oferty na grę",
                 headersPadding = PaddingValues(horizontal = 10.dp)
             )

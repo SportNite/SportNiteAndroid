@@ -1,6 +1,22 @@
-query Me {
+query Me{
   me {
-    userId
-    firebaseUserId
+    userId,
+    firebaseUserId,
+    avatar,
+    name,
+    birthDate,
+    sex,
+    city,
+    availability,
+    bio,
+    skills {
+      skillId,
+      sport,
+      level,
+      years,
+      weight,
+      height,
+      nrtp
+    }
   }
 }
