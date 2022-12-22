@@ -20,7 +20,8 @@ import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 fun GameOfferCard(
     gameOffer: GameOffer,
     isExpanded: () -> Boolean = {false},
-    onExpandClick: () -> Unit = {}
+    onTextButtonClick: () -> Unit = {},
+    onExpandClick: (GameOffer) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -50,7 +51,7 @@ fun GameOfferCard(
             Spacer(modifier = Modifier.width(5.dp))
             Text(text = gameOffer.date.asLocalDateTimeString())
             Spacer(modifier = Modifier.width(10.dp))
-            IconButton(onClick = { onExpandClick() }) {
+            IconButton(onClick = { onExpandClick(gameOffer) }) {
                 Icon(painter = painterResource(id = R.drawable.arrow_down), contentDescription = "")
             }
         }
@@ -82,7 +83,7 @@ fun GameOfferCard(
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { onTextButtonClick() }
                 ) {
                     Text(text = "Akceptuj propozycję")
                 }

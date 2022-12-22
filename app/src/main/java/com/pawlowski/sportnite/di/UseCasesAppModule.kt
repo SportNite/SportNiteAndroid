@@ -1,10 +1,7 @@
 package com.pawlowski.sportnite.di
 
 import com.pawlowski.sportnite.domain.IAppRepository
-import com.pawlowski.sportnite.presentation.use_cases.AddGameOfferUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetGameOffersUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetOffersToAcceptUseCase
+import com.pawlowski.sportnite.presentation.use_cases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +27,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getIncomingMeetingsUseCase(appRepository: IAppRepository): GetIncomingMeetingsUseCase = GetIncomingMeetingsUseCase(appRepository::getIncomingMeetings)
+
+    @Singleton
+    @Provides
+    fun sendGameOfferToAcceptUseCase(appRepository: IAppRepository): SendGameOfferToAcceptUseCase = SendGameOfferToAcceptUseCase(appRepository::sendOfferToAccept)
 }

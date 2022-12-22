@@ -1,4 +1,5 @@
 package com.pawlowski.sportnite.presentation.ui.screens
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -11,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.GameOfferCard
@@ -36,6 +39,19 @@ fun SportScreen(
     viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>(),
     modifier: Modifier = Modifier
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collect { event ->
+            when(event) {
+                is SportScreenSideEffect.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     val uiState = viewModel.container.stateFlow.collectAsState()
     val sportState = remember {
         derivedStateOf {
@@ -61,7 +77,30 @@ fun SportScreen(
         }
     }
 
+    val offersToAcceptDataState = remember {
+        derivedStateOf {
+            uiState.value.offersToAccept
+        }
+    }
+
+    val offersToAcceptValueState = remember {
+        derivedStateOf {
+            val offersToAcceptValue = offersToAcceptDataState.value
+            if(offersToAcceptValue is UiData.Success)
+            {
+                offersToAcceptValue.data
+            }
+            else
+                listOf()
+        }
+    }
+
     Surface(modifier = modifier.fillMaxSize()) {
+
+        val offersToAcceptMapped = remember(offersToAcceptValueState.value) {
+            offersToAcceptValueState.value.map { it.asGameOffer() }.take(3)
+        }
+
         LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
             item {
                 SportHeader(sport = sportState.value)
@@ -71,8 +110,9 @@ fun SportScreen(
                 Text(text = sportState.value.sportName.asString(), fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(5.dp))
             }
+
             gameOffersColumnItem(
-                offers = getGameOfferListForPreview().take(3),
+                offers = offersToAcceptMapped,
                 headerText = "Do akceptacji",
                 headersPadding = PaddingValues(horizontal = 10.dp)
             )
@@ -93,7 +133,10 @@ fun SportScreen(
             gameOffersColumnItem(
                 offers = offersValueState.value.take(4),
                 headerText = "Oferty na grę",
-                headersPadding = PaddingValues(horizontal = 10.dp)
+                headersPadding = PaddingValues(horizontal = 10.dp),
+                onOfferTextButtonClick = {
+                    viewModel.sendGameOfferToAccept(it)
+                }
             )
 
             item {
@@ -106,8 +149,9 @@ fun SportScreen(
 fun LazyListScope.gameOffersColumnItem(
     offers: List<GameOffer>,
     headerText: String = "Oferty na grę",
-    headersPadding: PaddingValues = PaddingValues()
-) {
+    headersPadding: PaddingValues = PaddingValues(),
+    onOfferTextButtonClick: (GameOffer) -> Unit = {},
+    ) {
     item {
         Row(modifier = Modifier.padding(headersPadding)) {
             Text(
@@ -133,6 +177,9 @@ fun LazyListScope.gameOffersColumnItem(
             isExpanded = { isExpanded.value },
             onExpandClick = {
                 isExpanded.value = !isExpanded.value
+            },
+            onTextButtonClick = {
+                onOfferTextButtonClick(it)
             }
         )
     }
@@ -175,6 +222,7 @@ fun SportScreenPreview() {
 
             )
         }
+        override fun sendGameOfferToAccept(gameOffer: GameOffer) {}
 
     })
 }

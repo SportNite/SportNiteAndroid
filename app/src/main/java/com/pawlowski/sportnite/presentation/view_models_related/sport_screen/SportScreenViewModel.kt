@@ -2,14 +2,18 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetGameOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetOffersToAcceptUseCase
+import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
+import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.syntax.simple.repeatOnSubscription
 import org.orbitmvi.orbit.viewmodel.container
@@ -20,9 +24,22 @@ class SportScreenViewModel @Inject constructor(
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getGameOffersUseCase: GetGameOffersUseCase,
     private val getOffersToAcceptUseCase: GetOffersToAcceptUseCase,
+    private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportForPreview() //TODO
+
+
+    override fun sendGameOfferToAccept(gameOffer: GameOffer) = intent {
+        val result = sendGameOfferToAcceptUseCase(gameOffer.offerUid)
+        if(result is Resource.Success) {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message = offerToAcceptSuccessText))
+        }
+        else if(result is Resource.Error) {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message = defaultRequestError))
+        }
+    }
+
     override val container: Container<SportScreenUiState, SportScreenSideEffect> = container(
         initialState = SportScreenUiState(currentSport)
     )
