@@ -4,6 +4,7 @@ import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.OffersQuery
 import com.pawlowski.sportnite.ResponsesQuery
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Player
@@ -13,6 +14,7 @@ import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.type.CreateOfferInput
 import com.pawlowski.sportnite.type.SportType
+import com.pawlowski.sportnite.type.UpdateUserInput
 import com.pawlowski.sportnite.utils.UiDate
 import java.time.OffsetDateTime
 
@@ -73,6 +75,12 @@ fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
             it.toGameOfferToAccept()
         }
     }
+}
+
+fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
+    return UpdateUserInput(
+        name = Optional.present(name)
+    )
 }
 
 fun Sport.toSportType(): SportType {

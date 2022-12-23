@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.domain
 
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiData
@@ -21,5 +22,6 @@ interface IAppRepository {
     suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit>
     suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>
     suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit>
+    suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
 
 }

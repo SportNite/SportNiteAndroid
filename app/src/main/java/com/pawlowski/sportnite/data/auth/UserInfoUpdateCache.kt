@@ -19,7 +19,6 @@ class UserInfoUpdateCache @Inject constructor(
 ){
     suspend fun didUserAddInfo(userId: String): Resource<Boolean> {
         return if(sharedPreferences.contains("userInfo")) {
-            Log.d("here", "here")
             Resource.Success(sharedPreferences.getBoolean("userInfo", false))
         } else {
             checkValueFromApi()
@@ -28,6 +27,10 @@ class UserInfoUpdateCache @Inject constructor(
 
     fun markUserInfoAsSaved() {
         sharedPreferences.edit().putBoolean("userInfo", true).apply()
+    }
+
+    fun deleteUserInfoCache() {
+        sharedPreferences.edit().remove("userInfo").apply()
     }
 
     private suspend fun checkValueFromApi(): Resource<Boolean>
@@ -41,7 +44,6 @@ class UserInfoUpdateCache @Inject constructor(
                 Resource.Success(result)
             }
             catch (e: Exception) {
-
                 Resource.Error(UiText.NonTranslatable(""))
             }
         }

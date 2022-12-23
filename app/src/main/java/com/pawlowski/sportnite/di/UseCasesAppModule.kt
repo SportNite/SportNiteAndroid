@@ -31,4 +31,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun sendGameOfferToAcceptUseCase(appRepository: IAppRepository): SendGameOfferToAcceptUseCase = SendGameOfferToAcceptUseCase(appRepository::sendOfferToAccept)
+
+    @Singleton
+    @Provides
+    fun updateUserInfoUseCase(appRepository: IAppRepository): UpdateUserInfoUseCase = UpdateUserInfoUseCase(appRepository::updateUserInfo)
 }

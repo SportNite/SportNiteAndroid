@@ -8,7 +8,9 @@ import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
 import com.pawlowski.sportnite.data.mappers.toGameOfferList
 import com.pawlowski.sportnite.data.mappers.toSportType
+import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.utils.Resource
@@ -116,6 +118,12 @@ class AppRepository @Inject constructor(
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
         return executeApolloMutation(request = {
             apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
+        })
+    }
+
+    override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
+        return executeApolloMutation(request = {
+            apolloClient.mutation(UpdateUserMutation(params.toUpdateUserInput())).execute()
         })
     }
 

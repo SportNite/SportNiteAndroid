@@ -1,6 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
+import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
+import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
@@ -11,7 +14,9 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountDetailsScreenViewModel @Inject constructor(): IAccountDetailsScreenViewModel, ViewModel() {
+class AccountDetailsScreenViewModel @Inject constructor(
+    private val updateUserInfoUseCase: UpdateUserInfoUseCase,
+): IAccountDetailsScreenViewModel, ViewModel() {
     override val container: Container<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect> =
         container(AccountDetailsScreenUiState())
 
@@ -39,7 +44,16 @@ class AccountDetailsScreenViewModel @Inject constructor(): IAccountDetailsScreen
 
     override fun continueClick() = intent {
         //TODO: Validate inputs
-        postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
+
+        val currentState = state
+        val result = updateUserInfoUseCase(UserUpdateInfoParams(name = currentState.nameAndSurnameInput))
+        //TODO add loading
+        if(result is Resource.Success) {
+            postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
+        }
+        else {
+            //TODO add errir
+        }
     }
 
     override fun backClick() {
