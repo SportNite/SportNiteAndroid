@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.di
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpHeader
 import com.google.firebase.auth.FirebaseAuth
@@ -60,5 +61,9 @@ class AppModule {
     @Provides
     fun appRepository(appRepository: AppRepository): IAppRepository = appRepository
 
-
+    @Singleton
+    @Provides
+    fun sharedPreferences(appContext: Context): SharedPreferences {
+        return appContext.getSharedPreferences("SportNitePreferences", Context.MODE_PRIVATE)
+    }
 }

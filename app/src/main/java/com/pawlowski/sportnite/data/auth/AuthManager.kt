@@ -136,4 +136,5 @@ class AuthManager @Inject constructor(
     override fun getUserPhone(): String {
         return auth.currentUser?.phoneNumber.orEmpty()
     }
+
 }

@@ -23,7 +23,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 fun SignInScreen(
     viewModel: ISignInScreenViewModel = hiltViewModel<SignInScreenViewModel>(),
     onNavigateToEnterSignInCodeScreen: () -> Unit = {},
-    onNavigateToSignedInScreen: () -> Unit = {},
+    onNavigateToWaitingForUserInfoScreen: () -> Unit = {},
 )
 {
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -43,7 +43,7 @@ fun SignInScreen(
                     Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
                 }
                 is SignInScreenSideEffect.NavigateToSignedInScreen -> {
-                    onNavigateToSignedInScreen()
+                    onNavigateToWaitingForUserInfoScreen()
                 }
             }
         }

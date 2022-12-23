@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.pawlowski.sportnite.presentation.ui.screens.AccountDetailsScreen
 import com.pawlowski.sportnite.presentation.ui.screens.EnterSignInCodeScreen
 import com.pawlowski.sportnite.presentation.ui.screens.SignInScreen
+import com.pawlowski.sportnite.presentation.ui.screens.WaitingForUserInfoScreen
 
 
 @Composable
@@ -24,6 +25,15 @@ fun LoginNavigationGraph(
                 {
                     launchSingleTop = true
                 }
+            },
+            onNavigateToWaitingForUserInfoScreen = {
+                navController.navigate("WaitingForUserInfo")
+                {
+                    launchSingleTop = true
+                    popUpTo("SignIn") {
+                        inclusive = true
+                    }
+                }
             })
         }
         composable(route = "EnterCode")
@@ -31,12 +41,36 @@ fun LoginNavigationGraph(
             EnterSignInCodeScreen(onNavigateBack = {
                 navController.popBackStack()
             },
-            onNavigateToAccountDetailsScreen = {
-                navController.navigate("AccountDetails")
+            onNavigateToWaitingForUserInfoScreen = {
+                navController.navigate("WaitingForUserInfo")
                 {
                     launchSingleTop = true
+                    popUpTo("SignIn") {
+                        inclusive = true
+                    }
                 }
             })
+        }
+        composable(route = "WaitingForUserInfo") {
+            WaitingForUserInfoScreen(
+                onNavigateToAccountDetailsScreen = {
+                    navController.navigate("AccountDetails")
+                    {
+                        launchSingleTop = true
+                        popUpTo("SignIn") {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateToHomeScreen = {
+                    navController.navigate("LoggedInRoot") {
+                        launchSingleTop = true
+                        popUpTo("SignIn") {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(route = "AccountDetails")
         {

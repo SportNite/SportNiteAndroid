@@ -24,7 +24,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 @Composable
 fun EnterSignInCodeScreen(
     viewModel: IEnterSignInCodeScreenViewModel = hiltViewModel<EnterSignInCodeScreenViewModel>(),
-    onNavigateToAccountDetailsScreen: () -> Unit = {},
+    onNavigateToWaitingForUserInfoScreen: () -> Unit = {},
     onNavigateToHomeScreen: () -> Unit = {},
     onNavigateBack: () -> Unit = {},
     ) {
@@ -52,7 +52,7 @@ fun EnterSignInCodeScreen(
                     onNavigateToHomeScreen()
                 }
                 is EnterSignInCodeSideEffect.MoveToAccountDetailsScreen -> {
-                    onNavigateToAccountDetailsScreen()
+                    onNavigateToWaitingForUserInfoScreen()
                 }
                 is EnterSignInCodeSideEffect.ShowErrorToast -> {
                     Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()

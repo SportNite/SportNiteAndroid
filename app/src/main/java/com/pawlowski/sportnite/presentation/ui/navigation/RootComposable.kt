@@ -18,5 +18,5 @@ fun RootComposable(
         startDestination = if(!isLoggedInValue)
             "SignIn"
         else
-            "LoggedInRoot")
+            "WaitingForUserInfo")
 }
