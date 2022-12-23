@@ -1,10 +1,7 @@
 package com.pawlowski.sportnite.presentation.ui.navigation
 
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.rememberNavController
 
 @Composable
@@ -14,9 +11,11 @@ fun RootComposable(
 {
     val controller = rememberNavController()
 
-
+    val isLoggedInValue = remember {
+        isUserLoggedIn()
+    }
     LoginNavigationGraph(navController = controller,
-        startDestination = if(!isUserLoggedIn())
+        startDestination = if(!isLoggedInValue)
             "SignIn"
         else
             "LoggedInRoot")

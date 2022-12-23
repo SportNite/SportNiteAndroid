@@ -3,9 +3,10 @@ package com.pawlowski.sportnite.data.auth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface IAuthManager {
-    val signUpState: MutableStateFlow<AuthResponse>
+    val signUpState: StateFlow<AuthResponse>
     fun authenticate(phone: String)
     fun onCodeSent(
         verificationId: String,

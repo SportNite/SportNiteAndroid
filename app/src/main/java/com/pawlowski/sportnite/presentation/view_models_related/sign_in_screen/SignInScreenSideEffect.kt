@@ -5,5 +5,7 @@ import com.pawlowski.sportnite.utils.UiText
 sealed interface SignInScreenSideEffect
 {
     object NavigateToNextScreen: SignInScreenSideEffect
+    object NavigateToSignedInScreen: SignInScreenSideEffect
+
     data class DisplayErrorToast(val message: UiText): SignInScreenSideEffect
 }

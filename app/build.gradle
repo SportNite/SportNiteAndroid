@@ -136,6 +136,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 //    //Firebase analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    //SafetyNet
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 
     //Firebase coroutines support
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'

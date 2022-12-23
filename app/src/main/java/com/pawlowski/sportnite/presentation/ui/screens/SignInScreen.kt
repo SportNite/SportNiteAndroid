@@ -22,7 +22,8 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 @Composable
 fun SignInScreen(
     viewModel: ISignInScreenViewModel = hiltViewModel<SignInScreenViewModel>(),
-    onNavigateToEnterSignInCodeScreen: () -> Unit = {}
+    onNavigateToEnterSignInCodeScreen: () -> Unit = {},
+    onNavigateToSignedInScreen: () -> Unit = {},
 )
 {
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -40,6 +41,9 @@ fun SignInScreen(
                 }
                 is SignInScreenSideEffect.DisplayErrorToast -> {
                     Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+                is SignInScreenSideEffect.NavigateToSignedInScreen -> {
+                    onNavigateToSignedInScreen()
                 }
             }
         }

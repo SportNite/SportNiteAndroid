@@ -1,23 +1,29 @@
 package com.pawlowski.sportnite.data.auth
 
 import android.util.Log
+import com.google.android.gms.auth.api.Auth
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.pawlowski.sportnite.MainActivity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AuthManager @Inject constructor(
     private val auth: FirebaseAuth,
     mainActivity: MainActivity
 ): IAuthManager {
     private val TAG = this::class.java.simpleName
 
-    var verificationOtp: String = ""
-    var resentToken: PhoneAuthProvider.ForceResendingToken? = null
-    override val signUpState: MutableStateFlow<AuthResponse> =
+    private var verificationOtp: String = ""
+    private var resentToken: PhoneAuthProvider.ForceResendingToken? = null
+
+    override val signUpState: StateFlow<AuthResponse> get() = _signUpState
+    private val _signUpState: MutableStateFlow<AuthResponse> =
         MutableStateFlow(AuthResponse.NotInitialized)
 
 
@@ -30,39 +36,37 @@ class AuthManager @Inject constructor(
                 TAG,
                 "onVerificationCompleted: Verification completed."
             )
-            signUpState.value =
+            _signUpState.value =
                 AuthResponse.Loading(message = "")
             // Use obtained credential to sign in user
             signInWithAuthCredential(credential)
         }
 
         override fun onVerificationFailed(exception: FirebaseException) {
-            when (exception) {
-                is FirebaseAuthInvalidCredentialsException -> {
-                    signUpState.value =
-                        AuthResponse.Error(exception)
+//            when (exception) {
+//                is FirebaseAuthInvalidCredentialsException -> {
+//                    signUpState.value =
+//                        AuthResponse.Error(exception)
+//
+//                }
+//                is FirebaseTooManyRequestsException -> {
+//                    signUpState.value =
+//                        AuthResponse.Error(exception)
+//
+//                }
+//                else -> {
+            _signUpState.value = AuthResponse.Error(exception)
 
-                }
-                is FirebaseTooManyRequestsException -> {
-                    signUpState.value =
-                        AuthResponse.Error(exception)
-
-                }
-                else -> {
-                    signUpState.value = AuthResponse.Error(exception)
-
-                }
-            }
+//                }
+//            }
 
         }
 
-        override fun onCodeSent(code: String, token:
-        PhoneAuthProvider.ForceResendingToken) {
+        override fun onCodeSent(code: String, token: PhoneAuthProvider.ForceResendingToken) {
             super.onCodeSent(code, token)
             verificationOtp = code
             resentToken = token
-            signUpState.value = AuthResponse.Loading(message =
-            "Wysłano kod")
+            _signUpState.value = AuthResponse.Loading(message = "Wysłano kod")
         }
 
     }
@@ -77,19 +81,18 @@ class AuthManager @Inject constructor(
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.i(TAG, "signInWithAuthCredential:The sign in succeeded ")
-                    signUpState.value =
+                    _signUpState.value =
                         AuthResponse.Success(message = "success")
                 } else {
 
 
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         Log.e(TAG, "invalid code")
-                        signUpState.value =
-                            AuthResponse.Error(exception = task.exception)
+                        _signUpState.value = AuthResponse.Error(exception = task.exception)
 
                         return@addOnCompleteListener
                     } else {
-                        signUpState.value = AuthResponse.Error(task.exception)
+                        _signUpState.value = AuthResponse.Error(task.exception)
                         Log.e(TAG, "signInWithAuthCredential: Error ${task.exception?.message}")
 
                     }
@@ -101,7 +104,7 @@ class AuthManager @Inject constructor(
 
 
     override fun authenticate(phone: String) {
-        signUpState.value =
+        _signUpState.value =
             AuthResponse.Loading("Kod zostanie wysłany na numer $phone")
         val options = authBuilder
             .setPhoneNumber(phone)

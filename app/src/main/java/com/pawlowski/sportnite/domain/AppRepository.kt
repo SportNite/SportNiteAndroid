@@ -14,6 +14,7 @@ import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.sportnite.utils.defaultRequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -104,6 +105,9 @@ class AppRepository @Inject constructor(
                 CreateResponseInput(offerId = offerUid, description = "")
             )).execute()
         },
+        validateResult = {
+             it.createResponse?.responseId != null
+        },
         onDataSuccessfullyReceived = {
             Log.d("New response id", it.createResponse?.responseId.toString())
         })
@@ -117,6 +121,7 @@ class AppRepository @Inject constructor(
 
     private suspend fun <T: Operation.Data>executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
+        validateResult: (T) -> Boolean = {true},
         onDataSuccessfullyReceived: (T) -> Unit = {},
     ): Resource<Unit> {
         return withContext(ioDispatcher) {
@@ -126,6 +131,18 @@ class AppRepository @Inject constructor(
                 ensureActive()
                 e.printStackTrace()
                 null
+            }
+            if(!response?.errors.isNullOrEmpty())
+            {
+                val message = response?.errors?.map {
+                    it.message
+                }?.reduce { acc, s -> "$acc$s " }
+                return@withContext Resource.Error(UiText.NonTranslatable("Error: $message"))
+            }
+            val responseData = response?.data
+            if(responseData != null && !validateResult(responseData))
+            {
+                return@withContext Resource.Error(defaultRequestError)
             }
             return@withContext response?.data?.let {
                 onDataSuccessfullyReceived(it)
