@@ -3,8 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.account_details
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -43,16 +42,40 @@ class AccountDetailsScreenViewModel @Inject constructor(
     }
 
     override fun continueClick() = intent {
-        //TODO: Validate inputs
-
+        //TODO: Validate more inputs
         val currentState = state
-        val result = updateUserInfoUseCase(UserUpdateInfoParams(name = currentState.nameAndSurnameInput))
+        if(currentState.isLoading)
+            return@intent
+
+        reduce {
+            state.copy(isLoading = true)
+        }
+        if(currentState.nameAndSurnameInput.trim().isEmpty() || currentState.dateOfBirthInput == null)
+        {
+            postSideEffect(AccountDetailsScreenSideEffect.ShowToastMessage(someFieldsMissingText))
+            reduce {
+                state.copy(isLoading = false)
+            }
+            return@intent
+        }
+
+        val result = updateUserInfoUseCase(UserUpdateInfoParams(
+            name = currentState.nameAndSurnameInput.trim(),
+            birthDate = currentState.dateOfBirthInput,
+            availability = currentState.timeAvailabilityInput.trim(),
+            photoUrl = currentState.photo
+        ))
+
+
         //TODO add loading
         if(result is Resource.Success) {
             postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
         }
         else {
-            //TODO add errir
+            //TODO add error
+        }
+        reduce {
+            state.copy(isLoading = false)
         }
     }
 

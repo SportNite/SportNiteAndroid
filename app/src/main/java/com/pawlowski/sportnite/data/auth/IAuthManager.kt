@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.data.auth
 
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.pawlowski.sportnite.presentation.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,5 +23,4 @@ interface IAuthManager {
 
     fun onVerificationFailed(exception: Exception)
     fun getUserPhone(): String
-
 }

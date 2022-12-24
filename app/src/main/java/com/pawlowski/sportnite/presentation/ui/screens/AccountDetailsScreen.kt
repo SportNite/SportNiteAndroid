@@ -1,7 +1,11 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -63,18 +67,27 @@ fun AccountDetailsScreen(
         }
     }
 
+    val isLoadingState = remember {
+        derivedStateOf {
+            uiState.value.isLoading
+        }
+    }
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.container.sideEffectFlow.collect { event ->
             when(event) {
                 is AccountDetailsScreenSideEffect.NavigateToNextScreen -> {
                     onNavigateToNextScreen()
                 }
+                is AccountDetailsScreenSideEffect.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             IconButton(onClick = { onNavigateBack() }) {
                 Icon(painter = painterResource(id = R.drawable.back_icon), contentDescription = "")
             }
@@ -132,14 +145,52 @@ fun AccountDetailsScreen(
             )
 
             Spacer(modifier = Modifier.height(15.dp))
-
+            val isGenderChooseDialogVisible = remember {
+                mutableStateOf(false)
+            }
             GenderInputField(
-                onClick = {},
+                onClick = {
+                    isGenderChooseDialogVisible.value = true
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 isMale = isMaleInputState.value,
             )
+
+            if(isGenderChooseDialogVisible.value)
+            {
+                AlertDialog(
+                    onDismissRequest = {
+                        isGenderChooseDialogVisible.value = false
+                    },
+                    text = {
+                        Text(text = "Wybierz swoją płeć")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.changeIsMaleInput(true)
+                                isGenderChooseDialogVisible.value = false
+
+                            }
+                        ) {
+                            Text(text = "Mężczyzna")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.changeIsMaleInput(false)
+                                isGenderChooseDialogVisible.value = false
+
+                            }
+                        ) {
+                            Text(text = "Kobieta")
+                        }
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(15.dp))
 
@@ -169,9 +220,13 @@ fun AccountDetailsScreen(
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp), onClick = { viewModel.continueClick() }) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                onClick = { viewModel.continueClick() },
+                enabled = !isLoadingState.value
+            ) {
                 Text(text = "Kontynuuj")
             }
         }

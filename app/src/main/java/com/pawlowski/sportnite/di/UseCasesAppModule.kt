@@ -35,4 +35,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun updateUserInfoUseCase(appRepository: IAppRepository): UpdateUserInfoUseCase = UpdateUserInfoUseCase(appRepository::updateUserInfo)
+
+    @Singleton
+    @Provides
+    fun getInfoAboutMeUseCase(appRepository: IAppRepository): GetInfoAboutMeUseCase = GetInfoAboutMeUseCase(appRepository::getInfoAboutMe)
 }

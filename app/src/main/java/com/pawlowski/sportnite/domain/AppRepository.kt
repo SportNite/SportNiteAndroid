@@ -5,6 +5,8 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.pawlowski.sportnite.*
+import com.pawlowski.sportnite.data.auth.IAuthManager
+import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
 import com.pawlowski.sportnite.data.mappers.toGameOfferList
 import com.pawlowski.sportnite.data.mappers.toSportType
@@ -28,6 +30,8 @@ import javax.inject.Singleton
 @Singleton
 class AppRepository @Inject constructor(
     private val apolloClient: ApolloClient,
+    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val authManager: IAuthManager,
     private val ioDispatcher: CoroutineDispatcher
 ): IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
@@ -92,6 +96,10 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override fun getInfoAboutMe(): User? {
+        TODO(" Ask UserInfoUpdateCache")
+    }
+
     override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
         return executeApolloMutation(request = {
             apolloClient.mutation(CreateOfferMutation(gameParams.toCreateOfferInput())).execute()
@@ -122,9 +130,11 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
-        return executeApolloMutation(request = {
+        val result = executeApolloMutation(request = {
             apolloClient.mutation(UpdateUserMutation(params.toUpdateUserInput())).execute()
         })
+        userInfoUpdateCache.markUserInfoAsSaved()
+        return result
     }
 
     private suspend fun <T: Operation.Data>executeApolloMutation(

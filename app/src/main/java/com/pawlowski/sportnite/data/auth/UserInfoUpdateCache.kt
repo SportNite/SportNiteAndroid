@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.pawlowski.sportnite.MeQuery
+import com.pawlowski.sportnite.presentation.models.User
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiText
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,6 +24,10 @@ class UserInfoUpdateCache @Inject constructor(
         } else {
             checkValueFromApi()
         }
+    }
+
+    fun getCachedUserInfo(): User {
+        TODO()
     }
 
     fun markUserInfoAsSaved() {

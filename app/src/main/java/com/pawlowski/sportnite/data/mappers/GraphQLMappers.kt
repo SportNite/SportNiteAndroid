@@ -79,7 +79,10 @@ fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
 
 fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
     return UpdateUserInput(
-        name = Optional.present(name)
+        name = Optional.present(name),
+        availability = Optional.present(availability),
+        birthDate = Optional.present(birthDate.offsetDateTimeDate.toString()),
+        avatar = Optional.presentIfNotNull(photoUrl)
     )
 }
 

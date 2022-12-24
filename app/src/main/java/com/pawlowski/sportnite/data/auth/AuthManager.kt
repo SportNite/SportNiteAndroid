@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.pawlowski.sportnite.MainActivity
+import com.pawlowski.sportnite.presentation.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.TimeUnit
@@ -136,5 +137,7 @@ class AuthManager @Inject constructor(
     override fun getUserPhone(): String {
         return auth.currentUser?.phoneNumber.orEmpty()
     }
+
+
 
 }
