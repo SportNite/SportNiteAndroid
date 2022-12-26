@@ -2,7 +2,6 @@ package com.pawlowski.sportnite.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
-import com.pawlowski.sportnite.presentation.ui.reusable_components.MeetingCard
+import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
 import com.pawlowski.sportnite.presentation.ui.utils.*
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenSideEffect
@@ -136,31 +134,7 @@ fun ProfileSegment(modifier: Modifier = Modifier, user: User?) {
     }
 }
 
-@Composable
-fun IncomingMeetingsRow(
-    modifier: Modifier = Modifier,
-    headersPadding: PaddingValues = PaddingValues(),
-    meetings: List<Meeting>?
-) {
-    Column(modifier = modifier) {
-        Row(modifier = Modifier.padding(headersPadding)) {
-            Text(text = "Nadchodzące spotkania")
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = "Zobacz wszystkie", color = MaterialTheme.colorScheme.primary)
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-        LazyRow {
-            item { Spacer(modifier = Modifier.width(5.dp)) }
-            meetings?.let {
-                items(meetings) {
-                    MeetingCard(meeting = it)
-                    Spacer(modifier = Modifier.width(4.dp))
-                }
-            }
 
-        }
-    }
-}
 
 @Composable
 fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {

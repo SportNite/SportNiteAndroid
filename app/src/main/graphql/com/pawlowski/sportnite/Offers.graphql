@@ -15,7 +15,8 @@ query Offers {
       street,
       user {
         name,
-        userId
+        userId,
+        firebaseUserId
       }
     }
   }

@@ -23,8 +23,8 @@ fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
         dateTime = this.date.offsetDateTimeDate.toString(),
         sport = this.sport.toSportType(),
         placeId = 0,
-        street = Optional.present(this.placeOrAddress),
-        city = Optional.present(this.city)
+        street = this.placeOrAddress,
+        city = this.city
     )
 }
 
@@ -42,28 +42,28 @@ fun OffersQuery.Node.toGameOffer(): GameOffer {
 
 fun OffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
-        uid = this.userId.toString(),
+        uid = this.firebaseUserId,
         name= this.name,
     )
 }
 
 fun ResponsesQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
-        uid = this.userId.toString(),
+        uid = this.firebaseUserId,
         name= this.name,
     )
 }
 
 fun IncomingOffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
-        uid = this.userId.toString(),
+        uid = this.firebaseUserId,
         name= this.name,
     )
 }
 
 fun IncomingOffersQuery.User1.toPlayer(): Player {
     return getPlayerForPreview().copy(
-        uid = this.userId.toString(),
+        uid = this.firebaseUserId,
         name= this.name,
     )
 }
@@ -100,7 +100,7 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
 }
 
 fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
-    val opponent = if(user!!.userId.toString() != myUid)
+    val opponent = if(user!!.toString() != myUid)
         user.toPlayer()
     else
         responses

@@ -3,7 +3,8 @@ query IncomingOffers {
     offerId,
     user {
       name,
-      userId
+      userId,
+      firebaseUserId
     }
     description,
     dateTime,
@@ -12,7 +13,8 @@ query IncomingOffers {
       status,
       user {
         name,
-        userId
+        userId,
+        firebaseUserId
       }
     }
     city

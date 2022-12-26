@@ -10,7 +10,8 @@ query Responses($sportFilter: SportType!) {
         offerId,
         user {
           userId,
-          name
+          name,
+          firebaseUserId
         },
         description,
         offer {

@@ -82,6 +82,7 @@ class AppRepository @Inject constructor(
         response?.data?.toGameOfferList()?.filter {
             it.owner.uid != myUid
         }?.let {
+            it.forEach { Log.d("test", "${it.owner.uid} $myUid") }
             emit(UiData.Success(isFresh = true, data = it))
         }
     }
