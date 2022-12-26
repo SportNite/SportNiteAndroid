@@ -1,18 +1,17 @@
 package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
+import com.pawlowski.sportnite.IncomingOffersQuery
 import com.pawlowski.sportnite.OffersQuery
 import com.pawlowski.sportnite.ResponsesQuery
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
-import com.pawlowski.sportnite.presentation.models.Player
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.type.CreateOfferInput
+import com.pawlowski.sportnite.type.ResponseStatus
 import com.pawlowski.sportnite.type.SportType
 import com.pawlowski.sportnite.type.UpdateUserInput
 import com.pawlowski.sportnite.utils.UiDate
@@ -55,6 +54,20 @@ fun ResponsesQuery.User.toPlayer(): Player {
     )
 }
 
+fun IncomingOffersQuery.User.toPlayer(): Player {
+    return getPlayerForPreview().copy(
+        uid = this.userId.toString(),
+        name= this.name,
+    )
+}
+
+fun IncomingOffersQuery.User1.toPlayer(): Player {
+    return getPlayerForPreview().copy(
+        uid = this.userId.toString(),
+        name= this.name,
+    )
+}
+
 fun OffersQuery.Data.toGameOfferList(): List<GameOffer>? {
     return this.offers?.nodes?.mapNotNull {
         it?.toGameOffer()
@@ -83,6 +96,27 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
         availability = Optional.present(availability),
         birthDate = Optional.present(birthDate.offsetDateTimeDate.toString()),
         avatar = Optional.presentIfNotNull(photoUrl)
+    )
+}
+
+fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
+    val opponent = if(user!!.userId.toString() != myUid)
+        user.toPlayer()
+    else
+        responses
+            .first {
+                it.status == ResponseStatus.APPROVED
+            }
+            .user.toPlayer()
+
+    return Meeting(
+        opponent = opponent,
+        sport = sport.toSport(),
+        placeOrAddress = street?:"",
+        city = city?:"",
+        date = UiDate(OffsetDateTime.parse(dateTime.toString())),
+        additionalNotes = description,
+        meetingUid = offerId.toString()
     )
 }
 

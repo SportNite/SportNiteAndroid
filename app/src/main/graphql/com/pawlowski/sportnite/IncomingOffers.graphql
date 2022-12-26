@@ -1,0 +1,21 @@
+query IncomingOffers {
+  incomingOffers {
+    offerId,
+    user {
+      name,
+      userId
+    }
+    description,
+    dateTime,
+    sport,
+    responses {
+      status,
+      user {
+        name,
+        userId
+      }
+    }
+    city
+    street
+  }
+}

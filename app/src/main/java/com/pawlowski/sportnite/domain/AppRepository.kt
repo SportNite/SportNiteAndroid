@@ -7,10 +7,7 @@ import com.apollographql.apollo3.api.Operation
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
-import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
-import com.pawlowski.sportnite.data.mappers.toGameOfferList
-import com.pawlowski.sportnite.data.mappers.toSportType
-import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
+import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
@@ -36,7 +33,25 @@ class AppRepository @Inject constructor(
 ): IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
         emit(UiData.Loading())
-        //TODO
+
+        val response = try {
+            apolloClient.query(IncomingOffersQuery()).execute()
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        response?.let { resp ->
+            val meetings = resp.data?.incomingOffers?.map {
+                it.toMeeting(authManager.getCurrentUserUid()!!)
+            }
+
+            meetings?.let {
+                emit(UiData.Success(isFresh = true, data = it))
+            }?: kotlin.run {
+                emit(UiData.Error(message = defaultRequestError))
+            }
+        }
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -63,7 +78,10 @@ class AppRepository @Inject constructor(
             e.printStackTrace()
             null
         }
-        response?.data?.toGameOfferList()?.let {
+        val myUid = authManager.getCurrentUserUid()!!
+        response?.data?.toGameOfferList()?.filter {
+            it.owner.uid != myUid
+        }?.let {
             emit(UiData.Success(isFresh = true, data = it))
         }
     }
@@ -96,8 +114,8 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getInfoAboutMe(): User? {
-        TODO(" Ask UserInfoUpdateCache")
+    override fun getInfoAboutMe(): Flow<User?> {
+        return userInfoUpdateCache.cachedUser
     }
 
     override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
@@ -133,7 +151,14 @@ class AppRepository @Inject constructor(
         val result = executeApolloMutation(request = {
             apolloClient.mutation(UpdateUserMutation(params.toUpdateUserInput())).execute()
         })
-        userInfoUpdateCache.markUserInfoAsSaved()
+        if(result is Resource.Success) {
+            userInfoUpdateCache.markUserInfoAsSaved(
+                User(
+                    userName = params.name,
+                    userPhotoUrl = params.photoUrl?:""
+                )
+            )
+        }
         return result
     }
 

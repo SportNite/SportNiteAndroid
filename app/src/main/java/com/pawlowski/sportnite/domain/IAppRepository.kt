@@ -18,7 +18,7 @@ interface IAppRepository {
     fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>>
     fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>>
     fun getUserNotifications(): Flow<UiData<List<Notification>>>
-    fun getInfoAboutMe() : User?
+    fun getInfoAboutMe() : Flow<User?>
 
     suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit>
     suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>

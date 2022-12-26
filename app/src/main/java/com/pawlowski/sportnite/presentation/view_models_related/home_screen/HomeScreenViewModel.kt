@@ -23,7 +23,7 @@ class HomeScreenViewModel @Inject constructor(
 ): IHomeScreenViewModel, ViewModel() {
     override val container: Container<HomeScreenUiState, HomeScreenSideEffect> = container(initialState = HomeScreenUiState(
         upcomingMeetings = UiData.Success(true, getMeetingsListForPreview()),
-        user = getInfoAboutMeUseCase()
+        user = null
     ))
 
     private fun observeIncomingMeetings() = intent(registerIdling = false) {
@@ -36,7 +36,18 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    private fun observeInfoAboutMe() = intent(registerIdling = false) {
+        repeatOnSubscription {
+            getInfoAboutMeUseCase().collectLatest {
+                reduce {
+                    state.copy(user = it)
+                }
+            }
+        }
+    }
+
     init {
+        observeInfoAboutMe()
         observeIncomingMeetings()
     }
 }

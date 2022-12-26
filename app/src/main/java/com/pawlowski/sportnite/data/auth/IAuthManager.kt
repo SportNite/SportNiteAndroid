@@ -23,4 +23,5 @@ interface IAuthManager {
 
     fun onVerificationFailed(exception: Exception)
     fun getUserPhone(): String
+    fun getCurrentUserUid(): String?
 }
