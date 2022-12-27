@@ -118,9 +118,9 @@ fun LoggedInRootComposable(
                         navController.popBackStack()
                     },
                     onNavigateToPlayerDetailsScreen = {
-//                        navController.navigate("PlayerDetails") {
-//                            launchSingleTop = true
-//                        }
+                        navController.navigate("PlayerDetails") {
+                            launchSingleTop = true
+                        }
                     },
                     onNavigateToMeetingDetailsScreen = {
                         navController.navigate("MeetingDetails") {
@@ -141,6 +141,13 @@ fun LoggedInRootComposable(
             }
             composable("MeetingDetails") {
                 MeetingDetailsScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable("PlayerDetails") {
+                PlayerDetailsScreen(
                     onNavigateBack = {
                         navController.popBackStack()
                     }
