@@ -39,4 +39,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getInfoAboutMeUseCase(appRepository: IAppRepository): GetInfoAboutMeUseCase = GetInfoAboutMeUseCase(appRepository::getInfoAboutMe)
+
+    @Singleton
+    @Provides
+    fun getMyOffersUseCase(appRepository: IAppRepository): GetMyOffersUseCase = GetMyOffersUseCase(appRepository::getMyGameOffers)
 }

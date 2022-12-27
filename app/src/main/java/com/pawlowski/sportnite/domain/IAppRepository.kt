@@ -13,6 +13,8 @@ interface IAppRepository {
     fun getUserSports(): Flow<UiData<List<Sport>>>
     fun getPlayers(sportFilter: Sport? = null, nameSearch: String? = null, level: AdvanceLevel?): Flow<UiData<List<Player>>>
     fun getGameOffers(sportFilter: Sport? = null): Flow<UiData<List<GameOffer>>>
+    fun getMyGameOffers(sportFilter: Sport? = null): Flow<UiData<List<GameOffer>>>
+
     fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>>
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
     fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>>

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.screens.AddOfferScreen
 import com.pawlowski.sportnite.presentation.ui.screens.HomeScreen
+import com.pawlowski.sportnite.presentation.ui.screens.MyMeetingsScreen
 import com.pawlowski.sportnite.presentation.ui.screens.SportScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +33,11 @@ fun LoggedInRootComposable(
             text = "Home",
             iconId = R.drawable.home_icon,
             route = "Home"
+        ),
+        NavigationItem(
+            text = "Moje spotkania",
+            iconId = R.drawable.my_meetings_icon,
+            route = "MyMeetings"
         )
     )
     val currentNavigationItem = remember {
@@ -61,7 +67,8 @@ fun LoggedInRootComposable(
 
     },
     floatingActionButton = {
-        if(currentRoute.value == "Sport")
+        val screensWithButton = listOf("Sport", "MyMeetings")
+        if(screensWithButton.contains(currentRoute.value))
         {
             FloatingActionButton(onClick = {
                 navController.navigate("AddOffer") {
@@ -85,9 +92,24 @@ fun LoggedInRootComposable(
                     modifier = Modifier.padding(padding)
                 )
             }
+            composable("MyMeetings") {
+                MyMeetingsScreen(
+                    onNavigateToHomeScreen = {
+                        navController.navigate("Home")
+                        {
+                            popUpTo("Home")
+                            restoreState = true
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
             composable("Sport") {
                 SportScreen(
-                    modifier = Modifier.padding(padding)
+                    modifier = Modifier.padding(padding),
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
                 )
             }
             composable("AddOffer") {

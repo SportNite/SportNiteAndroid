@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,10 +33,10 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
 fun SportScreen(
+    modifier: Modifier = Modifier,
     viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>(),
-    modifier: Modifier = Modifier
+    onNavigateBack: () -> Unit = {}
 ) {
-
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
@@ -116,7 +117,10 @@ fun SportScreen(
 
         LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
             item {
-                SportHeader(sport = sportState.value)
+                SportHeader(
+                    sport = sportState.value,
+                    onBackClick = onNavigateBack
+                )
             }
             item {
                 Spacer(modifier = Modifier.height(5.dp))

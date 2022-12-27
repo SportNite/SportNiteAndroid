@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,31 +9,34 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.ScreenHeader
 import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersColumnItem
-import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenUiState
+import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
+import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 
 @Composable
-fun MyMeetingsScreen() {
+fun MyMeetingsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: IMyMeetingsScreenViewModel = hiltViewModel<MyMeetingsScreenViewModel>(),
+    onNavigateToHomeScreen: () -> Unit = {}
+) {
 
-    val uiState = remember { //TODO get from view model
-        mutableStateOf(MyMeetingsScreenUiState(
-            UiData.Loading(),
-            UiData.Loading(),
-            UiData.Loading(),
-            UiData.Loading()
-        ))
+    BackHandler {
+        onNavigateToHomeScreen()
     }
+
+    val uiState = viewModel.container.stateFlow.collectAsState()
 
     val meetingsDataState = remember {
         derivedStateOf {
@@ -105,12 +109,15 @@ fun MyMeetingsScreen() {
         }
     }
 
-    Surface(Modifier.fillMaxSize()) {
+    Surface(modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
-                ScreenHeader(imageUrl = "", onBackClick = {
-
-                })
+                ScreenHeader(
+                    imageUrl = "https://images.unsplash.com/photo-1435527173128-983b87201f4d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2334&q=80",
+                    onBackClick = {
+                        onNavigateToHomeScreen()
+                    }
+                )
             }
             item {
                 Spacer(modifier = Modifier.height(5.dp))

@@ -30,8 +30,8 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
 fun HomeScreen(
-    viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
     modifier: Modifier = Modifier,
+    viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
     onNavigateToSportScreen: (Sport) -> Unit = {}
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()

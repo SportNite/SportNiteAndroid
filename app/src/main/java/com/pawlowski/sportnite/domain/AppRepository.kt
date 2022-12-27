@@ -82,7 +82,19 @@ class AppRepository @Inject constructor(
         response?.data?.toGameOfferList()?.filter {
             it.owner.uid != myUid
         }?.let {
-            it.forEach { Log.d("test", "${it.owner.uid} $myUid") }
+            emit(UiData.Success(isFresh = true, data = it))
+        }
+    }
+
+    override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
+        emit(UiData.Loading())
+        val response = try {
+            apolloClient.query(MyOffersQuery()).execute()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        response?.data?.toGameOfferList()?.let {
             emit(UiData.Success(isFresh = true, data = it))
         }
     }

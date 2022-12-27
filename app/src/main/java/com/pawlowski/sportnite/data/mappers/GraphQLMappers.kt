@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.IncomingOffersQuery
+import com.pawlowski.sportnite.MyOffersQuery
 import com.pawlowski.sportnite.OffersQuery
 import com.pawlowski.sportnite.ResponsesQuery
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
@@ -44,6 +45,31 @@ fun OffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
         name= this.name,
+    )
+}
+
+fun MyOffersQuery.User.toPlayer(): Player {
+    return getPlayerForPreview().copy(
+        uid = this.firebaseUserId,
+        name= this.name,
+    )
+}
+
+fun MyOffersQuery.Data.toGameOfferList() : List<GameOffer>? {
+    return this.myOffers?.nodes?.map {
+        it.toGameOffer()
+    }
+}
+
+fun MyOffersQuery.Node.toGameOffer(): GameOffer {
+    return GameOffer(
+        city = this.city,
+        placeOrAddress = this.street,
+        additionalNotes = this.description,
+        offerUid = this.offerId.toString(),
+        sport = this.sport.toSport(),
+        date = UiDate(OffsetDateTime.parse(this.dateTime.toString())),
+        owner = this.user.toPlayer()
     )
 }
 

@@ -1,0 +1,3 @@
+package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
+
+sealed interface MyMeetingsScreenSideEffect

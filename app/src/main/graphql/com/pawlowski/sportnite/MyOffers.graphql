@@ -1,0 +1,23 @@
+query MyOffers {
+  myOffers(where: {
+    isAvailable: {
+      eq: true
+    }
+  }) {
+    nodes {
+      offerId,
+      userId,
+      description,
+      dateTime,
+      sport,
+      isAvailable,
+      city,
+      street,
+      user {
+        name
+        userId,
+        firebaseUserId
+      }
+    }
+  }
+}
