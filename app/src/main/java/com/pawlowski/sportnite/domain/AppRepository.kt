@@ -175,6 +175,14 @@ class AppRepository @Inject constructor(
         return result
     }
 
+    override suspend fun deleteMyOffer(offerId: String): Resource<Unit> {
+        return withContext(ioDispatcher) {
+            executeApolloMutation(request = {
+                apolloClient.mutation(DeleteOfferMutation(offerId)).execute()
+            })
+        }
+    }
+
     private suspend fun <T: Operation.Data>executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
         validateResult: (T) -> Boolean = {true},

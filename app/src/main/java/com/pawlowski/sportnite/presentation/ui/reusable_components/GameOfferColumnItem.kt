@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ fun LazyListScope.gameOffersColumnItem(
     headersPadding: PaddingValues = PaddingValues(),
     displaySeeMore: Boolean = true,
     onSeeMoreClick: () -> Unit = {},
+    offerTextButtonText: @Composable (GameOffer) -> Unit = { Text(text = "Akceptuj propozycję") },
     onOfferTextButtonClick: (GameOffer) -> Unit = {},
 ) {
     item {
@@ -52,6 +54,9 @@ fun LazyListScope.gameOffersColumnItem(
             isExpanded = { isExpanded.value },
             onExpandClick = {
                 isExpanded.value = !isExpanded.value
+            },
+            textButtonText = {
+                offerTextButtonText(it)
             },
             onTextButtonClick = {
                 onOfferTextButtonClick(it)

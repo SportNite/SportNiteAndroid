@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -8,11 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +22,7 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeeti
 import com.pawlowski.sportnite.presentation.ui.reusable_components.ScreenHeader
 import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersColumnItem
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
+import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 
@@ -34,6 +35,16 @@ fun MyMeetingsScreen(
 
     BackHandler {
         onNavigateToHomeScreen()
+    }
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collect { event ->
+            when(event) {
+                is MyMeetingsScreenSideEffect.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -151,8 +162,11 @@ fun MyMeetingsScreen(
                 headerText = "Moje oferty",
                 headersPadding = PaddingValues(horizontal = 10.dp),
                 displaySeeMore = false,
+                offerTextButtonText = {
+                    Text(text = "Usuń ofertę", color = Color.Red)
+                },
                 onOfferTextButtonClick = {
-                    //TODO
+                    viewModel.deleteOffer(it)
                 }
             )
 

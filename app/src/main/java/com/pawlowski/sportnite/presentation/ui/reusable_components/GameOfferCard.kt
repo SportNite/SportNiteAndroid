@@ -20,6 +20,7 @@ import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 fun GameOfferCard(
     gameOffer: GameOffer,
     isExpanded: () -> Boolean = {false},
+    textButtonText: @Composable () -> Unit,
     onTextButtonClick: () -> Unit = {},
     onExpandClick: (GameOffer) -> Unit = {}
 ) {
@@ -85,7 +86,7 @@ fun GameOfferCard(
                         .padding(end = 10.dp),
                     onClick = { onTextButtonClick() }
                 ) {
-                    Text(text = "Akceptuj propozycję")
+                    textButtonText()
                 }
             }
         }
@@ -95,5 +96,10 @@ fun GameOfferCard(
 @Preview(showBackground = true)
 @Composable
 fun GameOfferCardPreview() {
-    GameOfferCard(getGameOfferForPreview())
+    GameOfferCard(
+        getGameOfferForPreview(),
+        textButtonText = {
+            Text(text = "Akceptuj propozycję")
+        }
+    )
 }
