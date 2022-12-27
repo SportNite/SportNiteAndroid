@@ -55,4 +55,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun signOutUseCase(appRepository: IAppRepository): SignOutUseCase = SignOutUseCase(appRepository::signOut)
+
+    @Singleton
+    @Provides
+    fun acceptOfferToAcceptUseCase(appRepository: IAppRepository): AcceptOfferToAcceptUseCase = AcceptOfferToAcceptUseCase(appRepository::acceptOfferToAccept)
 }

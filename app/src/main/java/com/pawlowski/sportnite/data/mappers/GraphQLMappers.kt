@@ -30,13 +30,13 @@ fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
 
 fun OffersQuery.Node.toGameOffer(): GameOffer {
     return GameOffer(
-        city = this.city?:"",
-        placeOrAddress = this.street?:"",
+        city = this.city,
+        placeOrAddress = this.street,
         additionalNotes = this.description,
         offerUid = this.offerId.toString(),
         sport = this.sport.toSport(),
         date = UiDate(OffsetDateTime.parse(this.dateTime.toString())),
-        owner = this.user!!.toPlayer()
+        owner = this.user.toPlayer()
     )
 }
 
@@ -101,7 +101,7 @@ fun OffersQuery.Data.toGameOfferList(): List<GameOffer>? {
 
 fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
     return GameOfferToAccept(
-        offerToAcceptUid = this.offerId.toString(),
+        offerToAcceptUid = this.responseId.toString(),
         from = this.user.toPlayer(),
         offer = getGameOfferForPreview().copy(offerUid = this.offerId.toString()) //TODO fix when backand error will be fixed
     )
@@ -109,7 +109,9 @@ fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
 
 fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
     return this.myOffers?.nodes?.flatMap { node ->
-        node.responses.map {
+        node.responses.filter {
+            it.status != ResponseStatus.APPROVED
+        }.map {
             it.toGameOfferToAccept()
         }
     }
@@ -125,7 +127,7 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
 }
 
 fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
-    val opponent = if(user!!.toString() != myUid)
+    val opponent = if(user.firebaseUserId != myUid)
         user.toPlayer()
     else
         responses
@@ -137,8 +139,8 @@ fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
     return Meeting(
         opponent = opponent,
         sport = sport.toSport(),
-        placeOrAddress = street?:"",
-        city = city?:"",
+        placeOrAddress = street,
+        city = city,
         date = UiDate(OffsetDateTime.parse(dateTime.toString())),
         additionalNotes = description,
         meetingUid = offerId.toString()

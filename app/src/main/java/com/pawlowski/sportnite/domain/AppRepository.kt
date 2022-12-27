@@ -170,6 +170,7 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
+        Log.d("offerToAcceptId", offerToAcceptUid)
         return executeApolloMutation(request = {
             apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
         })

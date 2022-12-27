@@ -3,6 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*
@@ -23,6 +24,7 @@ class SportScreenViewModel @Inject constructor(
     private val getOffersToAcceptUseCase: GetOffersToAcceptUseCase,
     private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
     private val getPlayersUseCase: GetPlayersUseCase,
+    private val acceptOfferToAcceptUseCase: AcceptOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportForPreview() //TODO
@@ -79,6 +81,16 @@ class SportScreenViewModel @Inject constructor(
                     state.copy(otherPlayers = it)
                 }
             }
+        }
+    }
+
+    override fun acceptOfferToAccept(gameOfferToAcceptId: String) = intent {
+        val result = acceptOfferToAcceptUseCase(gameOfferToAcceptId)
+        if(result is Resource.Success) {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(offerAcceptingSuccessText))
+        }
+        else if(result is Resource.Error) {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(result.message?: defaultRequestError))
         }
     }
 

@@ -6,6 +6,7 @@ query Responses($sportFilter: SportType!) {
   }) {
     nodes {
       responses {
+        status,
         responseId,
         offerId,
         user {

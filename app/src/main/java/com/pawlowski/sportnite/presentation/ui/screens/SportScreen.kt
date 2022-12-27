@@ -145,7 +145,10 @@ fun SportScreen(
             gameOffersColumnItem(
                 offers = offersToAcceptMapped,
                 headerText = "Do akceptacji",
-                headersPadding = PaddingValues(horizontal = 10.dp)
+                headersPadding = PaddingValues(horizontal = 10.dp),
+                onOfferTextButtonClick = {
+                    viewModel.acceptOfferToAccept(it.offerUid)
+                }
             )
             item {
                 Spacer(modifier = Modifier.height(5.dp))
@@ -212,6 +215,7 @@ fun SportScreenPreview() {
         }
 
         override fun sendGameOfferToAccept(gameOffer: GameOffer) {}
+        override fun acceptOfferToAccept(gameOfferToAcceptId: String) {}
 
     })
 }
