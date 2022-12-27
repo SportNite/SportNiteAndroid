@@ -51,4 +51,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getPlayersUseCase(appRepository: IAppRepository): GetPlayersUseCase = GetPlayersUseCase(appRepository::getPlayers)
+
+    @Singleton
+    @Provides
+    fun signOutUseCase(appRepository: IAppRepository): SignOutUseCase = SignOutUseCase(appRepository::signOut)
 }

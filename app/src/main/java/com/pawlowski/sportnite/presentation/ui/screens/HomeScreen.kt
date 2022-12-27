@@ -32,7 +32,8 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
-    onNavigateToSportScreen: (Sport) -> Unit = {}
+    onNavigateToSportScreen: (Sport) -> Unit = {},
+    onNavigateToSettingsScreen: () -> Unit = {}
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val userState = remember {
@@ -54,7 +55,8 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(10.dp))
             ProfileSegment(
                 modifier = Modifier.padding(horizontal = 10.dp),
-                user = userState.value
+                user = userState.value,
+                onSettingsButtonClick = onNavigateToSettingsScreen
             )
             Spacer(modifier = Modifier.height(20.dp))
             IncomingMeetingsRow(
@@ -105,7 +107,11 @@ fun SportsRow(
 }
 
 @Composable
-fun ProfileSegment(modifier: Modifier = Modifier, user: User?) {
+fun ProfileSegment(
+    modifier: Modifier = Modifier,
+                   user: User?,
+                   onSettingsButtonClick: () -> Unit = {}
+) {
     Row(modifier = modifier
         .fillMaxWidth()) {
         ProfileImageCard(
@@ -125,7 +131,7 @@ fun ProfileSegment(modifier: Modifier = Modifier, user: User?) {
                 contentDescription = ""
             )
         }
-        FilledIconButton(onClick = { /*TODO*/ }) {
+        FilledIconButton(onClick = { onSettingsButtonClick() }) {
             Icon(
                 painter = painterResource(id = R.drawable.settings_icon),
                 contentDescription = ""

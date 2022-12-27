@@ -10,10 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.ui.screens.AddOfferScreen
-import com.pawlowski.sportnite.presentation.ui.screens.HomeScreen
-import com.pawlowski.sportnite.presentation.ui.screens.MyMeetingsScreen
-import com.pawlowski.sportnite.presentation.ui.screens.SportScreen
+import com.pawlowski.sportnite.presentation.ui.screens.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,7 +86,12 @@ fun LoggedInRootComposable(
                             launchSingleTop = true
                         }
                     },
-                    modifier = Modifier.padding(padding)
+                    modifier = Modifier.padding(padding),
+                    onNavigateToSettingsScreen = {
+                        navController.navigate("Settings") {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
             composable("MyMeetings") {
@@ -116,6 +118,11 @@ fun LoggedInRootComposable(
                 AddOfferScreen(onNavigateBack = {
                     navController.popBackStack()
                 })
+            }
+            composable("Settings") {
+                SettingsScreen(
+                    onNavigateToLoginScreen = onNavigateToSignInScreen
+                )
             }
         }
     }

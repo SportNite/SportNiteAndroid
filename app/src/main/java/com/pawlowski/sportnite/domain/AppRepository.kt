@@ -121,7 +121,9 @@ class AppRepository @Inject constructor(
             e.printStackTrace()
             null
         }
-        response?.data
+        response?.data?.toGameOfferToAcceptList()?.let {
+            emit(UiData.Success(isFresh = true, data = it))
+        }
     }
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {
@@ -173,6 +175,11 @@ class AppRepository @Inject constructor(
         })
     }
 
+    override fun signOut() {
+        authManager.signOut()
+        userInfoUpdateCache.deleteUserInfoCache()
+    }
+
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
         val result = executeApolloMutation(request = {
             apolloClient.mutation(UpdateUserMutation(params.toUpdateUserInput())).execute()
@@ -181,7 +188,8 @@ class AppRepository @Inject constructor(
             userInfoUpdateCache.markUserInfoAsSaved(
                 User(
                     userName = params.name,
-                    userPhotoUrl = params.photoUrl?:""
+                    userPhotoUrl = params.photoUrl?:"",
+                    userPhoneNumber = authManager.getUserPhone()
                 )
             )
         }

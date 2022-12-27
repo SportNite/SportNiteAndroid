@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_use
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
-    private val userInfoUpdateCache: UserInfoUpdateCache
+    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val authManager: AuthManager
 ):IWaitingForUserInfoViewModel, ViewModel() {
 
     override val container: Container<WaitingForUserInfoUiState, WaitingForUserInfoSideEffect> = container(
@@ -31,7 +33,7 @@ class WaitingForUserInfoViewModel @Inject constructor(
         reduce {
             state.copy(isLoading = true, message = "Please wait...")
         }
-        val info = userInfoUpdateCache.didUserAddInfo(FirebaseAuth.getInstance().currentUser!!.uid)
+        val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
         if(info is Resource.Success) {
             if(info.data == true)
             {
