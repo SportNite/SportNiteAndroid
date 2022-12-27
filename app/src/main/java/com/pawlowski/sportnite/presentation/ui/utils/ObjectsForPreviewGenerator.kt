@@ -47,6 +47,18 @@ fun getMeetingsListForPreview(): List<Meeting> {
     )
 }
 
+fun getPlayerDetailsForPreview(): PlayerDetails {
+    return PlayerDetails(
+        playerName = "Mariusz Kowalski",
+        playerPhotoUrl = "https://images.unsplash.com/photo-1620000617482-821324eb9a14?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2ZpbGUlMjBpbWFnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60",
+        advanceLevels = mapOf(Pair(getSportForPreview(), AdvanceLevel.NRTP(4.5))),
+        age = 18,
+        playerUid = "uid",
+        contact = listOf("+48718904901", "kowalski@onet.pl"),
+        timeAvailability = "Głównie wieczorami"
+    )
+}
+
 fun getUserForPreview(): User {
     return User("Mariusz Kowalski", "https://images.unsplash.com/photo-1620000617482-821324eb9a14?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2ZpbGUlMjBpbWFnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60", userPhoneNumber = "718948153")
 }

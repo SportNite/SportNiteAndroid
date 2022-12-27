@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.player_details
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.presentation.ui.utils.getPlayerDetailsForPreview
 import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
@@ -14,7 +15,7 @@ class PlayerDetailsViewModel @Inject constructor(
     override val container: Container<PlayerDetailsUiState, PlayerDetailsSideEffect> =
         container(
             initialState = PlayerDetailsUiState(
-                UiData.Loading()
+                UiData.Success(true, getPlayerDetailsForPreview())
             )
         )
 }
