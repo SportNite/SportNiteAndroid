@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.reusable_components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -19,6 +20,7 @@ fun IncomingMeetingsRow(
     headersPadding: PaddingValues = PaddingValues(),
     meetings: List<Meeting>?,
     displaySeeMore: Boolean = true,
+    onMeetingCardClick: (Meeting) -> Unit = {},
     onSeeMoreClick: () -> Unit = {}
 ) {
     Column(modifier = modifier) {
@@ -37,7 +39,10 @@ fun IncomingMeetingsRow(
             item { Spacer(modifier = Modifier.width(5.dp)) }
             meetings?.let {
                 items(meetings) {
-                    MeetingCard(meeting = it)
+                    MeetingCard(
+                        modifier = Modifier.clickable { onMeetingCardClick(it) },
+                        meeting = it
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }

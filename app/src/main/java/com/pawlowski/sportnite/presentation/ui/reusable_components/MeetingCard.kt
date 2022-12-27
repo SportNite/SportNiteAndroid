@@ -16,9 +16,12 @@ import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.ui.utils.getMeetingForPreview
 
 @Composable
-fun MeetingCard(meeting: Meeting) {
+fun MeetingCard(
+    modifier: Modifier = Modifier,
+    meeting: Meeting
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .width(130.dp)
             .height(75.dp)
     ) {

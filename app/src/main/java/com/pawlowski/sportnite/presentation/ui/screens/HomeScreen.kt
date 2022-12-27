@@ -33,7 +33,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: IHomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
     onNavigateToSportScreen: (Sport) -> Unit = {},
-    onNavigateToSettingsScreen: () -> Unit = {}
+    onNavigateToSettingsScreen: () -> Unit = {},
+    onNavigateToMeetingDetails: (String) -> Unit = {},
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val userState = remember {
@@ -61,7 +62,10 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             IncomingMeetingsRow(
                 headersPadding = PaddingValues(horizontal = 10.dp),
-                meetings = meetingsState.value
+                meetings = meetingsState.value,
+                onMeetingCardClick = {
+                    onNavigateToMeetingDetails(it.meetingUid)
+                }
             )
             Spacer(modifier = Modifier.height(20.dp))
 

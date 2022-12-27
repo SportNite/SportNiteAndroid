@@ -91,6 +91,11 @@ fun LoggedInRootComposable(
                         navController.navigate("Settings") {
                             launchSingleTop = true
                         }
+                    },
+                    onNavigateToMeetingDetails = {
+                        navController.navigate("MeetingDetails") {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
@@ -111,6 +116,16 @@ fun LoggedInRootComposable(
                     modifier = Modifier.padding(padding),
                     onNavigateBack = {
                         navController.popBackStack()
+                    },
+                    onNavigateToPlayerDetailsScreen = {
+//                        navController.navigate("PlayerDetails") {
+//                            launchSingleTop = true
+//                        }
+                    },
+                    onNavigateToMeetingDetailsScreen = {
+                        navController.navigate("MeetingDetails") {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
@@ -122,6 +137,13 @@ fun LoggedInRootComposable(
             composable("Settings") {
                 SettingsScreen(
                     onNavigateToLoginScreen = onNavigateToSignInScreen
+                )
+            }
+            composable("MeetingDetails") {
+                MeetingDetailsScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayersRow
@@ -36,7 +37,9 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 fun SportScreen(
     modifier: Modifier = Modifier,
     viewModel: ISportScreenViewModel = hiltViewModel<SportScreenViewModel>(),
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onNavigateToPlayerDetailsScreen: (String) -> Unit = {},
+    onNavigateToMeetingDetailsScreen: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
 
@@ -157,7 +160,10 @@ fun SportScreen(
             item {
                 IncomingMeetingsRow(
                     meetings = meetingsValueState.value,
-                    headersPadding = PaddingValues(horizontal = 10.dp)
+                    headersPadding = PaddingValues(horizontal = 10.dp),
+                    onMeetingCardClick = {
+                        onNavigateToMeetingDetailsScreen(it.meetingUid)
+                    }
                 )
             }
             item {
@@ -167,7 +173,10 @@ fun SportScreen(
             item {
                 PlayersRow(
                     players = playersValueState.value,
-                    headersPadding = PaddingValues(horizontal = 10.dp)
+                    headersPadding = PaddingValues(horizontal = 10.dp),
+                    onPlayerCardClick = {
+                        onNavigateToPlayerDetailsScreen(it.uid)
+                    }
                 )
             }
 

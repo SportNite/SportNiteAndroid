@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.reusable_components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -20,6 +21,7 @@ fun PlayersRow(
     headersPadding: PaddingValues = PaddingValues(),
     players: List<Player>?,
     displaySeeMore: Boolean = true,
+    onPlayerCardClick: (Player) -> Unit,
     onSeeMoreClick: () -> Unit = {}
 ) {
     Column(modifier = modifier) {
@@ -38,7 +40,9 @@ fun PlayersRow(
             item { Spacer(modifier = Modifier.width(5.dp)) }
             players?.let {
                 items(players) {
-                    PlayerCard(player = it)
+                    PlayerCard(modifier = Modifier.clickable {
+                        onPlayerCardClick(it)
+                    }, player = it)
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }
