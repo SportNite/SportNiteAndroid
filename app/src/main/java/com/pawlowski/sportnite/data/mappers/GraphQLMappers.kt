@@ -1,10 +1,7 @@
 package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
-import com.pawlowski.sportnite.IncomingOffersQuery
-import com.pawlowski.sportnite.MyOffersQuery
-import com.pawlowski.sportnite.OffersQuery
-import com.pawlowski.sportnite.ResponsesQuery
+import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
@@ -16,7 +13,9 @@ import com.pawlowski.sportnite.type.ResponseStatus
 import com.pawlowski.sportnite.type.SportType
 import com.pawlowski.sportnite.type.UpdateUserInput
 import com.pawlowski.sportnite.utils.UiDate
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.Period
 
 fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
     return CreateOfferInput(
@@ -143,6 +142,24 @@ fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
         date = UiDate(OffsetDateTime.parse(dateTime.toString())),
         additionalNotes = description,
         meetingUid = offerId.toString()
+    )
+}
+
+fun UsersQuery.Data.toPlayersList(): List<Player>? {
+    return this.users?.nodes?.mapNotNull {
+        it?.toPlayer()
+    }
+}
+
+fun UsersQuery.Node.toPlayer(): Player {
+    val ageInYears = Period.between(OffsetDateTime.parse(birthDate.toString()).toLocalDate(),LocalDate.now()).years
+    return Player(
+        uid = firebaseUserId,
+        name = name,
+        photoUrl = avatar,
+        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        age = ageInYears,
+        phoneNumber = "" //TODO
     )
 }
 

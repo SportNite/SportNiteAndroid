@@ -1,0 +1,21 @@
+query Users {
+  users {
+    nodes {
+      userId,
+      firebaseUserId,
+      avatar,
+      name,
+      birthDate,
+      sex,
+      city,
+      skills {
+        nrtp,
+        sport,
+        level,
+        years,
+        weight,
+        height
+      }
+    }
+  }
+}

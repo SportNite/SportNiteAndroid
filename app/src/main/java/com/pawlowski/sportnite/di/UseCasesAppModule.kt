@@ -47,4 +47,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun deleteMyOfferUseCase(appRepository: IAppRepository): DeleteMyOfferUseCase = DeleteMyOfferUseCase(appRepository::deleteMyOffer)
+
+    @Singleton
+    @Provides
+    fun getPlayersUseCase(appRepository: IAppRepository): GetPlayersUseCase = GetPlayersUseCase(appRepository::getPlayers)
 }

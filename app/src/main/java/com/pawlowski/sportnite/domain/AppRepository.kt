@@ -66,8 +66,21 @@ class AppRepository @Inject constructor(
         sportFilter: Sport?,
         nameSearch: String?,
         level: AdvanceLevel?
-    ): Flow<UiData<List<Player>>> {
-        TODO("Not yet implemented")
+    ): Flow<UiData<List<Player>>> = flow {
+        emit(UiData.Loading())
+        val response = try {
+            apolloClient.query(UsersQuery()).execute()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        val myUid = authManager.getCurrentUserUid()!!
+        response?.data?.toPlayersList()?.filter {
+            it.uid != myUid
+        }?.let {
+            emit(UiData.Success(isFresh = true, data = it))
+        }
+        //TODO: use filters from arguments
     }
 
     override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {

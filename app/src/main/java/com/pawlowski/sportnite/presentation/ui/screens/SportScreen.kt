@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
+
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +20,7 @@ import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
+import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayersRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.ScreenHeader
 import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersColumnItem
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
@@ -41,9 +42,10 @@ fun SportScreen(
 
     LaunchedEffect(Unit) {
         viewModel.container.sideEffectFlow.collect { event ->
-            when(event) {
+            when (event) {
                 is SportScreenSideEffect.ShowToastMessage -> {
-                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -65,10 +67,9 @@ fun SportScreen(
     val meetingsValueState = remember {
         derivedStateOf {
             val meetingsDataValue = meetingsDataState.value
-            if(meetingsDataValue is UiData.Success) {
+            if (meetingsDataValue is UiData.Success) {
                 meetingsDataValue.data
-            }
-            else
+            } else
                 listOf()
         }
     }
@@ -82,11 +83,9 @@ fun SportScreen(
     val offersValueState = remember {
         derivedStateOf {
             val offersValue = offersDataState.value
-            if(offersValue is UiData.Success)
-            {
+            if (offersValue is UiData.Success) {
                 offersValue.data
-            }
-            else
+            } else
                 listOf()
         }
     }
@@ -100,19 +99,34 @@ fun SportScreen(
     val offersToAcceptValueState = remember {
         derivedStateOf {
             val offersToAcceptValue = offersToAcceptDataState.value
-            if(offersToAcceptValue is UiData.Success)
-            {
+            if (offersToAcceptValue is UiData.Success) {
                 offersToAcceptValue.data
-            }
-            else
+            } else
                 listOf()
+        }
+    }
+
+    val playersDataState = remember {
+        derivedStateOf {
+            uiState.value.otherPlayers
+        }
+    }
+
+    val playersValueState = remember {
+        derivedStateOf {
+            val value = playersDataState.value
+            if (value is UiData.Success) {
+                value.data
+            } else {
+                listOf()
+            }
         }
     }
 
     Surface(modifier = modifier.fillMaxSize()) {
 
         val offersToAcceptMapped = remember(offersToAcceptValueState.value) {
-            offersToAcceptValueState.value.map { it.asGameOffer() }.take(3)
+            offersToAcceptValueState.value.map { it.asGameOffer() }.take(4)
         }
 
         LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -147,8 +161,19 @@ fun SportScreen(
                 Spacer(modifier = Modifier.height(5.dp))
             }
 
+            item {
+                PlayersRow(
+                    players = playersValueState.value,
+                    headersPadding = PaddingValues(horizontal = 10.dp)
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+
             gameOffersColumnItem(
-                offers = offersValueState.value.take(4),
+                offers = offersValueState.value.take(5),
                 headerText = "Oferty na grę",
                 headersPadding = PaddingValues(horizontal = 10.dp),
                 onOfferTextButtonClick = {
@@ -176,13 +201,16 @@ private fun SportHeader(
 @Preview(showBackground = true)
 @Composable
 fun SportScreenPreview() {
-    SportScreen(viewModel = object : OrbitMviPreviewViewModel<SportScreenUiState, SportScreenSideEffect>(), ISportScreenViewModel {
+    SportScreen(viewModel = object :
+        OrbitMviPreviewViewModel<SportScreenUiState, SportScreenSideEffect>(),
+        ISportScreenViewModel {
         override fun stateForPreview(): SportScreenUiState {
             return SportScreenUiState(
                 sport = getSportForPreview(),
 
-            )
+                )
         }
+
         override fun sendGameOfferToAccept(gameOffer: GameOffer) {}
 
     })

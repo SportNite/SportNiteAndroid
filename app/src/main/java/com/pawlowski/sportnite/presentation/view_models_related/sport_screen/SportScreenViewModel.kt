@@ -4,10 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
-import com.pawlowski.sportnite.presentation.use_cases.GetGameOffersUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetOffersToAcceptUseCase
-import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
+import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +22,7 @@ class SportScreenViewModel @Inject constructor(
     private val getGameOffersUseCase: GetGameOffersUseCase,
     private val getOffersToAcceptUseCase: GetOffersToAcceptUseCase,
     private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
+    private val getPlayersUseCase: GetPlayersUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportForPreview() //TODO
@@ -74,9 +72,20 @@ class SportScreenViewModel @Inject constructor(
         }
     }
 
+    private fun observePlayers() = intent(registerIdling = false) {
+        repeatOnSubscription {
+            getPlayersUseCase(null, null, null).collectLatest {
+                reduce {
+                    state.copy(otherPlayers = it)
+                }
+            }
+        }
+    }
+
     init {
         observeGameOffers()
         observeOffersToAccept()
         observeIncomingMeetings()
+        observePlayers()
     }
 }
