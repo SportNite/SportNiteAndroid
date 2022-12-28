@@ -35,6 +35,11 @@ fun LoggedInRootComposable(
             text = "Moje spotkania",
             iconId = R.drawable.my_meetings_icon,
             route = "MyMeetings"
+        ),
+        NavigationItem(
+            text = "Szukaj ludzi",
+            iconId = R.drawable.person_search_icon,
+            route = "FindPlayers"
         )
     )
     val currentNavigationItem = remember {
@@ -108,7 +113,8 @@ fun LoggedInRootComposable(
                             restoreState = true
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    modifier = Modifier.padding(padding)
                 )
             }
             composable("Sport") {
@@ -150,6 +156,19 @@ fun LoggedInRootComposable(
                 PlayerDetailsScreen(
                     onNavigateBack = {
                         navController.popBackStack()
+                    }
+                )
+            }
+            composable("FindPlayers") {
+                FindPlayersScreen(
+                    modifier = Modifier.padding(padding),
+                    onNavigateToHomeScreen = {
+                        navController.navigate("Home")
+                        {
+                            popUpTo("Home")
+                            restoreState = true
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
