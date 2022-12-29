@@ -83,7 +83,7 @@ class UserInfoUpdateCache @Inject constructor(
                 val response = apolloClient.query(MeQuery()).execute()
                 val name = response.data!!.me.name
                 val photoUrl = response.data!!.me.avatar
-                val result = name.isNotEmpty()
+                val result = name.isNotEmpty() && photoUrl.isNotEmpty()
                 sharedPreferences
                     .edit()
                     .putBoolean(USER_INFO_KEY, result)

@@ -42,7 +42,6 @@ class FindPlayersScreenViewModel @Inject constructor(
     fun observePlayers() = intent(registerIdling = false) {
         repeatOnSubscription {
             filtersChangeFlow.onStart { emit(true) }.flatMapLatest {
-                Log.d("getting", "getting")
                 getPlayersUseCase(state.sportFilterInput, state.searchInput, state.advanceLevelFilterInput)
             }.collectLatest {
                 reduce {

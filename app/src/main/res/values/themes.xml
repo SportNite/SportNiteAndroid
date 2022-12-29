@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SportNite" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.SportNite" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="md_color_button_text">@color/black</item>
+    </style>
 </resources>

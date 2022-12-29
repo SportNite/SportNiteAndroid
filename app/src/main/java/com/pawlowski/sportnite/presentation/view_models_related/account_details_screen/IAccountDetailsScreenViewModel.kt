@@ -7,7 +7,7 @@ interface IAccountDetailsScreenViewModel: ContainerHost<AccountDetailsScreenUiSt
     fun changeNameAndSurnameInput(newValue: String)
     fun changeDateInput(newValue: UiDate)
     fun changeIsMaleInput(newValue: Boolean)
-    fun changePhotoInput(newValue: String)
+    fun changePhotoInput(newValue: String?)
     fun changeTimeAvailabilityInput(newValue: String)
     fun continueClick()
     fun backClick()

@@ -1,8 +1,11 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,13 +19,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.options
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.GenderInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.ProfilePictureWithEditIcon
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
-import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel
@@ -106,11 +110,30 @@ fun AccountDetailsScreen(
                 text = "Wygląda na to, że jesteś tu pierwszy raz.\nPodaj nam coś o sobie!",
             )
             Spacer(modifier = Modifier.height(30.dp))
+            val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
+                if (result.isSuccessful) {
+                    // use the cropped image
+                    val uri = result.uriContent
+                    uri?.let {
+                        viewModel.changePhotoInput(it.toString())
+                    }
+                } else {
+                    // an error occurred cropping
+                    val exception = result.error
+                }
+            }
+            val imagePickerLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+                val cropOptions = options(uri = uri) {
+                    setAspectRatio(1, 1)
+                }
+                imageCropLauncher.launch(cropOptions)
+            }
+            
             ProfilePictureWithEditIcon(
                 modifier = Modifier
                     .align(CenterHorizontally)
                     .clickable {
-                        //TODO()
+                        imagePickerLauncher.launch("image/*")
                     },
                 photoUrl = photoUrlState.value,
                 size = 120.dp
@@ -254,7 +277,7 @@ fun AccountDetailsScreenPreview() {
             TODO("Not yet implemented")
         }
 
-        override fun changePhotoInput(newValue: String) {
+        override fun changePhotoInput(newValue: String?) {
             TODO("Not yet implemented")
         }
 

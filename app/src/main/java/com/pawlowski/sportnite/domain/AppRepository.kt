@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.domain
 
+import android.net.Uri
 import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
@@ -7,6 +8,7 @@ import com.apollographql.apollo3.api.Operation
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
+import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
@@ -29,6 +31,7 @@ class AppRepository @Inject constructor(
     private val apolloClient: ApolloClient,
     private val userInfoUpdateCache: UserInfoUpdateCache,
     private val authManager: IAuthManager,
+    private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
     private val ioDispatcher: CoroutineDispatcher
 ): IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
@@ -170,7 +173,7 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        Log.d("offerToAcceptId", offerToAcceptUid)
+        //Log.d("offerToAcceptId", offerToAcceptUid)
         return executeApolloMutation(request = {
             apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
         })
@@ -182,14 +185,21 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
+        val uploadedPhotoUri = params.photoUrl?.let {
+            val result = firebaseStoragePhotoUploader.uploadNewImage(Uri.parse(it), authManager.getCurrentUserUid()!!)
+            if(result is Resource.Success) {
+                result.data
+            } else
+                null
+        } ?: return Resource.Error(defaultRequestError)
         val result = executeApolloMutation(request = {
-            apolloClient.mutation(UpdateUserMutation(params.toUpdateUserInput())).execute()
+            apolloClient.mutation(UpdateUserMutation(params.copy(photoUrl = uploadedPhotoUri).toUpdateUserInput())).execute()
         })
         if(result is Resource.Success) {
             userInfoUpdateCache.markUserInfoAsSaved(
                 User(
                     userName = params.name,
-                    userPhotoUrl = params.photoUrl?:"",
+                    userPhotoUrl = uploadedPhotoUri,
                     userPhoneNumber = authManager.getUserPhone()
                 )
             )

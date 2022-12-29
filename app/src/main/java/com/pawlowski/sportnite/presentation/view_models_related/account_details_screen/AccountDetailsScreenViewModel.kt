@@ -33,7 +33,7 @@ class AccountDetailsScreenViewModel @Inject constructor(
         reduce { state.copy(isMaleInput = newValue) }
     }
 
-    override fun changePhotoInput(newValue: String) = intent {
+    override fun changePhotoInput(newValue: String?) = intent {
         reduce { state.copy(photo = newValue) }
     }
 
@@ -71,8 +71,8 @@ class AccountDetailsScreenViewModel @Inject constructor(
         if(result is Resource.Success) {
             postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
         }
-        else {
-            //TODO add error
+        else if(result is Resource.Error) {
+            postSideEffect(AccountDetailsScreenSideEffect.ShowToastMessage(result.message?: defaultRequestError))
         }
         reduce {
             state.copy(isLoading = false)
@@ -82,6 +82,5 @@ class AccountDetailsScreenViewModel @Inject constructor(
     override fun backClick() {
         TODO("Not yet implemented")
     }
-
 
 }

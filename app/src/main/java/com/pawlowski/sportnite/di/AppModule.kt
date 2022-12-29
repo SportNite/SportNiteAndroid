@@ -1,11 +1,13 @@
 package com.pawlowski.sportnite.di
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpHeader
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.sportnite.MainActivity
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
@@ -65,5 +67,14 @@ class AppModule {
     @Provides
     fun sharedPreferences(appContext: Context): SharedPreferences {
         return appContext.getSharedPreferences("SportNitePreferences", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    fun firebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
+    @Provides
+    fun contentResolver(appContext: Context): ContentResolver
+    {
+        return appContext.contentResolver
     }
 }
