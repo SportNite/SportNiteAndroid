@@ -5,12 +5,17 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.dropbox.android.external.store4.ResponseOrigin
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreRequest
+import com.dropbox.android.external.store4.StoreResponse
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
@@ -22,6 +27,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +38,8 @@ class AppRepository @Inject constructor(
     private val userInfoUpdateCache: UserInfoUpdateCache,
     private val authManager: IAuthManager,
     private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    private val playersStore: Store<PlayersFilter, List<Player>>
 ): IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
         emit(UiData.Loading())
@@ -69,7 +76,21 @@ class AppRepository @Inject constructor(
         sportFilter: Sport?,
         nameSearch: String?,
         level: AdvanceLevel?
-    ): Flow<UiData<List<Player>>> = flow {
+    ): Flow<UiData<List<Player>>> {
+        val myUid = authManager.getCurrentUserUid()!!
+        return playersStore.stream(StoreRequest.cached(key = PlayersFilter(
+            sportFilter = sportFilter,
+            nameSearch = nameSearch,
+            level = level
+        ), refresh = true)).map {
+            when(it) {
+                is StoreResponse.Loading -> UiData.Loading()
+                is StoreResponse.Error -> UiData.Error(message = it.errorMessageOrNull()?.let { errorMessage -> UiText.NonTranslatable(errorMessage) })
+                is StoreResponse.Data -> UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = it.value.filter { el -> el.uid != myUid })
+                is StoreResponse.NoNewData -> UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = listOf())
+            }
+        }
+    }/*flow {
         emit(UiData.Loading())
         val response = try {
             apolloClient.query(UsersQuery()).execute()
@@ -84,7 +105,7 @@ class AppRepository @Inject constructor(
             emit(UiData.Success(isFresh = true, data = it))
         }
         //TODO: use filters from arguments
-    }
+    }*/
 
     override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
         emit(UiData.Loading())

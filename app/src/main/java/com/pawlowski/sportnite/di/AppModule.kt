@@ -5,15 +5,21 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.http.HttpHeader
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.sportnite.MainActivity
+import com.pawlowski.sportnite.UsersQuery
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
+import com.pawlowski.sportnite.data.mappers.toPlayersList
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
+import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.sportnite.presentation.models.Player
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,5 +82,13 @@ class AppModule {
     fun contentResolver(appContext: Context): ContentResolver
     {
         return appContext.contentResolver
+    }
+
+    @Singleton
+    @Provides
+    fun playersStore(apolloClient: ApolloClient): Store<PlayersFilter, List<Player>> {
+        return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
+            apolloClient.query(UsersQuery()).execute().data!!.toPlayersList()!!
+        }).build()
     }
 }
