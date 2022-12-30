@@ -26,6 +26,7 @@ import com.pawlowski.sportnite.utils.defaultRequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -82,30 +83,10 @@ class AppRepository @Inject constructor(
             sportFilter = sportFilter,
             nameSearch = nameSearch,
             level = level
-        ), refresh = true)).map {
-            when(it) {
-                is StoreResponse.Loading -> UiData.Loading()
-                is StoreResponse.Error -> UiData.Error(message = it.errorMessageOrNull()?.let { errorMessage -> UiText.NonTranslatable(errorMessage) })
-                is StoreResponse.Data -> UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = it.value.filter { el -> el.uid != myUid })
-                is StoreResponse.NoNewData -> UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = listOf())
-            }
-        }
-    }/*flow {
-        emit(UiData.Loading())
-        val response = try {
-            apolloClient.query(UsersQuery()).execute()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        val myUid = authManager.getCurrentUserUid()!!
-        response?.data?.toPlayersList()?.filter {
+        ), refresh = true)).toUiData(filterPredicateOnListData = {
             it.uid != myUid
-        }?.let {
-            emit(UiData.Success(isFresh = true, data = it))
-        }
-        //TODO: use filters from arguments
-    }*/
+        })
+    }
 
     override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
         emit(UiData.Loading())
@@ -233,6 +214,44 @@ class AppRepository @Inject constructor(
             executeApolloMutation(request = {
                 apolloClient.mutation(DeleteOfferMutation(offerId)).execute()
             })
+        }
+    }
+
+    private fun <Output> Flow<StoreResponse<Output>>.toUiData(): Flow<UiData<Output>> = flow {
+        var lastData: Output? = null
+        collect {
+            when(it) {
+                is StoreResponse.Loading -> {
+                    if(lastData == null)
+                        emit(UiData.Loading())
+                }
+                is StoreResponse.Error -> {
+                    emit(UiData.Error(cachedData = lastData, message = it.errorMessageOrNull()?.let { errorMessage -> UiText.NonTranslatable(errorMessage) }))
+                }
+                is StoreResponse.Data -> {
+                    lastData = it.value
+                    emit(UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = it.value))
+                }
+                is StoreResponse.NoNewData -> {
+                    if(it.origin == ResponseOrigin.Fetcher) {
+                        //emit(UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = null))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun <Output> Flow<StoreResponse<List<Output>>>.toUiData(filterPredicateOnListData: (Output) -> Boolean): Flow<UiData<List<Output>>> {
+        return toUiData().map { data ->
+            when (data) {
+                is UiData.Success -> {
+                    data.copy(data = data.data.filter { filterPredicateOnListData(it) })
+                }
+                is UiData.Error -> {
+                    data.copy(cachedData = data.cachedData?.filter { filterPredicateOnListData(it) })
+                }
+                else -> data
+            }
         }
     }
 

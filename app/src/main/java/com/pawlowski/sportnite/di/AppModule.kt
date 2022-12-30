@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
 import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +16,7 @@ import com.pawlowski.sportnite.UsersQuery
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
+import com.pawlowski.sportnite.data.local.PlayersInMemoryCache
 import com.pawlowski.sportnite.data.mappers.toPlayersList
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
@@ -26,6 +28,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import javax.inject.Singleton
 
 @Module
@@ -84,11 +87,26 @@ class AppModule {
         return appContext.contentResolver
     }
 
+
+
     @Singleton
     @Provides
-    fun playersStore(apolloClient: ApolloClient): Store<PlayersFilter, List<Player>> {
+    fun playersStore(apolloClient: ApolloClient, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
             apolloClient.query(UsersQuery()).execute().data!!.toPlayersList()!!
-        }).build()
+        }, sourceOfTruth = SourceOfTruth.of(
+            reader = { key: PlayersFilter ->
+                playersInMemoryCache.observeData(key)
+            },
+            writer = { key: PlayersFilter, input: List<Player> ->
+                playersInMemoryCache.addManyElements(key, input)
+            },
+            delete = { key: PlayersFilter ->
+                playersInMemoryCache.deleteAllElementsWithKey(key)
+            },
+            deleteAll = { playersInMemoryCache.deleteAllData() }
+        )).build()
     }
 }
+
+

@@ -4,36 +4,70 @@ import kotlinx.coroutines.flow.*
 
 abstract class InMemoryDataCache<T, K> {
     private val data by lazy {
-        MutableStateFlow(listOf<T>())
+        MutableStateFlow(mapOf<K, List<T>>())
     }
 
-    fun getData(): List<T> {
-        return data.value
-    }
+//    fun getData(key: K): List<T> {
+//        return data.value[key]?: listOf()
+//    }
 
-    suspend fun addData(key: K, element: T) {
+    fun addElement(key: K, element: T) {
         data.update {
-            it.toMutableList().apply {
-                add(element)
-            }.toList()
+            it.toMutableMap().apply {
+                get(key)?.let { currentList ->
+                    replace(key, currentList.toMutableList().apply {
+                        add(element)
+                    })
+                }?: kotlin.run {
+                    put(key, listOf(element))
+                }
+            }
+
+
         }
     }
 
-    fun observeData(key: K): Flow<List<T>> = data.filter {
-        filter(key)
-    }
-
-    suspend fun deleteAllData() {
-        data.value = listOf()
-    }
-
-    suspend fun deleteData(element: T) {
+    fun addManyElements(key: K, elements: List<T>) {
         data.update {
-            it.toMutableList().apply {
-                remove(element)
-            }.toList()
+            it.toMutableMap().apply {
+                get(key)?.toMutableList()?.addAll(elements) ?: kotlin.run {
+                    put(key, elements)
+                }
+            }
+
+
         }
     }
 
-    abstract fun filter(key: K): Boolean
+    fun observeData(key: K): Flow<List<T>> {
+        return data.map {
+            it[key] ?: listOf()
+        }
+    }
+
+    fun deleteAllData() {
+        data.value = mapOf()
+    }
+
+    fun deleteElement(key: K, element: T) {
+        data.update {
+            it.toMutableMap().apply {
+                val currentList = get(key)
+                currentList?.let {
+                    replace(key, currentList.toMutableList().apply {
+                        remove(element)
+                    })
+                }
+            }
+        }
+    }
+
+    fun deleteAllElementsWithKey(key: K) {
+        data.update {
+            it.toMutableMap().apply {
+                remove(key)
+            }
+        }
+    }
+
 }
