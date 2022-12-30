@@ -1,5 +1,5 @@
-query Users {
-  users {
+query Users($filter: UserFilterInput) {
+  users(where: $filter) {
     nodes {
       userId,
       firebaseUserId,

@@ -18,6 +18,7 @@ import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.local.PlayersInMemoryCache
 import com.pawlowski.sportnite.data.mappers.toPlayersList
+import com.pawlowski.sportnite.data.mappers.toUserFilterInput
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.domain.models.PlayersFilter
@@ -28,7 +29,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import javax.inject.Singleton
 
 @Module
@@ -93,7 +93,7 @@ class AppModule {
     @Provides
     fun playersStore(apolloClient: ApolloClient, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
-            apolloClient.query(UsersQuery()).execute().data!!.toPlayersList()!!
+            apolloClient.query(UsersQuery(filters.toUserFilterInput())).execute().data!!.toPlayersList()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: PlayersFilter ->
                 playersInMemoryCache.observeData(key)

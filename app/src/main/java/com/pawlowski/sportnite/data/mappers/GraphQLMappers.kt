@@ -3,19 +3,61 @@ package com.pawlowski.sportnite.data.mappers
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
+import com.pawlowski.sportnite.presentation.models.User
 import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
-import com.pawlowski.sportnite.type.CreateOfferInput
-import com.pawlowski.sportnite.type.ResponseStatus
-import com.pawlowski.sportnite.type.SportType
-import com.pawlowski.sportnite.type.UpdateUserInput
+import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.UiDate
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.Period
+
+fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
+    return if (nameSearch == null && sportFilter == null && level == null)
+        Optional.absent()
+    else {
+        val nameFilter = nameSearch?.let {
+            UserFilterInput(
+                name = Optional.present(
+                    StringOperationFilterInput(
+                        contains = Optional.present(
+                            nameSearch
+                        )
+                    )
+                ),
+            )
+        }
+        val sportFilter = sportFilter?.let {
+            UserFilterInput(
+                skills = Optional.present(
+                    value = ListFilterInputTypeOfSkillFilterInput(
+                        some = Optional.present(
+                            SkillFilterInput(
+                                sport = Optional.present(
+                                    SportTypeOperationFilterInput(
+                                        eq = Optional.present(sportFilter.toSportType())
+                                    )
+                                ),
+                                and = Optional.presentIfNotNull(level?.let {
+                                    null //TODO: Add level filters
+                                })
+                            )
+                        )
+                    )
+                )
+            )
+        }
+
+
+        Optional.present(
+            UserFilterInput(and = Optional.presentIfNotNull(listOfNotNull(nameFilter, sportFilter)))
+        )
+    }
+}
 
 fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
     return CreateOfferInput(
@@ -43,18 +85,18 @@ fun OffersQuery.Node.toGameOffer(): GameOffer {
 fun OffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
-        name= this.name,
+        name = this.name,
     )
 }
 
 fun MyOffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
-        name= this.name,
+        name = this.name,
     )
 }
 
-fun MyOffersQuery.Data.toGameOfferList() : List<GameOffer>? {
+fun MyOffersQuery.Data.toGameOfferList(): List<GameOffer>? {
     return this.myOffers?.nodes?.map {
         it.toGameOffer()
     }
@@ -75,21 +117,21 @@ fun MyOffersQuery.Node.toGameOffer(): GameOffer {
 fun ResponsesQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
-        name= this.name,
+        name = this.name,
     )
 }
 
 fun IncomingOffersQuery.User.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
-        name= this.name,
+        name = this.name,
     )
 }
 
 fun IncomingOffersQuery.User1.toPlayer(): Player {
     return getPlayerForPreview().copy(
         uid = this.firebaseUserId,
-        name= this.name,
+        name = this.name,
     )
 }
 
@@ -127,7 +169,7 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
 }
 
 fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
-    val opponent = if(user.firebaseUserId != myUid)
+    val opponent = if (user.firebaseUserId != myUid)
         user.toPlayer()
     else
         responses
@@ -154,7 +196,10 @@ fun UsersQuery.Data.toPlayersList(): List<Player>? {
 }
 
 fun UsersQuery.Node.toPlayer(): Player {
-    val ageInYears = Period.between(OffsetDateTime.parse(birthDate.toString()).toLocalDate(),LocalDate.now()).years
+    val ageInYears = Period.between(
+        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
+        LocalDate.now()
+    ).years
     return Player(
         uid = firebaseUserId,
         name = name,
