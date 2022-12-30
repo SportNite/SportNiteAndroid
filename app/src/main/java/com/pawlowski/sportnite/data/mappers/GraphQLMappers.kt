@@ -51,8 +51,6 @@ fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
                 )
             )
         }
-
-
         Optional.present(
             UserFilterInput(and = Optional.presentIfNotNull(listOfNotNull(nameFilter, sportFilter)))
         )

@@ -12,17 +12,24 @@ import com.dropbox.android.external.store4.StoreBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.sportnite.MainActivity
+import com.pawlowski.sportnite.OffersQuery
+import com.pawlowski.sportnite.ResponsesQuery
 import com.pawlowski.sportnite.UsersQuery
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
+import com.pawlowski.sportnite.data.local.OffersInMemoryCache
+import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.local.PlayersInMemoryCache
-import com.pawlowski.sportnite.data.mappers.toPlayersList
-import com.pawlowski.sportnite.data.mappers.toUserFilterInput
+import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
+import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Player
+import com.pawlowski.sportnite.presentation.models.Sport
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -105,6 +112,44 @@ class AppModule {
                 playersInMemoryCache.deleteAllElementsWithKey(key)
             },
             deleteAll = { playersInMemoryCache.deleteAllData() }
+        )).build()
+    }
+
+    @Singleton
+    @Provides
+    fun offersStore(apolloClient: ApolloClient, offersInMemoryCache: OffersInMemoryCache): Store<OffersFilter, List<GameOffer>> {
+        return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
+            apolloClient.query(OffersQuery()).execute().data!!.toGameOfferList()!!
+        }, sourceOfTruth = SourceOfTruth.of(
+            reader = { key: OffersFilter ->
+                offersInMemoryCache.observeData(key)
+            },
+            writer = { key: OffersFilter, input: List<GameOffer> ->
+                offersInMemoryCache.addManyElements(key, input)
+            },
+            delete = { key: OffersFilter ->
+                offersInMemoryCache.deleteAllElementsWithKey(key)
+            },
+            deleteAll = { offersInMemoryCache.deleteAllData() }
+        )).build()
+    }
+
+    @Singleton
+    @Provides
+    fun offersToAcceptStore(apolloClient: ApolloClient, offersToAcceptMemoryCache: OffersToAcceptMemoryCache): Store<OffersFilter, List<GameOfferToAccept>> {
+        return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
+            apolloClient.query(ResponsesQuery(filters.sportFilter!!.toSportType())).execute().data!!.toGameOfferToAcceptList()!!
+        }, sourceOfTruth = SourceOfTruth.of(
+            reader = { key: OffersFilter ->
+                offersToAcceptMemoryCache.observeData(key)
+            },
+            writer = { key: OffersFilter, input: List<GameOfferToAccept> ->
+                offersToAcceptMemoryCache.addManyElements(key, input)
+            },
+            delete = { key: OffersFilter ->
+                offersToAcceptMemoryCache.deleteAllElementsWithKey(key)
+            },
+            deleteAll = { offersToAcceptMemoryCache.deleteAllData() }
         )).build()
     }
 }

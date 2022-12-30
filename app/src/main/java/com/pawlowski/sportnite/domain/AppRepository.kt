@@ -13,8 +13,10 @@ import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
+import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
@@ -26,7 +28,6 @@ import com.pawlowski.sportnite.utils.defaultRequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -40,15 +41,16 @@ class AppRepository @Inject constructor(
     private val authManager: IAuthManager,
     private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
-    private val playersStore: Store<PlayersFilter, List<Player>>
-): IAppRepository {
+    private val playersStore: Store<PlayersFilter, List<Player>>,
+    private val offersStore: Store<OffersFilter, List<GameOffer>>,
+    private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
+) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
         emit(UiData.Loading())
 
         val response = try {
             apolloClient.query(IncomingOffersQuery()).execute()
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
@@ -59,7 +61,7 @@ class AppRepository @Inject constructor(
 
             meetings?.let {
                 emit(UiData.Success(isFresh = true, data = it))
-            }?: kotlin.run {
+            } ?: kotlin.run {
                 emit(UiData.Error(message = defaultRequestError))
             }
         }
@@ -79,29 +81,30 @@ class AppRepository @Inject constructor(
         level: AdvanceLevel?
     ): Flow<UiData<List<Player>>> {
         val myUid = authManager.getCurrentUserUid()!!
-        return playersStore.stream(StoreRequest.cached(key = PlayersFilter(
-            sportFilter = sportFilter,
-            nameSearch = nameSearch,
-            level = level
-        ), refresh = true)).toUiData(filterPredicateOnListData = {
+        return playersStore.stream(
+            StoreRequest.cached(
+                key = PlayersFilter(
+                    sportFilter = sportFilter,
+                    nameSearch = nameSearch,
+                    level = level
+                ), refresh = true
+            )
+        ).toUiData(filterPredicateOnListData = {
             it.uid != myUid
         })
     }
 
-    override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
-        emit(UiData.Loading())
-        val response = try {
-            apolloClient.query(OffersQuery()).execute()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+    override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
         val myUid = authManager.getCurrentUserUid()!!
-        response?.data?.toGameOfferList()?.filter {
+        return offersStore.stream(
+            StoreRequest.cached(
+                key = OffersFilter(
+                    sportFilter = sportFilter
+                ), refresh = true
+            )
+        ).toUiData(filterPredicateOnListData = {
             it.owner.uid != myUid
-        }?.let {
-            emit(UiData.Success(isFresh = true, data = it))
-        }
+        })
     }
 
     override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
@@ -117,18 +120,14 @@ class AppRepository @Inject constructor(
         }
     }
 
-    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> = flow {
-        emit(UiData.Loading())
-        //Optional.presentIfNotNull(sportFilter?.toSportType())
-        val response = try {
-            apolloClient.query(ResponsesQuery(sportFilter!!.toSportType())).execute()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        response?.data?.toGameOfferToAcceptList()?.let {
-            emit(UiData.Success(isFresh = true, data = it))
-        }
+    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
+        return gameOffersToAcceptStore.stream(
+            StoreRequest.cached(
+                key = OffersFilter(
+                    sportFilter = sportFilter
+                ), refresh = true
+            )
+        ).toUiData()
     }
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {
@@ -155,23 +154,25 @@ class AppRepository @Inject constructor(
         return executeApolloMutation(request = {
             apolloClient.mutation(CreateOfferMutation(gameParams.toCreateOfferInput())).execute()
         },
-        onDataSuccessfullyReceived = {
-            Log.d("New offer id", it.createOffer.offerId.toString())
-        })
+            onDataSuccessfullyReceived = {
+                Log.d("New offer id", it.createOffer.offerId.toString())
+            })
     }
 
     override suspend fun sendOfferToAccept(offerUid: String): Resource<Unit> {
         return executeApolloMutation(request = {
-            apolloClient.mutation(CreateResponseMutation(
-                CreateResponseInput(offerId = offerUid, description = "")
-            )).execute()
+            apolloClient.mutation(
+                CreateResponseMutation(
+                    CreateResponseInput(offerId = offerUid, description = "")
+                )
+            ).execute()
         },
-        validateResult = {
-             it.createResponse?.responseId != null
-        },
-        onDataSuccessfullyReceived = {
-            Log.d("New response id", it.createResponse?.responseId.toString())
-        })
+            validateResult = {
+                it.createResponse?.responseId != null
+            },
+            onDataSuccessfullyReceived = {
+                Log.d("New response id", it.createResponse?.responseId.toString())
+            })
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
@@ -188,16 +189,23 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
         val uploadedPhotoUri = params.photoUrl?.let {
-            val result = firebaseStoragePhotoUploader.uploadNewImage(Uri.parse(it), authManager.getCurrentUserUid()!!)
-            if(result is Resource.Success) {
+            val result = firebaseStoragePhotoUploader.uploadNewImage(
+                Uri.parse(it),
+                authManager.getCurrentUserUid()!!
+            )
+            if (result is Resource.Success) {
                 result.data
             } else
                 null
         } ?: return Resource.Error(defaultRequestError)
         val result = executeApolloMutation(request = {
-            apolloClient.mutation(UpdateUserMutation(params.copy(photoUrl = uploadedPhotoUri).toUpdateUserInput())).execute()
+            apolloClient.mutation(
+                UpdateUserMutation(
+                    params.copy(photoUrl = uploadedPhotoUri).toUpdateUserInput()
+                )
+            ).execute()
         })
-        if(result is Resource.Success) {
+        if (result is Resource.Success) {
             userInfoUpdateCache.markUserInfoAsSaved(
                 User(
                     userName = params.name,
@@ -220,20 +228,30 @@ class AppRepository @Inject constructor(
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(): Flow<UiData<Output>> = flow {
         var lastData: Output? = null
         collect {
-            when(it) {
+            when (it) {
                 is StoreResponse.Loading -> {
-                    if(lastData == null)
+                    if (lastData == null)
                         emit(UiData.Loading())
                 }
                 is StoreResponse.Error -> {
-                    emit(UiData.Error(cachedData = lastData, message = it.errorMessageOrNull()?.let { errorMessage -> UiText.NonTranslatable(errorMessage) }))
+                    emit(
+                        UiData.Error(
+                            cachedData = lastData,
+                            message = it.errorMessageOrNull()
+                                ?.let { errorMessage -> UiText.NonTranslatable(errorMessage) })
+                    )
                 }
                 is StoreResponse.Data -> {
                     lastData = it.value
-                    emit(UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = it.value))
+                    emit(
+                        UiData.Success(
+                            isFresh = it.origin == ResponseOrigin.Fetcher,
+                            data = it.value
+                        )
+                    )
                 }
                 is StoreResponse.NoNewData -> {
-                    if(it.origin == ResponseOrigin.Fetcher) {
+                    if (it.origin == ResponseOrigin.Fetcher) {
                         //emit(UiData.Success(isFresh = it.origin == ResponseOrigin.Fetcher, data = null))
                     }
                 }
@@ -255,9 +273,9 @@ class AppRepository @Inject constructor(
         }
     }
 
-    private suspend fun <T: Operation.Data>executeApolloMutation(
+    private suspend fun <T : Operation.Data> executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
-        validateResult: (T) -> Boolean = {true},
+        validateResult: (T) -> Boolean = { true },
         onDataSuccessfullyReceived: (T) -> Unit = {},
     ): Resource<Unit> {
         return withContext(ioDispatcher) {
@@ -268,23 +286,25 @@ class AppRepository @Inject constructor(
                 e.printStackTrace()
                 null
             }
-            if(!response?.errors.isNullOrEmpty())
-            {
+            if (!response?.errors.isNullOrEmpty()) {
                 val message = response?.errors?.map {
                     it.message
                 }?.reduce { acc, s -> "$acc$s " }
                 return@withContext Resource.Error(UiText.NonTranslatable("Error: $message"))
             }
             val responseData = response?.data
-            if(responseData != null && !validateResult(responseData))
-            {
+            if (responseData != null && !validateResult(responseData)) {
                 return@withContext Resource.Error(defaultRequestError)
             }
             return@withContext response?.data?.let {
                 onDataSuccessfullyReceived(it)
                 Resource.Success(Unit)
-            }?:let {
-                Resource.Error(message = UiText.NonTranslatable(response?.errors?.firstOrNull()?.message?:"Request error"))
+            } ?: let {
+                Resource.Error(
+                    message = UiText.NonTranslatable(
+                        response?.errors?.firstOrNull()?.message ?: "Request error"
+                    )
+                )
             }
         }
     }
