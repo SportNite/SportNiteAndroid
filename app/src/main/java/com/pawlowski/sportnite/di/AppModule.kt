@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
@@ -20,6 +21,7 @@ import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
+import com.pawlowski.sportnite.data.local.PlayerDetailsInMemoryCache
 import com.pawlowski.sportnite.data.local.PlayersInMemoryCache
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.AppRepository
@@ -29,12 +31,16 @@ import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Player
+import com.pawlowski.sportnite.presentation.models.PlayerDetails
+import com.pawlowski.sportnite.type.StringOperationFilterInput
+import com.pawlowski.sportnite.type.UserFilterInput
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import javax.inject.Singleton
 
 @Module
@@ -152,7 +158,31 @@ class AppModule {
         )).build()
     }
 
-
+    @Singleton
+    @Provides
+    fun playerDetailsStore(apolloClient: ApolloClient, playerDetailsInMemoryCache: PlayerDetailsInMemoryCache): Store<String, PlayerDetails> {
+        return StoreBuilder.from(fetcher = Fetcher.of { filter: String ->
+            apolloClient.query(UsersQuery(filter =
+            Optional.present(
+                UserFilterInput(firebaseUserId = Optional.present(
+                    StringOperationFilterInput(
+                        eq = Optional.present(filter)
+                    )
+                ))
+            ))).execute().data!!.toPlayerDetails()!!
+        }, sourceOfTruth = SourceOfTruth.of(
+            reader = { key: String ->
+                playerDetailsInMemoryCache.observeData(key).map { it.first() }
+            },
+            writer = { key: String, input: PlayerDetails ->
+                playerDetailsInMemoryCache.addManyElements(key, listOf(input))
+            },
+            delete = { key: String ->
+                playerDetailsInMemoryCache.deleteAllElementsWithKey(key)
+            },
+            deleteAll = { playerDetailsInMemoryCache.deleteAllData() }
+        )).build()
+    }
 }
 
 

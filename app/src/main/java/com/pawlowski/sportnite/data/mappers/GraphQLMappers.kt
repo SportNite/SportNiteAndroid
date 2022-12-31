@@ -189,6 +189,31 @@ fun UsersQuery.Data.toPlayersList(): List<Player>? {
     }
 }
 
+fun UsersQuery.Data.toPlayerDetails(): PlayerDetails? {
+
+    return this.users?.nodes?.get(0)?.let {
+        val ageInYears = Period.between(
+            OffsetDateTime.parse(it.birthDate.toString()).toLocalDate(),
+            LocalDate.now()
+        ).years
+        PlayerDetails(
+            playerUid = it.firebaseUserId,
+            playerPhotoUrl = it.avatar,
+            age = ageInYears,
+            playerName = it.name,
+            timeAvailability = it.availability,
+            contact = listOfNotNull(
+                it.phone?:""
+            ),
+            advanceLevels = it.skills.associate { skill ->
+                Pair(skill.sport.toSport(), skill.toAdvanceLevel())
+            }
+        )
+    }
+}
+
+
+
 fun UsersQuery.Node.toPlayer(): Player {
     val ageInYears = Period.between(
         OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
@@ -234,6 +259,10 @@ fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
             )
         )
     }?: Optional.absent()
+}
+
+fun UsersQuery.Skill.toAdvanceLevel(): AdvanceLevel {
+    return AdvanceLevel.NRTP(7.0)
 }
 
 

@@ -9,6 +9,7 @@ query Users($filter: UserFilterInput) {
       sex,
       city,
       phone,
+      availability,
       skills {
         nrtp,
         sport,

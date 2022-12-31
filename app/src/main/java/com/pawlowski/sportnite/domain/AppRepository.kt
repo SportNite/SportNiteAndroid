@@ -44,6 +44,7 @@ class AppRepository @Inject constructor(
     private val playersStore: Store<PlayersFilter, List<Player>>,
     private val offersStore: Store<OffersFilter, List<GameOffer>>,
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
+    private val playerDetailsStore: Store<String, PlayerDetails>,
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
         emit(UiData.Loading())
@@ -137,7 +138,12 @@ class AppRepository @Inject constructor(
     }
 
     override fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>> {
-        TODO("Not yet implemented")
+        return playerDetailsStore.stream(
+            StoreRequest.cached(
+                key = playerUid,
+                refresh = true
+            )
+        ).toUiData()
     }
 
     override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> {

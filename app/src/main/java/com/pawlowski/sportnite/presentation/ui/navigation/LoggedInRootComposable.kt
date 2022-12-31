@@ -135,7 +135,7 @@ fun LoggedInRootComposable(
                         navController.popBackStack()
                     },
                     onNavigateToPlayerDetailsScreen = {
-                        navController.navigate("PlayerDetails") {
+                        navController.navigate("PlayerDetails/$it") {
                             launchSingleTop = true
                         }
                     },
@@ -163,7 +163,15 @@ fun LoggedInRootComposable(
                     }
                 )
             }
-            composable("PlayerDetails") {
+            composable(
+                route = "PlayerDetails/{playerId}",
+                arguments = listOf(
+                    navArgument(name = "playerId") {
+                        type = NavType.StringType
+                        nullable = false
+                    }
+                )
+            ) {
                 PlayerDetailsScreen(
                     onNavigateBack = {
                         navController.popBackStack()
@@ -180,6 +188,9 @@ fun LoggedInRootComposable(
                             restoreState = true
                             launchSingleTop = true
                         }
+                    },
+                    onNavigateToPlayerDetailsScreen = {
+                        navController.navigate("PlayerDetails/$it")
                     }
                 )
             }

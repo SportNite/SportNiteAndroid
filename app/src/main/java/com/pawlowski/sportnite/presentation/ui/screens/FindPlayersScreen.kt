@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,6 +30,7 @@ fun FindPlayersScreen(
     modifier: Modifier = Modifier,
     viewModel: IFindPlayersScreenViewModel = hiltViewModel<FindPlayersScreenViewModel>(),
     onNavigateToHomeScreen: () -> Unit = {},
+    onNavigateToPlayerDetailsScreen: (String) -> Unit = {}
 ) {
     BackHandler {
         onNavigateToHomeScreen()
@@ -59,14 +61,17 @@ fun FindPlayersScreen(
     val playersValueState = remember {
         derivedStateOf {
             val value = playersDataState.value
-            if(value is UiData.Success)
+            if (value is UiData.Success)
                 value.data
             else
                 listOf()
         }
     }
     Surface(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             FiltersCard(
                 searchInput = { searchInputState.value },
                 sportInput = { sportInputState.value },
@@ -83,7 +88,15 @@ fun FindPlayersScreen(
             val players = playersValueState.value
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                 items(players.size) {
-                    PlayerCard(modifier = Modifier.padding(5.dp), player = players[it])
+                    val currentPlayer = players[it]
+                    PlayerCard(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .clickable {
+                                onNavigateToPlayerDetailsScreen(currentPlayer.uid)
+                            },
+                        player = currentPlayer
+                    )
                 }
             }
         }
@@ -108,24 +121,33 @@ fun FiltersCard(
         shape = RectangleShape,
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Spacer(modifier = Modifier.height(5.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 value = searchInput(),
                 label = {
-                        Text(text = "Wpisz aby wyszukać")
+                    Text(text = "Wpisz aby wyszukać")
                 },
                 onValueChange = onSearchInputChange,
                 leadingIcon = {
-                    Icon(painter = painterResource(id = R.drawable.search_icon), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.drawable.search_icon),
+                        contentDescription = ""
+                    )
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            SportInputField(modifier = Modifier.fillMaxWidth(0.9f), chosenSport = sportInput(), onClick = {
+            SportInputField(
+                modifier = Modifier.fillMaxWidth(0.9f),
+                chosenSport = sportInput(),
+                onClick = {
 
-            })
+                })
 
             Spacer(modifier = Modifier.height(10.dp))
 
