@@ -29,7 +29,6 @@ import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Player
-import com.pawlowski.sportnite.presentation.models.Sport
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -152,6 +151,8 @@ class AppModule {
             deleteAll = { offersToAcceptMemoryCache.deleteAllData() }
         )).build()
     }
+
+
 }
 
 

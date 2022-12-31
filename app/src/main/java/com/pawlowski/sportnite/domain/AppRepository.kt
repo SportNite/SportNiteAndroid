@@ -71,8 +71,8 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getUserSports(): Flow<UiData<List<Sport>>> {
-        TODO("Not yet implemented")
+    override fun getUserSports(): Flow<UiData<List<Sport>>> = flow {
+        emit(UiData.Success(isFresh = true, data = availableSports.values.toList()))
     }
 
     override fun getPlayers(

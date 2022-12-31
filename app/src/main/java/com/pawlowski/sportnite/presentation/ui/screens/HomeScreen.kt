@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -51,6 +52,18 @@ fun HomeScreen(
                 null
         }
     }
+
+
+
+    val sportsValueState = remember {
+        derivedStateOf {
+            val value = uiState.value.userSports
+            if(value is UiData.Success)
+                value.data
+            else
+                listOf()
+        }
+    }
     Surface(modifier.fillMaxSize()) {
         Column {
             Spacer(modifier = Modifier.height(10.dp))
@@ -71,7 +84,7 @@ fun HomeScreen(
 
             SportsRow(
                 headersPadding = PaddingValues(horizontal = 10.dp),
-                sports = listOf(),
+                sports = sportsValueState.value,
                 onSportClick = {
                     onNavigateToSportScreen(it)
                 }
@@ -97,9 +110,9 @@ fun SportsRow(
         Spacer(modifier = Modifier.height(5.dp))
         LazyRow {
             item { Spacer(modifier = Modifier.width(5.dp)) }
-            items(3) {
+            items(sports) { sport ->
                 SportCard(
-                    sport = getSportForPreview(),
+                    sport = sport,
                     onSportClick = {
                         onSportClick(it)
                     }

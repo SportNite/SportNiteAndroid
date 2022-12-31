@@ -8,6 +8,7 @@ query Users($filter: UserFilterInput) {
       birthDate,
       sex,
       city,
+      phone,
       skills {
         nrtp,
         sport,

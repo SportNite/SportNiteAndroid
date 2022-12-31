@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.di
 
+import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.presentation.use_cases.*
 import dagger.Module
@@ -59,4 +60,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun acceptOfferToAcceptUseCase(appRepository: IAppRepository): AcceptOfferToAcceptUseCase = AcceptOfferToAcceptUseCase(appRepository::acceptOfferToAccept)
+
+    @Singleton
+    @Provides
+    fun getUserSportsUseCase(appRepository: AppRepository) = GetUserSportsUseCase(appRepository::getUserSports)
 }

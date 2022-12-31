@@ -6,6 +6,7 @@ import com.pawlowski.sportnite.presentation.ui.utils.getMeetingsListForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getUserForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetInfoAboutMeUseCase
+import com.pawlowski.sportnite.presentation.use_cases.GetUserSportsUseCase
 import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getInfoAboutMeUseCase: GetInfoAboutMeUseCase,
+    private val getUserSportsUseCase: GetUserSportsUseCase,
 ): IHomeScreenViewModel, ViewModel() {
     override val container: Container<HomeScreenUiState, HomeScreenSideEffect> = container(initialState = HomeScreenUiState(
         upcomingMeetings = UiData.Success(true, getMeetingsListForPreview()),
@@ -46,7 +48,18 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    private fun observeUserSports() = intent {
+        repeatOnSubscription {
+            getUserSportsUseCase().collectLatest {
+                reduce {
+                    state.copy(userSports = it)
+                }
+            }
+        }
+    }
+
     init {
+        observeUserSports()
         observeInfoAboutMe()
         observeIncomingMeetings()
     }

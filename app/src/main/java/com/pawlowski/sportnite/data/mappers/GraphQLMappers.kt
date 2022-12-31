@@ -6,10 +6,8 @@ import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.presentation.models.User
 import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
-import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.UiDate
 import java.time.LocalDate
@@ -209,9 +207,15 @@ fun UsersQuery.Node.toPlayer(): Player {
 }
 
 fun Sport.toSportType(): SportType {
-    return SportType.TENNIS
+
+    return try {
+        SportType.valueOf(sportId)
+    }
+    catch (e: IllegalArgumentException) {
+        SportType.RUN
+    }
 }
 
 fun SportType.toSport(): Sport {
-    return getSportForPreview()
+    return getSportFromSportId(this.name)
 }
