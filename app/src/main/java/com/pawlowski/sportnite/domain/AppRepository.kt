@@ -5,7 +5,6 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
-import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
@@ -15,13 +14,14 @@ import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.mappers.*
+import com.pawlowski.sportnite.data.local.OffersInMemoryCache
+import com.pawlowski.sportnite.data.mappers.availableSports
+import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
+import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
 import com.pawlowski.sportnite.domain.models.*
+import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
-import com.pawlowski.sportnite.type.OfferFilterInput
-import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.UiText
@@ -29,7 +29,6 @@ import com.pawlowski.sportnite.utils.defaultRequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -49,6 +48,7 @@ class AppRepository @Inject constructor(
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
     private val meetingsInMemoryCache: MeetingsInMemoryCache,
+    private val offersInMemoryCache: OffersInMemoryCache,
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
         return meetingsStore.stream(
@@ -106,7 +106,7 @@ class AppRepository @Inject constructor(
                 key = OffersFilter(
                     sportFilter = sportFilter,
                     myOffers = true
-                ), refresh = true
+                ), refresh = true //TODO: check is it working if something appeared in cache before was loaded (when added an offer)
             )
         ).toUiData()
     }
@@ -157,7 +157,24 @@ class AppRepository @Inject constructor(
             apolloClient.mutation(CreateOfferMutation(gameParams.toCreateOfferInput())).execute()
         },
             onDataSuccessfullyReceived = {
-                Log.d("New offer id", it.createOffer.offerId.toString())
+                //Log.d("New offer id", it.createOffer.offerId.toString())
+                val paramsAsGameOffer = gameParams.toGameOffer(
+                    offerId = it.createOffer.offerId.toString(),
+                    playerName = userInfoUpdateCache.cachedUser.value?.userName?:"")
+                offersInMemoryCache.addElement(
+                    key = OffersFilter(
+                        myOffers = true,
+                        sportFilter = null
+                    ),
+                    element = paramsAsGameOffer
+                )
+                offersInMemoryCache.addElement(
+                    key = OffersFilter(
+                        myOffers = true,
+                        sportFilter = gameParams.sport
+                    ),
+                    element = paramsAsGameOffer
+                )
             })
     }
 
@@ -311,4 +328,6 @@ class AppRepository @Inject constructor(
         }
     }
 }
+
+
 

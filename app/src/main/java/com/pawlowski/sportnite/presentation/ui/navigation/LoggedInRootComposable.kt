@@ -73,7 +73,7 @@ fun LoggedInRootComposable(
     },
     floatingActionButton = {
         val screensWithButton = listOf("Sport", "MyMeetings")
-        if(screensWithButton.contains(currentRoute.value))
+        if(screensWithButton.any { currentRoute.value?.contains(it) == true })
         {
             FloatingActionButton(onClick = {
                 navController.navigate("AddOffer") {
