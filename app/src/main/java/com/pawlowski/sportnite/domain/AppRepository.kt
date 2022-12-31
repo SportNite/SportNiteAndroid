@@ -100,17 +100,15 @@ class AppRepository @Inject constructor(
         })
     }
 
-    override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> = flow {
-        emit(UiData.Loading())
-        val response = try {
-            apolloClient.query(MyOffersQuery()).execute()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        response?.data?.toGameOfferList()?.let {
-            emit(UiData.Success(isFresh = true, data = it))
-        }
+    override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
+        return offersStore.stream(
+            StoreRequest.cached(
+                key = OffersFilter(
+                    sportFilter = sportFilter,
+                    myOffers = true
+                ), refresh = true
+            )
+        ).toUiData()
     }
 
     override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {

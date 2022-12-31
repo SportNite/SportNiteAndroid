@@ -116,7 +116,12 @@ class AppModule {
     @Provides
     fun offersStore(apolloClient: ApolloClient, offersInMemoryCache: OffersInMemoryCache): Store<OffersFilter, List<GameOffer>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput())).execute().data!!.toGameOfferList()!!
+            return@of if(filters.myOffers)
+            {
+                apolloClient.query(MyOffersQuery()).execute().data!!.toGameOfferList()!!
+            }
+            else
+                apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput())).execute().data!!.toGameOfferList()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersInMemoryCache.observeData(key)
