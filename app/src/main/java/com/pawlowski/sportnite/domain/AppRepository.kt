@@ -168,13 +168,13 @@ class AppRepository @Inject constructor(
                     ),
                     element = paramsAsGameOffer
                 )
-                offersInMemoryCache.addElement(
+                /*offersInMemoryCache.addElement(
                     key = OffersFilter(
                         myOffers = true,
                         sportFilter = gameParams.sport
                     ),
                     element = paramsAsGameOffer
-                )
+                )*/
             })
     }
 
@@ -240,7 +240,11 @@ class AppRepository @Inject constructor(
         return withContext(ioDispatcher) {
             executeApolloMutation(request = {
                 apolloClient.mutation(DeleteOfferMutation(offerId)).execute()
-            })
+            }) {
+                offersInMemoryCache.deleteElement(OffersFilter(sportFilter = null, myOffers = true)) {
+                    it.offerUid == offerId
+                }
+            }
         }
     }
 

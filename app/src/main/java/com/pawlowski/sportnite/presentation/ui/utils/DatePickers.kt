@@ -4,6 +4,7 @@ import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.datetime.dateTimePicker
+import com.pawlowski.sportnite.utils.UiDate
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -42,12 +43,7 @@ fun showDatePicker(
             val year = datetime.get(Calendar.YEAR)
             val month = datetime.get(Calendar.MONTH)+1
             val day = datetime.get(Calendar.DAY_OF_MONTH)
-            val offsetDateTime = OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneId
-                .systemDefault()
-                .rules
-                .getOffset(
-                    Instant.now()
-                ))
+            val offsetDateTime = OffsetDateTime.of(year, month, day, 0, 0, 0, 0, UiDate.getZoneOffsetOfDevice())
             onDatePicked(offsetDateTime)
         }
     }

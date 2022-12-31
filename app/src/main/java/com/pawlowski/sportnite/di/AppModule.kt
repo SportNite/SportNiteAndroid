@@ -103,7 +103,9 @@ class AppModule {
                 playersInMemoryCache.observeData(key)
             },
             writer = { key: PlayersFilter, input: List<Player> ->
-                playersInMemoryCache.addManyElements(key, input)
+                playersInMemoryCache.addManyElements(key, input) {
+                    it.uid
+                }
             },
             delete = { key: PlayersFilter ->
                 playersInMemoryCache.deleteAllElementsWithKey(key)
@@ -127,7 +129,9 @@ class AppModule {
                 offersInMemoryCache.observeData(key)
             },
             writer = { key: OffersFilter, input: List<GameOffer> ->
-                offersInMemoryCache.addManyElements(key, input)
+                offersInMemoryCache.addManyElements(key, input) {
+                    it.offerUid
+                }
             },
             delete = { key: OffersFilter ->
                 offersInMemoryCache.deleteAllElementsWithKey(key)
@@ -146,7 +150,9 @@ class AppModule {
                 offersToAcceptMemoryCache.observeData(key)
             },
             writer = { key: OffersFilter, input: List<GameOfferToAccept> ->
-                offersToAcceptMemoryCache.addManyElements(key, input)
+                offersToAcceptMemoryCache.addManyElements(key, input) {
+                    it.offerToAcceptUid
+                }
             },
             delete = { key: OffersFilter ->
                 offersToAcceptMemoryCache.deleteAllElementsWithKey(key)
@@ -173,6 +179,9 @@ class AppModule {
             },
             writer = { key: String, input: PlayerDetails ->
                 playerDetailsInMemoryCache.addManyElements(key, listOf(input))
+                {
+                    it.playerUid
+                }
             },
             delete = { key: String ->
                 playerDetailsInMemoryCache.deleteAllElementsWithKey(key)
@@ -202,6 +211,9 @@ class AppModule {
             },
             writer = { key: MeetingsFilter, input: List<Meeting> ->
                 meetingsInMemoryCache.addManyElements(key, input)
+                {
+                    it.meetingUid
+                }
             },
             delete = { key: MeetingsFilter ->
                 meetingsInMemoryCache.deleteAllElementsWithKey(key)

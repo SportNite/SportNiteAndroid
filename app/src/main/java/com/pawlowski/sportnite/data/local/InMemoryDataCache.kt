@@ -19,7 +19,7 @@ abstract class InMemoryDataCache<T, K> {
                     replace(key, currentList.toMutableList().apply {
                         add(element)
                     })
-                }?: kotlin.run {
+                } ?: kotlin.run {
                     put(key, listOf(element))
                 }
             }
@@ -28,15 +28,16 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun addManyElements(key: K, elements: List<T>) {
-        data.update {
-            it.toMutableMap().apply {
-                get(key)?.toMutableList()?.addAll(elements) ?: kotlin.run {
-                    put(key, elements)
+    fun <V>addManyElements(key: K, elements: List<T>, elementsEqualityChecker: (T) -> V) {
+        data.update { lastStateValue ->
+            lastStateValue.toMutableMap().let { map ->
+                map[key] = map[key]?.toMutableList()?.apply {
+                    addAll(elements)
+                }?.distinctBy(elementsEqualityChecker) ?: kotlin.run {
+                    elements
                 }
+                map
             }
-
-
         }
     }
 
@@ -68,6 +69,20 @@ abstract class InMemoryDataCache<T, K> {
             }
         }
     }
+
+    fun deleteElement(key: K, predicate: (T) -> Boolean) {
+        data.update {
+            it.toMutableMap().apply {
+                val currentList = get(key)
+                currentList?.let {
+                    replace(key, currentList.toMutableList().apply {
+                        removeIf(predicate)
+                    })
+                }
+            }
+        }
+    }
+
 
     fun deleteAllElementsWithKey(key: K) {
         data.update {

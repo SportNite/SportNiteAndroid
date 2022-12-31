@@ -1,6 +1,9 @@
 package com.pawlowski.sportnite.utils
 
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 class UiDate(val offsetDateTimeDate: OffsetDateTime) {
@@ -20,16 +23,30 @@ class UiDate(val offsetDateTimeDate: OffsetDateTime) {
         {
             return DateTimeFormatter.ofPattern("dd.MM.u")
         }
+
+        fun getZoneOffsetOfDevice(): ZoneOffset {
+            return ZoneId
+                .systemDefault()
+                .rules
+                .getOffset(
+                    Instant.now()
+                )
+        }
     }
 
     fun asLocalDateString(): String
     {
-        return offsetDateTimeDate.format(dateFormatter())
+        val newOffsetDateTime = offsetDateTimeDate.withOffsetSameInstant(
+            getZoneOffsetOfDevice()
+        )
+        return newOffsetDateTime.format(dateFormatter())
     }
 
-    fun asLocalDateTimeString(): String
-    {
-        return offsetDateTimeDate.format(dateTimeFormatter())
+    fun asLocalDateTimeString(): String {
+        val newOffsetDateTime = offsetDateTimeDate.withOffsetSameInstant(
+            getZoneOffsetOfDevice()
+        )
+        return newOffsetDateTime.format(dateTimeFormatter())
     }
 
 
