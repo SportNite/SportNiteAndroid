@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.data.mappers.getSportFromSportId
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
@@ -27,7 +28,7 @@ class SportScreenViewModel @Inject constructor(
     private val acceptOfferToAcceptUseCase: AcceptOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
-    private val currentSport = getSportForPreview() //TODO
+    private val currentSport = getSportFromSportId(savedStateHandle.get<String>("sportId")!!)
 
 
     override fun sendGameOfferToAccept(gameOffer: GameOffer) = intent {
@@ -76,7 +77,7 @@ class SportScreenViewModel @Inject constructor(
 
     private fun observePlayers() = intent(registerIdling = false) {
         repeatOnSubscription {
-            getPlayersUseCase(null, null, null).collectLatest {
+            getPlayersUseCase(currentSport, null, null).collectLatest {
                 reduce {
                     state.copy(otherPlayers = it)
                 }

@@ -5,6 +5,7 @@ import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
@@ -15,12 +16,11 @@ import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.domain.models.AddGameOfferParams
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
+import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
+import com.pawlowski.sportnite.type.OfferFilterInput
+import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.UiText
@@ -49,7 +49,9 @@ class AppRepository @Inject constructor(
         emit(UiData.Loading())
 
         val response = try {
-            apolloClient.query(IncomingOffersQuery()).execute()
+            apolloClient.query(IncomingOffersQuery(
+                offersFilter = MeetingsFilter(sportFilter = sportFilter).toOfferFilterInput()
+            )).execute()
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -309,3 +311,4 @@ class AppRepository @Inject constructor(
         }
     }
 }
+

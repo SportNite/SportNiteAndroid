@@ -2,9 +2,7 @@ package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.domain.models.AddGameOfferParams
-import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
+import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
@@ -202,9 +200,42 @@ fun UsersQuery.Node.toPlayer(): Player {
         photoUrl = avatar,
         advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
         age = ageInYears,
-        phoneNumber = "" //TODO
+        phoneNumber = phone?:""
     )
 }
+
+fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
+    return this.sportFilter?.let {
+        Optional.present(
+            listOf(
+                OfferFilterInput(
+                    sport = Optional.present(
+                        SportTypeOperationFilterInput(
+                            eq = Optional.present(it.toSportType())
+                        )
+                    )
+                )
+            )
+        )
+    }?:Optional.absent()
+}
+
+fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
+    return sportFilter?.let {
+        Optional.present(
+            listOf(
+                OfferFilterInput(
+                    sport = Optional.present(
+                        SportTypeOperationFilterInput(
+                            eq = Optional.present(sportFilter.toSportType())
+                        )
+                    )
+                )
+            )
+        )
+    }?: Optional.absent()
+}
+
 
 fun Sport.toSportType(): SportType {
 

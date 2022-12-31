@@ -1,8 +1,9 @@
-query Offers {
+query Offers($offerFilterInput: [OfferFilterInput!]) {
   offers(where: {
     isAvailable: {
       eq: true
-    }
+    },
+    and: $offerFilterInput
   }) {
     nodes {
       offerId,

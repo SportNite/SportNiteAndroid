@@ -5,10 +5,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.screens.*
 
@@ -87,7 +90,7 @@ fun LoggedInRootComposable(
             composable("Home") {
                 HomeScreen(
                     onNavigateToSportScreen = {
-                        navController.navigate("Sport") {
+                        navController.navigate("Sport/${it.sportId}") {
                             launchSingleTop = true
                         }
                     },
@@ -117,7 +120,15 @@ fun LoggedInRootComposable(
                     modifier = Modifier.padding(padding)
                 )
             }
-            composable("Sport") {
+            composable(
+                route = "Sport/{sportId}",
+                arguments = listOf(
+                    navArgument("sportId") {
+                        type = NavType.StringType
+                        nullable = false
+                    }
+                )
+            ) {
                 SportScreen(
                     modifier = Modifier.padding(padding),
                     onNavigateBack = {

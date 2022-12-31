@@ -1,5 +1,7 @@
-query IncomingOffers {
-  incomingOffers {
+query IncomingOffers($offersFilter: [OfferFilterInput!]) {
+  incomingOffers(where: {
+    and: $offersFilter
+  }) {
     offerId,
     user {
       name,
