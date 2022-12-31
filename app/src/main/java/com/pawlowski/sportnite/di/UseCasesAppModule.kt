@@ -63,9 +63,13 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getUserSportsUseCase(appRepository: AppRepository) = GetUserSportsUseCase(appRepository::getUserSports)
+    fun getUserSportsUseCase(appRepository: IAppRepository) = GetUserSportsUseCase(appRepository::getUserSports)
 
     @Singleton
     @Provides
-    fun getPlayerDetailsUseCase(appRepository: AppRepository) = GetPlayerDetailsUseCase(appRepository::getPlayerDetails)
+    fun getPlayerDetailsUseCase(appRepository: IAppRepository) = GetPlayerDetailsUseCase(appRepository::getPlayerDetails)
+
+    @Singleton
+    @Provides
+    fun getMeetingByIdUseCase(appRepository: IAppRepository) = GetMeetingByIdUseCase(appRepository::getMeetingDetails)
 }

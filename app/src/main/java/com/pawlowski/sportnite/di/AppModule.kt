@@ -12,26 +12,18 @@ import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.pawlowski.sportnite.MainActivity
-import com.pawlowski.sportnite.OffersQuery
-import com.pawlowski.sportnite.ResponsesQuery
-import com.pawlowski.sportnite.UsersQuery
+import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
-import com.pawlowski.sportnite.data.local.OffersInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.local.PlayerDetailsInMemoryCache
-import com.pawlowski.sportnite.data.local.PlayersInMemoryCache
+import com.pawlowski.sportnite.data.local.*
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
+import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
-import com.pawlowski.sportnite.presentation.models.Player
-import com.pawlowski.sportnite.presentation.models.PlayerDetails
+import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.StringOperationFilterInput
 import com.pawlowski.sportnite.type.UserFilterInput
 import dagger.Module
@@ -181,6 +173,35 @@ class AppModule {
                 playerDetailsInMemoryCache.deleteAllElementsWithKey(key)
             },
             deleteAll = { playerDetailsInMemoryCache.deleteAllData() }
+        )).build()
+    }
+
+
+    @Singleton
+    @Provides
+    fun meetingStore(apolloClient: ApolloClient, meetingsInMemoryCache: MeetingsInMemoryCache, authManager: AuthManager): Store<MeetingsFilter, List<Meeting>> {
+        return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
+            apolloClient.query(
+                IncomingOffersQuery(
+                    offersFilter = filters.toOfferFilterInput()
+                )
+            ).execute().data!!.incomingOffers.let { beforeMappingData ->
+                val userUid = authManager.getCurrentUserUid()!!
+                beforeMappingData.map {
+                    it.toMeeting(userUid)
+                }
+            }
+        }, sourceOfTruth = SourceOfTruth.of(
+            reader = { key: MeetingsFilter ->
+                meetingsInMemoryCache.observeData(key)
+            },
+            writer = { key: MeetingsFilter, input: List<Meeting> ->
+                meetingsInMemoryCache.addManyElements(key, input)
+            },
+            delete = { key: MeetingsFilter ->
+                meetingsInMemoryCache.deleteAllElementsWithKey(key)
+            },
+            deleteAll = { meetingsInMemoryCache.deleteAllData() }
         )).build()
     }
 }

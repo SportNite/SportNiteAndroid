@@ -116,16 +116,32 @@ fun ResponsesQuery.User.toPlayer(): Player {
 }
 
 fun IncomingOffersQuery.User.toPlayer(): Player {
-    return getPlayerForPreview().copy(
-        uid = this.firebaseUserId,
-        name = this.name,
+    val ageInYears = Period.between(
+        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
+        LocalDate.now()
+    ).years
+    return Player(
+        uid = firebaseUserId,
+        name = name,
+        photoUrl = avatar,
+        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        age = ageInYears,
+        phoneNumber = phone?:""
     )
 }
 
 fun IncomingOffersQuery.User1.toPlayer(): Player {
-    return getPlayerForPreview().copy(
-        uid = this.firebaseUserId,
-        name = this.name,
+    val ageInYears = Period.between(
+        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
+        LocalDate.now()
+    ).years
+    return Player(
+        uid = firebaseUserId,
+        name = name,
+        photoUrl = avatar,
+        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        age = ageInYears,
+        phoneNumber = phone?:""
     )
 }
 

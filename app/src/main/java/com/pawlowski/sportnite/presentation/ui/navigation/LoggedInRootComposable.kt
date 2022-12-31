@@ -101,7 +101,7 @@ fun LoggedInRootComposable(
                         }
                     },
                     onNavigateToMeetingDetails = {
-                        navController.navigate("MeetingDetails") {
+                        navController.navigate("MeetingDetails/$it") {
                             launchSingleTop = true
                         }
                     }
@@ -114,6 +114,11 @@ fun LoggedInRootComposable(
                         {
                             popUpTo("Home")
                             restoreState = true
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToMeetingDetailsScreen = {
+                        navController.navigate("MeetingDetails/$it") {
                             launchSingleTop = true
                         }
                     },
@@ -140,7 +145,7 @@ fun LoggedInRootComposable(
                         }
                     },
                     onNavigateToMeetingDetailsScreen = {
-                        navController.navigate("MeetingDetails") {
+                        navController.navigate("MeetingDetails/$it") {
                             launchSingleTop = true
                         }
                     }
@@ -156,7 +161,15 @@ fun LoggedInRootComposable(
                     onNavigateToLoginScreen = onNavigateToSignInScreen
                 )
             }
-            composable("MeetingDetails") {
+            composable(
+                route = "MeetingDetails/{meetingId}",
+                arguments = listOf(
+                    navArgument("meetingId") {
+                        type = NavType.StringType
+                        nullable = false
+                    }
+                )
+            ) {
                 MeetingDetailsScreen(
                     onNavigateBack = {
                         navController.popBackStack()

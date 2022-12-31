@@ -30,7 +30,8 @@ import com.pawlowski.sportnite.utils.UiData
 fun MyMeetingsScreen(
     modifier: Modifier = Modifier,
     viewModel: IMyMeetingsScreenViewModel = hiltViewModel<MyMeetingsScreenViewModel>(),
-    onNavigateToHomeScreen: () -> Unit = {}
+    onNavigateToHomeScreen: () -> Unit = {},
+    onNavigateToMeetingDetailsScreen: (String) -> Unit = {}
 ) {
 
     BackHandler {
@@ -150,7 +151,10 @@ fun MyMeetingsScreen(
                 IncomingMeetingsRow(
                     meetings = meetingsValueState.value,
                     headersPadding = PaddingValues(horizontal = 10.dp),
-                    displaySeeMore = false
+                    displaySeeMore = false,
+                    onMeetingCardClick = {
+                        onNavigateToMeetingDetailsScreen(it.meetingUid)
+                    }
                 )
             }
             item {

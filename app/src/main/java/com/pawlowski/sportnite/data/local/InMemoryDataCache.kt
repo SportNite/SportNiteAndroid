@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.data.local
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 abstract class InMemoryDataCache<T, K> {
@@ -42,6 +43,12 @@ abstract class InMemoryDataCache<T, K> {
     fun observeData(key: K): Flow<List<T>> {
         return data.map {
             it[key] ?: listOf()
+        }
+    }
+
+    fun observeFirstFromAnyKey(predicate: (T) -> Boolean): Flow<T> {
+        return data.map {
+            it.flatMap { it.value }.first { predicate(it) }
         }
     }
 

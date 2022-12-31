@@ -14,6 +14,7 @@ import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
+import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.*
@@ -28,6 +29,7 @@ import com.pawlowski.sportnite.utils.defaultRequestError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -45,29 +47,17 @@ class AppRepository @Inject constructor(
     private val offersStore: Store<OffersFilter, List<GameOffer>>,
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
+    private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
+    private val meetingsInMemoryCache: MeetingsInMemoryCache,
 ) : IAppRepository {
-    override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> = flow {
-        emit(UiData.Loading())
-
-        val response = try {
-            apolloClient.query(IncomingOffersQuery(
-                offersFilter = MeetingsFilter(sportFilter = sportFilter).toOfferFilterInput()
-            )).execute()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        response?.let { resp ->
-            val meetings = resp.data?.incomingOffers?.map {
-                it.toMeeting(authManager.getCurrentUserUid()!!)
-            }
-
-            meetings?.let {
-                emit(UiData.Success(isFresh = true, data = it))
-            } ?: kotlin.run {
-                emit(UiData.Error(message = defaultRequestError))
-            }
-        }
+    override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
+        return meetingsStore.stream(
+            StoreRequest.cached(
+                key = MeetingsFilter(
+                    sportFilter = sportFilter
+                ), refresh = true
+            )
+        ).toUiData()
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -138,6 +128,7 @@ class AppRepository @Inject constructor(
     }
 
     override fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>> {
+        //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
         return playerDetailsStore.stream(
             StoreRequest.cached(
                 key = playerUid,
@@ -146,8 +137,13 @@ class AppRepository @Inject constructor(
         ).toUiData()
     }
 
-    override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> {
-        TODO("Not yet implemented")
+    override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> = flow {
+        emit(UiData.Loading())
+        meetingsInMemoryCache.observeFirstFromAnyKey {
+            it.meetingUid == meetingUid
+        }.collect {
+            emit(UiData.Success(isFresh = true, data = it))
+        }
     }
 
     override fun getUserNotifications(): Flow<UiData<List<Notification>>> {

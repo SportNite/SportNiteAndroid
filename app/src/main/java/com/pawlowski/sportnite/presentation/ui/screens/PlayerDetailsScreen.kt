@@ -147,10 +147,13 @@ fun ContactRow(contacts: List<String>) {
 
             }
             items(contacts) {
-                Card {
-                    Text(modifier = Modifier.padding(3.dp), text = it)
+                if(it.isNotEmpty())
+                {
+                    Card {
+                        Text(modifier = Modifier.padding(3.dp), text = it)
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
                 }
-                Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }

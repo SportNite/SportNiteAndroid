@@ -22,7 +22,7 @@ class PlayerDetailsViewModel @Inject constructor(
     override val container: Container<PlayerDetailsUiState, PlayerDetailsSideEffect> =
         container(
             initialState = PlayerDetailsUiState(
-                UiData.Success(true, getPlayerDetailsForPreview())
+                UiData.Loading()
             )
         )
 
