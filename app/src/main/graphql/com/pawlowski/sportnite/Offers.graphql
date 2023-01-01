@@ -4,7 +4,10 @@ query Offers($offerFilterInput: [OfferFilterInput!]) {
       eq: true
     },
     and: $offerFilterInput
-  }) {
+  },
+     order: {
+       dateTime: ASC
+     }) {
     nodes {
       offerId,
       userId,

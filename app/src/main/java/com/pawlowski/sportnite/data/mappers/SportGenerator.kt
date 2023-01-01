@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.data.mappers
 
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.utils.UiText
 
@@ -12,6 +13,22 @@ fun getSportFromSportId(sportId: String): Sport {
             sportId = sportId,
             sportIconId = R.drawable.sport_icon
         )
+    }
+}
+
+fun getAvailableLevelsForSport(sport: Sport): List<AdvanceLevel> {
+    return when(sport.sportId) {
+        "TENNIS" -> {
+            (1..11).map {
+                AdvanceLevel.NRTP(nrtpLevel = it*0.5)
+            }
+        }
+        else -> {
+            (1..10).map {
+                AdvanceLevel.DefaultLevel(level = it)
+            }
+        }
+
     }
 }
 

@@ -5,7 +5,6 @@ import org.orbitmvi.orbit.ContainerHost
 
 interface IChooseAdvanceLevelScreenViewModel: ContainerHost<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect> {
     fun selectLevel(level: AdvanceLevel)
-    fun changeSearchCityInput(newValue: String)
     fun continueClick()
     fun navigateBack()
 }

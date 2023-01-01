@@ -4,7 +4,7 @@ import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.view_models_related.choose_city_screen.ChooseCityScreenSideEffect
 import org.orbitmvi.orbit.ContainerHost
 
-interface IChooseSportsScreenViewModel: ContainerHost<ChooseSportsScreenUiState, ChooseCityScreenSideEffect> {
+interface IChooseSportsScreenViewModel: ContainerHost<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> {
     fun changeSelectionOfSport(sport: Sport)
     fun continueClick()
     fun navigateBack()
