@@ -122,7 +122,6 @@ class AppRepository @Inject constructor(
     }
 
     override fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>> {
-        //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
         return playerDetailsStore.stream(
             StoreRequest.cached(
                 key = playerUid,
@@ -132,6 +131,7 @@ class AppRepository @Inject constructor(
     }
 
     override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> = flow {
+        //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
         emit(UiData.Loading())
         meetingsInMemoryCache.observeFirstFromAnyKey {
             it.meetingUid == meetingUid
@@ -231,7 +231,7 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit> {
         return withContext(ioDispatcher) {
-            val result = levels.toSetSkillInput().map {
+            val isAllSuccess = levels.toSetSkillInput().map {
                 async {
                     executeApolloMutation(request = {
                         apolloClient.mutation(SetSkillMutation(it)).execute()
@@ -240,8 +240,11 @@ class AppRepository @Inject constructor(
             }.all {
                 it.await() is Resource.Success
             }
-            if(result)
+            if(isAllSuccess)
+            {
+                userInfoUpdateCache.saveInfoAboutAdvanceLevels(levels)
                 Resource.Success(Unit)
+            }
             else
                 Resource.Error(defaultRequestError)
         }

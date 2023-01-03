@@ -2,7 +2,6 @@ package com.pawlowski.sportnite.presentation.view_models_related.player_details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.presentation.ui.utils.getPlayerDetailsForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetPlayerDetailsUseCase
 import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel

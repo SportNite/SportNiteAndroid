@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.data.mappers
 
+import android.util.Log
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*

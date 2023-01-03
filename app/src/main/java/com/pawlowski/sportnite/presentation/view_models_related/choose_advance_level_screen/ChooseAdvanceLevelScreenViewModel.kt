@@ -23,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ChooseAdvanceLevelScreenViewModel @Inject constructor(
     private val advanceLevelUpdatingCache: AdvanceLevelUpdatingCache,
-    private val userInfoUpdateCache: UserInfoUpdateCache,
     private val updateAdvanceLevelInfoUseCase: UpdateAdvanceLevelInfoUseCase,
 ): IChooseAdvanceLevelScreenViewModel, ViewModel() {
     private var currentSportIndexState = MutableStateFlow(0)
@@ -71,7 +70,6 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
             }.onError { message, _ ->
                 postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(message))
             }
-            userInfoUpdateCache.saveInfoAboutAdvanceLevels(levelsMapped)
         }
         else {
             postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(UiText.NonTranslatable("Something is missing!")))
