@@ -4,8 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
 import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
-import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,11 +31,10 @@ class SportScreenViewModel @Inject constructor(
 
     override fun sendGameOfferToAccept(gameOffer: GameOffer) = intent {
         val result = sendGameOfferToAcceptUseCase(gameOffer.offerUid)
-        if(result is Resource.Success) {
+        result.onSuccess {
             postSideEffect(SportScreenSideEffect.ShowToastMessage(message = offerToAcceptSuccessText))
-        }
-        else if(result is Resource.Error) {
-            postSideEffect(SportScreenSideEffect.ShowToastMessage(message = defaultRequestError))
+        }.onError { message, _ ->
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message = message))
         }
     }
 
@@ -87,11 +84,10 @@ class SportScreenViewModel @Inject constructor(
 
     override fun acceptOfferToAccept(gameOfferToAcceptId: String) = intent {
         val result = acceptOfferToAcceptUseCase(gameOfferToAcceptId)
-        if(result is Resource.Success) {
+        result.onSuccess {
             postSideEffect(SportScreenSideEffect.ShowToastMessage(offerAcceptingSuccessText))
-        }
-        else if(result is Resource.Error) {
-            postSideEffect(SportScreenSideEffect.ShowToastMessage(result.message?: defaultRequestError))
+        }.onError { message, _ ->
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message))
         }
     }
 

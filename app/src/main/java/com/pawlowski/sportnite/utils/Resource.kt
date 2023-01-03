@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.utils
 
-sealed class Resource<T>(val data: T? = null, val message: UiText? = null) {
-    class Success<T>(data: T?): Resource<T>(data)
-    class Error<T>(message: UiText, data: T? = null): Resource<T>(data, message)
+sealed class Resource<T> {
+    class Success<T>(val data: T?): Resource<T>()
+    class Error<T>(val message: UiText, val data: T? = null): Resource<T>()
 }

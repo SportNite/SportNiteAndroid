@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.utils.Resource
+import com.pawlowski.sportnite.utils.onError
+import com.pawlowski.sportnite.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -34,23 +36,21 @@ class WaitingForUserInfoViewModel @Inject constructor(
             state.copy(isLoading = true, message = "Please wait...")
         }
         val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
-        if(info is Resource.Success) {
-            if(info.data == true)
+        info.onSuccess {
+            if(it == true)
             {
                 postSideEffect(WaitingForUserInfoSideEffect.NavigateToHomeScreen)
                 reduce {
                     state.copy(isLoading = false, message = "Please wait...")
                 }
             }
-            else if(info.data == false) {
+            else if(it == false) {
                 postSideEffect(WaitingForUserInfoSideEffect.NavigateToAccountDetailsScreen)
                 reduce {
                     state.copy(isLoading = false, message = "Please wait...")
                 }
             }
-        }
-        else
-        {
+        }.onError { _, _ ->
             reduce {
                 state.copy(message = "Some error occured", isLoading = false)
             }

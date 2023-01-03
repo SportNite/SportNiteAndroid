@@ -22,10 +22,7 @@ import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiData
-import com.pawlowski.sportnite.utils.UiText
-import com.pawlowski.sportnite.utils.defaultRequestError
+import com.pawlowski.sportnite.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -212,10 +209,7 @@ class AppRepository @Inject constructor(
                 Uri.parse(it),
                 authManager.getCurrentUserUid()!!
             )
-            if (result is Resource.Success) {
-                result.data
-            } else
-                null
+            result.dataOrNull()
         } ?: return Resource.Error(defaultRequestError)
         val result = executeApolloMutation(request = {
             apolloClient.mutation(
@@ -284,15 +278,7 @@ class AppRepository @Inject constructor(
 
     private fun <Output> Flow<StoreResponse<List<Output>>>.toUiData(filterPredicateOnListData: (Output) -> Boolean): Flow<UiData<List<Output>>> {
         return toUiData().map { data ->
-            when (data) {
-                is UiData.Success -> {
-                    data.copy(data = data.data.filter { filterPredicateOnListData(it) })
-                }
-                is UiData.Error -> {
-                    data.copy(cachedData = data.cachedData?.filter { filterPredicateOnListData(it) })
-                }
-                else -> data
-            }
+            data.filteredIfDataExists(filterPredicateOnListData)
         }
     }
 

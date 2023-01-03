@@ -77,18 +77,18 @@ class AddOfferScreenViewModel @Inject constructor(
                     sport = lastState.sport
                 )
 
-                when(val response = addGameOfferUseCase(params)) {
-                    is Resource.Success -> {
+                addGameOfferUseCase(params)
+                    .onSuccess {
                         postSideEffect(
                             AddOfferScreenSideEffect.ShowToastAndChangeScreen(offerSuccessText)
                         )
                     }
-                    is Resource.Error -> {
+                    .onError { message, _ ->
                         postSideEffect(
-                            AddOfferScreenSideEffect.ShowToast(response.message?: defaultRequestError)
+                            AddOfferScreenSideEffect.ShowToast(message)
                         )
                     }
-                }
+
             }
             else
             {

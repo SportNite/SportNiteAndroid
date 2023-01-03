@@ -27,6 +27,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.home_screen.Home
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.sportnite.utils.dataOrNull
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -45,11 +46,7 @@ fun HomeScreen(
     }
     val meetingsState = remember {
         derivedStateOf {
-            val meetingsUiData = uiState.value.upcomingMeetings
-            if(meetingsUiData is UiData.Success)
-                meetingsUiData.data
-            else
-                null
+            uiState.value.upcomingMeetings.dataOrNull()
         }
     }
 

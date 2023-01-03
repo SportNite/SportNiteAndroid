@@ -61,13 +61,13 @@ class MyMeetingsScreenViewModel @Inject constructor(
     override fun deleteOffer(offer: GameOffer) = intent {
         //TODO: show loading
         val response = deleteMyOfferUseCase(offer.offerUid)
-        if(response is Resource.Success) {
+        response.onSuccess {
             postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(offerDeletionSuccessText))
+        }.onError { message, _ ->
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
+
         }
-        else
-        {
-            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(response.message?: defaultRequestError))
-        }
+
     }
 
     init {

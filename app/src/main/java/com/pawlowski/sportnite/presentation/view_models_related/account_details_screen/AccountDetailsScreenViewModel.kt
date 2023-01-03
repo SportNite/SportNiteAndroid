@@ -68,11 +68,11 @@ class AccountDetailsScreenViewModel @Inject constructor(
 
 
         //TODO add loading
-        if(result is Resource.Success) {
+        result.onSuccess {
             postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
-        }
-        else if(result is Resource.Error) {
-            postSideEffect(AccountDetailsScreenSideEffect.ShowToastMessage(result.message?: defaultRequestError))
+
+        }.onError { message, _ ->
+            postSideEffect(AccountDetailsScreenSideEffect.ShowToastMessage(message))
         }
         reduce {
             state.copy(isLoading = false)
