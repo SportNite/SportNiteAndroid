@@ -4,20 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenUiState
+import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.IChooseSportsScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
@@ -25,12 +24,23 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 @Composable
 fun ChooseSportsScreen(
     modifier: Modifier = Modifier,
-    viewModel: IChooseSportsScreenViewModel
+    viewModel: IChooseSportsScreenViewModel = hiltViewModel<ChooseSportsScreenViewModel>(),
+    onNavigateToChoseAdvanceLevelScreen: () -> Unit = {}
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()
     val isLoadingState = remember {
         derivedStateOf {
             uiState.value.isLoading
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collect { event ->
+            when(event) {
+                is ChooseSportsScreenSideEffect.NavigateToChoseAdvanceLevelScreen -> {
+                    onNavigateToChoseAdvanceLevelScreen()
+                }
+            }
         }
     }
     Surface(modifier = modifier.fillMaxSize()) {

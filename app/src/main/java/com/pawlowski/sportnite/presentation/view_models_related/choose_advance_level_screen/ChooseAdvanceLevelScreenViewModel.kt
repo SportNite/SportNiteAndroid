@@ -1,15 +1,20 @@
 package com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
+import com.pawlowski.sportnite.data.mappers.getAvailableLevelsForSport
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
+import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.syntax.simple.repeatOnSubscription
 import org.orbitmvi.orbit.viewmodel.container
@@ -17,15 +22,30 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChooseAdvanceLevelScreenViewModel @Inject constructor(
-    private val advanceLevelUpdatingCache: AdvanceLevelUpdatingCache
+    private val advanceLevelUpdatingCache: AdvanceLevelUpdatingCache,
+    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val updateAdvanceLevelInfoUseCase: UpdateAdvanceLevelInfoUseCase,
 ): IChooseAdvanceLevelScreenViewModel, ViewModel() {
+    private var currentSportIndexState = MutableStateFlow(0)
+
+    override val container: Container<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect> =
+        container(
+            initialState = ChooseAdvanceLevelScreenUiState(
+                currentSport = getSportForIndex(currentSportIndexState.value),
+            )
+        )
+
     override fun selectLevel(level: AdvanceLevel) = intent {
         advanceLevelUpdatingCache.setAdvanceLevelOfSport(state.currentSport, level)
     }
 
-    private var currentSportIndexState = MutableStateFlow(0)
-
     override fun continueClick() = intent {
+        if(state.isLoading)
+            return@intent
+
+        reduce {
+            state.copy(isLoading = true)
+        }
         val sportsSize = advanceLevelUpdatingCache.chosenSports.value.size
         if(currentSportIndexState.value + 1 >= sportsSize) {
             saveLevels()
@@ -36,14 +56,31 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
                 it+1
             }
         }
+        reduce {
+            state.copy(isLoading = false)
+        }
+    }
+    private fun saveLevels() = intent {
+        val levels = advanceLevelUpdatingCache.chosenSports.value
+        val isAnyMissing = levels.any { it.value == null }
+        val levelsMapped = levels.map { Pair(it.key, it.value!!) }.toMap()
+        if(!isAnyMissing) {
+            updateAdvanceLevelInfoUseCase(levelsMapped).onSuccess {
+                postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(skillsSuccessText))
+                postSideEffect(ChooseAdvanceLevelScreenSideEffect.NavigateToHomeScreen)
+            }.onError { message, _ ->
+                postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(message))
+            }
+            userInfoUpdateCache.saveInfoAboutAdvanceLevels(levelsMapped)
+        }
+        else {
+            postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(UiText.NonTranslatable("Something is missing!")))
+        }
     }
 
-    private fun saveLevels() = intent {
-        TODO()
-    }
-    override fun navigateBack() {
+    override fun navigateBack() = intent {
         if(currentSportIndexState.value  == 0) {
-            //TODO: Navigate to ChooseSportsScreen
+            postSideEffect(ChooseAdvanceLevelScreenSideEffect.NavigateToChooseSportsScreen)
         }
         else
         {
@@ -57,12 +94,14 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
         return advanceLevelUpdatingCache.chosenSports.value.toList()[index].first
     }
 
+
+
     private fun observeCurrentSportAndChosenLevel() = intent(registerIdling = false) {
         repeatOnSubscription {
             currentSportIndexState.collectLatest { currentIndex ->
                 val currentSport = getSportForIndex(currentIndex)
                 reduce {
-                    state.copy(currentSport = currentSport)
+                    state.copy(currentSport = currentSport, availableLevels = getAvailableLevelsForSport(currentSport))
                 }
                 advanceLevelUpdatingCache.chosenSports.collectLatest {
                     reduce {
@@ -74,15 +113,6 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
             }
         }
     }
-
-
-
-    override val container: Container<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect> =
-        container(
-            initialState = ChooseAdvanceLevelScreenUiState(
-                currentSport = getSportForIndex(currentSportIndexState.value),
-            )
-        )
 
     init {
         observeCurrentSportAndChosenLevel()

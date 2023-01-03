@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.utils
 
 val defaultRequestError: UiText = UiText.NonTranslatable("Some error occurred")
 val offerSuccessText: UiText = UiText.NonTranslatable("Offer added successfully")
+val skillsSuccessText: UiText = UiText.NonTranslatable("Skills updated successfully")
 val offerAcceptingSuccessText: UiText = UiText.NonTranslatable("Offer accepted successfully")
 
 val offerDeletionSuccessText: UiText = UiText.NonTranslatable("Offer deleted successfully")

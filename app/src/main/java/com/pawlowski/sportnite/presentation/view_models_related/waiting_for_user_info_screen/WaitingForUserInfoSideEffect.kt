@@ -3,5 +3,5 @@ package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_use
 sealed interface WaitingForUserInfoSideEffect {
     object NavigateToHomeScreen: WaitingForUserInfoSideEffect
     object NavigateToAccountDetailsScreen: WaitingForUserInfoSideEffect
-
+    object NavigateToChooseSportsScreen: WaitingForUserInfoSideEffect
 }

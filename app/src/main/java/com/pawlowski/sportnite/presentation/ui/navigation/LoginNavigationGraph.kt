@@ -4,10 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pawlowski.sportnite.presentation.ui.screens.AccountDetailsScreen
-import com.pawlowski.sportnite.presentation.ui.screens.EnterSignInCodeScreen
-import com.pawlowski.sportnite.presentation.ui.screens.SignInScreen
-import com.pawlowski.sportnite.presentation.ui.screens.WaitingForUserInfoScreen
+import com.pawlowski.sportnite.presentation.ui.screens.*
 
 
 @Composable
@@ -69,6 +66,11 @@ fun LoginNavigationGraph(
                             inclusive = true
                         }
                     }
+                },
+                onNavigateToChooseSports = {
+                    navController.navigate("ChooseSports") {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -77,12 +79,34 @@ fun LoginNavigationGraph(
             AccountDetailsScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToNextScreen = {
+                    navController.navigate("ChooseSports") {
+                        launchSingleTop = true
+                        popUpTo("SignIn") {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+        composable(route = "ChooseSports") {
+            ChooseSportsScreen(onNavigateToChoseAdvanceLevelScreen = {
+                navController.navigate("ChooseAdvanceLevel") {
+                    launchSingleTop = true
+                }
+            })
+        }
+        composable(route = "ChooseAdvanceLevel") {
+            ChooseAdvanceLevelScreen(
+                onNavigateToHomeScreen = {
                     navController.navigate("LoggedInRoot") {
                         launchSingleTop = true
                         popUpTo("SignIn") {
                             inclusive = true
                         }
                     }
+                },
+                onNavigateToChooseSportsScreen = {
+                    navController.popBackStack()
                 }
             )
         }

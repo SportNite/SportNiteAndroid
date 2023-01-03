@@ -72,4 +72,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getMeetingByIdUseCase(appRepository: IAppRepository) = GetMeetingByIdUseCase(appRepository::getMeetingDetails)
+
+    @Singleton
+    @Provides
+    fun updateAdvanceLevelInfoUseCase(appRepository: IAppRepository) = UpdateAdvanceLevelInfoUseCase(appRepository::updateAdvanceLevelInfo)
 }

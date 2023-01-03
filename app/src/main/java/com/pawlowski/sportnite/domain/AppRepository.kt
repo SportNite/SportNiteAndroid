@@ -17,18 +17,17 @@ import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
+import com.pawlowski.sportnite.data.mappers.toSetSkillInput
 import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.utils.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -228,6 +227,24 @@ class AppRepository @Inject constructor(
             )
         }
         return result
+    }
+
+    override suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit> {
+        return withContext(ioDispatcher) {
+            val result = levels.toSetSkillInput().map {
+                async {
+                    executeApolloMutation(request = {
+                        apolloClient.mutation(SetSkillMutation(it)).execute()
+                    })
+                }
+            }.all {
+                it.await() is Resource.Success
+            }
+            if(result)
+                Resource.Success(Unit)
+            else
+                Resource.Error(defaultRequestError)
+        }
     }
 
     override suspend fun deleteMyOffer(offerId: String): Resource<Unit> {

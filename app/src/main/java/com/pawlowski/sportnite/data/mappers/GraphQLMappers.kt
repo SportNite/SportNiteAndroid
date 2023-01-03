@@ -277,8 +277,31 @@ fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     }?: Optional.absent()
 }
 
+fun MeQuery.Skill.toAdvanceLevel(): AdvanceLevel {
+    return nrtp?.let {
+        AdvanceLevel.NRTP(it)
+    }?:level?.let {
+        AdvanceLevel.DefaultLevel(it.toInt())
+    }?: TODO()
+}
+
 fun UsersQuery.Skill.toAdvanceLevel(): AdvanceLevel {
-    return AdvanceLevel.NRTP(7.0)
+    return if(nrtp != null) {
+        AdvanceLevel.NRTP(nrtp)
+    } else {
+        AdvanceLevel.DefaultLevel(level = level?.toInt()?:-1)
+    }
+}
+
+fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
+    return map {
+        val sport = it.key.toSportType()
+        SetSkillInput(
+            sport = sport,
+            nrtp = if(it.value is AdvanceLevel.NRTP) Optional.present((it.value as AdvanceLevel.NRTP).nrtpLevel) else Optional.absent(),
+            level = -1.0//TODO: change to null when possible
+        )
+    }
 }
 
 

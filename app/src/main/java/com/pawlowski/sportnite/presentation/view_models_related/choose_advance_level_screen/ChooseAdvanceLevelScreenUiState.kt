@@ -6,5 +6,6 @@ import com.pawlowski.sportnite.presentation.models.Sport
 data class ChooseAdvanceLevelScreenUiState(
     val currentSport: Sport,
     val availableLevels: List<AdvanceLevel>? = null,
-    val chosenLevel: AdvanceLevel? = null
+    val chosenLevel: AdvanceLevel? = null,
+    val isLoading: Boolean = false
 )

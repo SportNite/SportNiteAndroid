@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
+import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache.RegistrationProgress.*
 import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.onError
 import com.pawlowski.sportnite.utils.onSuccess
@@ -37,22 +38,29 @@ class WaitingForUserInfoViewModel @Inject constructor(
         }
         val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
         info.onSuccess {
-            if(it == true)
-            {
-                postSideEffect(WaitingForUserInfoSideEffect.NavigateToHomeScreen)
-                reduce {
-                    state.copy(isLoading = false, message = "Please wait...")
+            when (it) {
+                EVERYTHING_ADDED -> {
+                    postSideEffect(WaitingForUserInfoSideEffect.NavigateToHomeScreen)
+                    reduce {
+                        state.copy(isLoading = false, message = "Please wait...")
+                    }
                 }
-            }
-            else if(it == false) {
-                postSideEffect(WaitingForUserInfoSideEffect.NavigateToAccountDetailsScreen)
-                reduce {
-                    state.copy(isLoading = false, message = "Please wait...")
+                NO_INFO_ADDED -> {
+                    postSideEffect(WaitingForUserInfoSideEffect.NavigateToAccountDetailsScreen)
+                    reduce {
+                        state.copy(isLoading = false, message = "Please wait...")
+                    }
+                }
+                PROFILE_INFO_ADDED -> {
+                    postSideEffect(WaitingForUserInfoSideEffect.NavigateToChooseSportsScreen)
+                    reduce {
+                        state.copy(isLoading = false, message = "Please wait...")
+                    }
                 }
             }
         }.onError { _, _ ->
             reduce {
-                state.copy(message = "Some error occured", isLoading = false)
+                state.copy(message = "Some error occurred", isLoading = false)
             }
         }
     }

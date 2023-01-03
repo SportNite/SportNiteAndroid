@@ -21,7 +21,7 @@ fun WaitingForUserInfoScreen(
     viewModel: IWaitingForUserInfoViewModel = hiltViewModel<WaitingForUserInfoViewModel>(),
     onNavigateToHomeScreen: () -> Unit = {},
     onNavigateToAccountDetailsScreen: () -> Unit = {},
-
+    onNavigateToChooseSports: () -> Unit = {}
     ) {
     LaunchedEffect(Unit) {
         viewModel.checkUserInfo()
@@ -32,6 +32,9 @@ fun WaitingForUserInfoScreen(
                 }
                 is WaitingForUserInfoSideEffect.NavigateToHomeScreen -> {
                     onNavigateToHomeScreen()
+                }
+                is WaitingForUserInfoSideEffect.NavigateToChooseSportsScreen -> {
+                    onNavigateToChooseSports()
                 }
             }
         }

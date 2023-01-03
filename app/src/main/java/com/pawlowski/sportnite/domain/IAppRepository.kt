@@ -26,6 +26,7 @@ interface IAppRepository {
     suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>
     suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit>
     suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
+    suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
     suspend fun deleteMyOffer(offerId: String): Resource<Unit>
     fun signOut()
 }
