@@ -24,6 +24,7 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.VerticalDivid
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.IPlayerDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.PlayerDetailsViewModel
 import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
 fun PlayerDetailsScreen(
@@ -34,12 +35,7 @@ fun PlayerDetailsScreen(
     val uiState = viewModel.container.stateFlow.collectAsState()
     val playerDetailsState = remember {
         derivedStateOf {
-            val value = uiState.value.playerDetails
-            if(value is UiData.Success) {
-                value.data
-            }
-            else
-                null
+            uiState.value.playerDetails.dataOrNull()
         }
     }
     Surface(modifier = modifier.fillMaxSize()) {

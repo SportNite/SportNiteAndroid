@@ -19,6 +19,7 @@ import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.IMeetingDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.MeetingDetailsViewModel
 import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
 fun MeetingDetailsScreen(
@@ -29,11 +30,7 @@ fun MeetingDetailsScreen(
     val uiState = viewModel.container.stateFlow.collectAsState()
     val meetingState = remember {
         derivedStateOf {
-            val value = uiState.value.meeting
-            if(value is UiData.Success)
-                value.data
-            else
-                null
+            uiState.value.meeting.dataOrNull()
         }
     }
     Surface(modifier.fillMaxSize()) {

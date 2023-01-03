@@ -25,6 +25,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_scre
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
 fun MyMeetingsScreen(
@@ -58,12 +59,7 @@ fun MyMeetingsScreen(
 
     val meetingsValueState = remember {
         derivedStateOf {
-            val meetingsDataValue = meetingsDataState.value
-            if(meetingsDataValue is UiData.Success) {
-                meetingsDataValue.data
-            }
-            else
-                listOf()
+            meetingsDataState.value.dataOrNull()?: listOf()
         }
     }
 
@@ -75,13 +71,7 @@ fun MyMeetingsScreen(
 
     val offersValueState = remember {
         derivedStateOf {
-            val offersValue = offersDataState.value
-            if(offersValue is UiData.Success)
-            {
-                offersValue.data
-            }
-            else
-                listOf()
+            offersDataState.value.dataOrNull()?: listOf()
         }
     }
 
@@ -93,13 +83,9 @@ fun MyMeetingsScreen(
 
     val offersToAcceptValueState = remember {
         derivedStateOf {
-            val offersToAcceptValue = offersToAcceptDataState.value
-            if(offersToAcceptValue is UiData.Success)
-            {
-                offersToAcceptValue.data.map { it.asGameOffer() }
-            }
-            else
-                listOf()
+            offersToAcceptDataState.value.dataOrNull()?.map {
+                it.asGameOffer()
+            }?: listOf()
         }
     }
 
@@ -111,13 +97,7 @@ fun MyMeetingsScreen(
 
     val historicalMeetingsValueState = remember {
         derivedStateOf {
-            val historicalMeetingsValue = historicalMeetingsDataState.value
-            if(historicalMeetingsValue is UiData.Success)
-            {
-                historicalMeetingsValue.data
-            }
-            else
-                listOf()
+            historicalMeetingsDataState.value.dataOrNull()?: listOf()
         }
     }
 

@@ -31,6 +31,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.Spo
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.sportnite.utils.dataOrNull
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -69,11 +70,7 @@ fun SportScreen(
 
     val meetingsValueState = remember {
         derivedStateOf {
-            val meetingsDataValue = meetingsDataState.value
-            if (meetingsDataValue is UiData.Success) {
-                meetingsDataValue.data
-            } else
-                listOf()
+            meetingsDataState.value.dataOrNull()?: listOf()
         }
     }
 
@@ -85,11 +82,7 @@ fun SportScreen(
 
     val offersValueState = remember {
         derivedStateOf {
-            val offersValue = offersDataState.value
-            if (offersValue is UiData.Success) {
-                offersValue.data
-            } else
-                listOf()
+            offersDataState.value.dataOrNull()?: listOf()
         }
     }
 
@@ -101,11 +94,7 @@ fun SportScreen(
 
     val offersToAcceptValueState = remember {
         derivedStateOf {
-            val offersToAcceptValue = offersToAcceptDataState.value
-            if (offersToAcceptValue is UiData.Success) {
-                offersToAcceptValue.data
-            } else
-                listOf()
+            offersToAcceptDataState.value.dataOrNull()?: listOf()
         }
     }
 

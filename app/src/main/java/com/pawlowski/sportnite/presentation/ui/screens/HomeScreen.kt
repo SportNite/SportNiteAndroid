@@ -54,11 +54,7 @@ fun HomeScreen(
 
     val sportsValueState = remember {
         derivedStateOf {
-            val value = uiState.value.userSports
-            if(value is UiData.Success)
-                value.data
-            else
-                listOf()
+            uiState.value.userSports.dataOrNull()?: listOf()
         }
     }
     Surface(modifier.fillMaxSize()) {
