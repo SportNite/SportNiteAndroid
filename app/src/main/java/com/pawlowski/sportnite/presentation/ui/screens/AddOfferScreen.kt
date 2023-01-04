@@ -12,23 +12,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog
-import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
 import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
 import com.pawlowski.sportnite.utils.UiDate
 import kotlinx.coroutines.flow.collectLatest
-import java.time.Instant
-import java.time.OffsetDateTime
-import java.time.ZoneId
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,11 +103,10 @@ fun AddOfferScreen(
                 )
             }
             Spacer(modifier = Modifier.height(15.dp))
-            val context = LocalContext.current
             DateInputField(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 onClick = {
-                    showDateTimePicker(context) {
+                    showDateTimePicker(context, requireFutureDateTime = true) {
                         viewModel.changeDateTimeInput(UiDate(it))
                     }
                 },

@@ -124,7 +124,7 @@ fun IncomingOffersQuery.User.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
         age = ageInYears,
         phoneNumber = phone?:""
     )
@@ -139,7 +139,7 @@ fun IncomingOffersQuery.User1.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
         age = ageInYears,
         phoneNumber = phone?:""
     )
@@ -239,7 +239,7 @@ fun UsersQuery.Node.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
         age = ageInYears,
         phoneNumber = phone?:""
     )

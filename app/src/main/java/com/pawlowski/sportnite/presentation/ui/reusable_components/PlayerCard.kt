@@ -40,7 +40,7 @@ fun PlayerCard(
             Spacer(modifier = Modifier.height(3.dp))
             Text(text = player.name, fontWeight = FontWeight.Medium)
             Text(text = "${player.age} lat")
-            Text(text = player.advanceLevel.asString)
+            //Text(text = player.advanceLevel.asString)
         }
     }
 }
