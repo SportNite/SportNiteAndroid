@@ -1,6 +1,5 @@
 package com.pawlowski.sportnite.data.mappers
 
-import android.util.Log
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*
@@ -246,6 +245,26 @@ fun UsersQuery.Node.toPlayer(): Player {
     )
 }
 
+fun futureOffersOfferFilterInput(): OfferFilterInput {
+    return OfferFilterInput(
+        dateTime = Optional.present(
+            ComparableDateTimeOperationFilterInput(
+                gte = Optional.present(OffsetDateTime.now().toString())
+            )
+        )
+    )
+}
+
+fun historicalOffersOfferFilterInput(): OfferFilterInput {
+    return OfferFilterInput(
+        dateTime = Optional.present(
+            ComparableDateTimeOperationFilterInput(
+                lt = Optional.present(OffsetDateTime.now().toString())
+            )
+        )
+    )
+}
+
 fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     return this.sportFilter?.let {
         Optional.present(
@@ -256,7 +275,8 @@ fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
                             eq = Optional.present(it.toSportType())
                         )
                     )
-                )
+                ),
+                futureOffersOfferFilterInput()
             )
         )
     }?:Optional.absent()
@@ -300,7 +320,7 @@ fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
         SetSkillInput(
             sport = sport,
             nrtp = if(it.value is AdvanceLevel.NRTP) Optional.present((it.value as AdvanceLevel.NRTP).nrtpLevel) else Optional.absent(),
-            level = -1.0//TODO: change to null when possible
+            level = if(it.value is AdvanceLevel.DefaultLevel) Optional.present((it.value as AdvanceLevel.DefaultLevel).level.toDouble()) else Optional.absent()
         )
     }
 }

@@ -1,8 +1,9 @@
-query Responses($sportFilter: SportType!) {
+query Responses($sportFilter: SportType!, $otherFilters: [OfferFilterInput!]) {
   myOffers(where: {
     sport: {
       eq: $sportFilter
     }
+    and: $otherFilters
   }) {
     nodes {
       responses {

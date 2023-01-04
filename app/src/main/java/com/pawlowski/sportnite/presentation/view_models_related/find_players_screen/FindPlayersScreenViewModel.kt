@@ -1,9 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetPlayersUseCase
@@ -26,13 +24,13 @@ class FindPlayersScreenViewModel @Inject constructor(
     override val container: Container<FindPlayersScreenUiState, FindPlayersScreenSideEffect> =
         container(
             initialState = FindPlayersScreenUiState(
-                players = UiData.Success(true, listOf(getPlayerForPreview(), getPlayerForPreview(), getPlayerForPreview()))
+                players = UiData.Loading()
             )
         )
 
     override fun changeSearchInput(newValue: String) = intent {
         reduce {
-            state.copy(searchInput = newValue)
+            state.copy(searchInput = newValue, wereAnyFiltersChangedBeforeApply = true)
         }
     }
 
@@ -42,6 +40,9 @@ class FindPlayersScreenViewModel @Inject constructor(
     fun observePlayers() = intent(registerIdling = false) {
         repeatOnSubscription {
             filtersChangeFlow.onStart { emit(true) }.flatMapLatest {
+                reduce {
+                    state.copy(areAnyFiltersOn = state.sportFilterInput != null || state.searchInput.isNotEmpty() || state.advanceLevelFilterInput != null)
+                }
                 getPlayersUseCase(state.sportFilterInput, state.searchInput, state.advanceLevelFilterInput)
             }.collectLatest {
                 reduce {
@@ -52,24 +53,25 @@ class FindPlayersScreenViewModel @Inject constructor(
     }
     override fun changeSportFilterInput(newValue: Sport?) = intent {
         reduce {
-            state.copy(sportFilterInput = newValue)
+            state.copy(sportFilterInput = newValue, wereAnyFiltersChangedBeforeApply = true)
         }
     }
 
     override fun changeLevelFilterInput(newValue: AdvanceLevel?) = intent {
         reduce {
-            state.copy(advanceLevelFilterInput = newValue)
+            state.copy(advanceLevelFilterInput = newValue, wereAnyFiltersChangedBeforeApply = true)
         }
     }
 
     override fun clearFilters() = intent {
         reduce {
-            state.copy(searchInput = "", advanceLevelFilterInput = null, sportFilterInput = null)
+            state.copy(searchInput = "", advanceLevelFilterInput = null, sportFilterInput = null, wereAnyFiltersChangedBeforeApply = false)
         }
         applyFilters()
     }
 
     override fun applyFilters() = intent {
+        reduce { state.copy(wereAnyFiltersChangedBeforeApply = false) }
         filtersChangeFlow.emit(true)
     }
 

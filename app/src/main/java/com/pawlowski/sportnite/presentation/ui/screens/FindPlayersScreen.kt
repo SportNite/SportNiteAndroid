@@ -22,7 +22,6 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputFie
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.FindPlayersScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.IFindPlayersScreenViewModel
-import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
@@ -63,6 +62,18 @@ fun FindPlayersScreen(
             playersDataState.value.dataOrNull()?: listOf()
         }
     }
+
+    val isApplyButtonEnabledState = remember {
+        derivedStateOf {
+            uiState.value.wereAnyFiltersChangedBeforeApply
+        }
+    }
+
+    val isClearButtonEnabledState = remember {
+        derivedStateOf {
+            levelInputState.value != null || sportInputState.value != null || searchInputState.value.isNotEmpty() || uiState.value.areAnyFiltersOn
+        }
+    }
     Surface(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -76,7 +87,9 @@ fun FindPlayersScreen(
                 onSportInputChange = { viewModel.changeSportFilterInput(it) },
                 onAdvanceLevelInputChange = { viewModel.changeLevelFilterInput(it) },
                 onApplyFiltersClick = { viewModel.applyFilters() },
-                onClearFiltersClick = { viewModel.clearFilters() }
+                onClearFiltersClick = { viewModel.clearFilters() },
+                isApplyButtonEnabled = { isApplyButtonEnabledState.value },
+                isClearFiltersButtonEnabled = { isClearButtonEnabledState.value }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -111,6 +124,8 @@ fun FiltersCard(
     onAdvanceLevelInputChange: (AdvanceLevel) -> Unit,
     onClearFiltersClick: () -> Unit,
     onApplyFiltersClick: () -> Unit,
+    isApplyButtonEnabled: () -> Boolean,
+    isClearFiltersButtonEnabled: () -> Boolean
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -159,11 +174,11 @@ fun FiltersCard(
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(horizontalArrangement = Arrangement.Center) {
-                Button(onClick = { onClearFiltersClick() }) {
+                Button(onClick = { onClearFiltersClick() }, enabled = isClearFiltersButtonEnabled()) {
                     Text(text = "Wyczyść filtry")
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                Button(onClick = { onApplyFiltersClick() }) {
+                Button(onClick = { onApplyFiltersClick() }, enabled = isApplyButtonEnabled()) {
                     Text(text = "Zastosuj")
                 }
             }

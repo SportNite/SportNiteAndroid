@@ -9,5 +9,7 @@ data class FindPlayersScreenUiState(
     val searchInput: String = "",
     val sportFilterInput: Sport? = null,
     val advanceLevelFilterInput: AdvanceLevel? = null,
-    val players: UiData<List<Player>>
+    val wereAnyFiltersChangedBeforeApply: Boolean = false,
+    val players: UiData<List<Player>>,
+    val areAnyFiltersOn: Boolean = false
 )
