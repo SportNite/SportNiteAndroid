@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -17,10 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayerCard
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
+import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.FindPlayersScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.IFindPlayersScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
@@ -138,12 +137,23 @@ fun FiltersCard(
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))
-
+            val isDialogVisible = remember {
+                mutableStateOf(false)
+            }
             SportInputField(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 chosenSport = sportInput(),
                 onClick = {
+                    isDialogVisible.value = true
+                })
 
+            SportPickerDialog(showDialog = { isDialogVisible.value },
+                availableSports = remember {
+                    availableSports.values.toList()
+                }, onSportChosen = {
+                    onSportInputChange(it)
+                }, onDismissDialog = {
+                    isDialogVisible.value = false
                 })
 
             Spacer(modifier = Modifier.height(10.dp))
