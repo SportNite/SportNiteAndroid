@@ -66,6 +66,7 @@ class FindPlayersScreenViewModel @Inject constructor(
         reduce {
             state.copy(searchInput = "", advanceLevelFilterInput = null, sportFilterInput = null)
         }
+        applyFilters()
     }
 
     override fun applyFilters() = intent {

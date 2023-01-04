@@ -15,6 +15,7 @@ import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
+import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
 import com.pawlowski.sportnite.data.mappers.toSetSkillInput
@@ -45,6 +46,7 @@ class AppRepository @Inject constructor(
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
     private val meetingsInMemoryCache: MeetingsInMemoryCache,
     private val offersInMemoryCache: OffersInMemoryCache,
+    private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
         return meetingsStore.stream(
@@ -60,8 +62,14 @@ class AppRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getUserSports(): Flow<UiData<List<Sport>>> = flow {
-        emit(UiData.Success(isFresh = true, data = availableSports.values.toList()))
+    override fun getUserSports(): Flow<UiData<List<Sport>>> {
+        return userInfoUpdateCache.cachedLevels.map { sportsMap ->
+            sportsMap?.keys?.toList()?.let {
+                UiData.Success(isFresh = true, data = it)
+            }?: kotlin.run {
+                UiData.Error()
+            }
+        }
     }
 
     override fun getPlayers(
@@ -194,7 +202,10 @@ class AppRepository @Inject constructor(
         //Log.d("offerToAcceptId", offerToAcceptUid)
         return executeApolloMutation(request = {
             apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
-        })
+        }).onSuccess {
+            offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
+            //TODO: Add meeting to cache
+        }
     }
 
     override fun signOut() {

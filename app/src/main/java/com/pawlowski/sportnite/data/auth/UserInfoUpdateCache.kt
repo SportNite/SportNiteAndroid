@@ -16,6 +16,7 @@ import com.pawlowski.sportnite.utils.UiText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,11 +40,12 @@ class UserInfoUpdateCache @Inject constructor(
         MutableStateFlow(getCachedUserFromPreferences())
     }
 
+    val cachedUser get() = _cachedUser.asStateFlow()
+
     private val _cachedLevels: MutableStateFlow<Map<Sport, AdvanceLevel>?> by lazy {
         MutableStateFlow(getCachedLevelsFromPreferences())
     }
-
-    val cachedUser: StateFlow<User?> get() = _cachedUser
+    val cachedLevels get() = _cachedLevels.asStateFlow()
 
     suspend fun didUserAddInfo(userPhoneNumber: String): Resource<RegistrationProgress> {
         return if(sharedPreferences.contains(USER_INFO_KEY) && sharedPreferences.contains(
@@ -128,12 +130,15 @@ class UserInfoUpdateCache @Inject constructor(
 
     fun deleteUserInfoCache() {
         _cachedUser.value = null
+        _cachedLevels.value = null
         sharedPreferences
             .edit()
             .remove(USER_INFO_KEY)
             .remove(NAME_KEY)
             .remove(PHOTO_URL_KEY)
             .remove(PHONE_NUMBER_KEY)
+            .remove(LEVELS_INFO_KEY)
+            .remove(SPORT_IDS_KEY)
             .apply()
     }
 

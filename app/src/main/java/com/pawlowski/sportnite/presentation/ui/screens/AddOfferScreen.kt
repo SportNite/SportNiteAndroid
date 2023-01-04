@@ -15,8 +15,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
+import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog
 import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
 import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenSideEffect
@@ -38,12 +40,14 @@ fun AddOfferScreen(
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.container.sideEffectFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is AddOfferScreenSideEffect.ShowToast -> {
-                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG)
+                        .show()
                 }
                 is AddOfferScreenSideEffect.ShowToastAndChangeScreen -> {
-                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG)
+                        .show()
                     onNavigateBack()
                 }
             }
@@ -87,14 +91,17 @@ fun AddOfferScreen(
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.White){
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 IconButton(
-                    modifier = Modifier.align(Alignment.CenterStart), 
+                    modifier = Modifier.align(Alignment.CenterStart),
                     onClick = { onNavigateBack() }
                 ) {
-                    Icon(painter = painterResource(id = R.drawable.back_icon), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.drawable.back_icon),
+                        contentDescription = ""
+                    )
                 }
                 Text(
                     modifier = Modifier.align(Alignment.Center),
@@ -116,17 +123,30 @@ fun AddOfferScreen(
                         contentDescription = ""
                     )
                 },
-                dateText = meetingDateTimeState.value?.asLocalDateTimeString()?:"Kliknij aby wybrać czas spotkania"
+                dateText = meetingDateTimeState.value?.asLocalDateTimeString()
+                    ?: "Kliknij aby wybrać czas spotkania"
             )
             Spacer(modifier = Modifier.height(15.dp))
 
+            val isDialogVisible = remember {
+                mutableStateOf(false)
+            }
             SportInputField(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 chosenSport = sportState.value,
                 onClick = {
-                    //TODO
+                    isDialogVisible.value = true
                 }
             )
+
+            SportPickerDialog(showDialog = { isDialogVisible.value },
+                availableSports = remember {
+                    availableSports.values.toList()
+                }, onSportChosen = {
+                    viewModel.changeSport(it)
+                }, onDismissDialog = {
+                    isDialogVisible.value = false
+                })
             Spacer(modifier = Modifier.height(15.dp))
             OutlinedTextField(
                 modifier = Modifier
@@ -140,7 +160,10 @@ fun AddOfferScreen(
                     Text(text = "Miasto")
                 },
                 leadingIcon = {
-                    Icon(painter = painterResource(id = R.drawable.place_icon), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.drawable.place_icon),
+                        contentDescription = ""
+                    )
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
@@ -156,7 +179,10 @@ fun AddOfferScreen(
                     Text(text = "Miejsce lub adres")
                 },
                 leadingIcon = {
-                    Icon(painter = painterResource(id = R.drawable.place_icon), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.drawable.place_icon),
+                        contentDescription = ""
+                    )
                 }
             )
 
@@ -173,7 +199,10 @@ fun AddOfferScreen(
                     Text(text = "Dodatkowe informacje")
                 },
                 leadingIcon = {
-                    Icon(painter = painterResource(id = R.drawable.notes_icon), contentDescription = "")
+                    Icon(
+                        painter = painterResource(id = R.drawable.notes_icon),
+                        contentDescription = ""
+                    )
                 }
             )
 
@@ -189,10 +218,10 @@ fun AddOfferScreen(
                 Text(text = "Dodaj ofertę")
             }
 
+
         }
     }
 }
-
 
 
 @Preview(showBackground = true)

@@ -142,7 +142,7 @@ fun MyMeetingsScreen(
             }
 
             gameOffersColumnItem(
-                offers = offersValueState.value.take(4),
+                offers = offersValueState.value,
                 headerText = "Moje oferty",
                 headersPadding = PaddingValues(horizontal = 10.dp),
                 displaySeeMore = false,
