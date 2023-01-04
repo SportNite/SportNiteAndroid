@@ -2,6 +2,9 @@ package com.pawlowski.sportnite.domain
 
 import android.net.Uri
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
@@ -16,10 +19,7 @@ import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploade
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.mappers.availableSports
-import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
-import com.pawlowski.sportnite.data.mappers.toSetSkillInput
-import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
+import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
@@ -154,6 +154,30 @@ class AppRepository @Inject constructor(
 
     override fun getInfoAboutMe(): Flow<User?> {
         return userInfoUpdateCache.cachedUser
+    }
+
+    override fun getPagedOffers(): Flow<PagingData<GameOffer>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PagingFactory<GameOffer>(
+                    request = { page, pageSize ->
+                    executeApolloQuery(
+                            request = {
+                                //TODO: use page and pageSize
+                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput())).execute()
+                            },
+                            mapper = {
+                                it.toGameOfferList()!!
+                            }
+                        )
+                    }
+                )
+            }
+        ).flow
     }
 
     override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
@@ -346,6 +370,25 @@ class AppRepository @Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    private suspend fun <T : Operation.Data, D> executeApolloQuery(
+        request: suspend () -> ApolloResponse<T>,
+        mapper: (T) -> D
+    ): Resource<D> {
+        return withContext(ioDispatcher) {
+            val response = try {
+                request().data!!
+            } catch (e: Exception) {
+                ensureActive()
+                e.printStackTrace()
+                null
+            }
+
+            response?.let {
+                Resource.Success(mapper(it))
+            }?:Resource.Error(defaultRequestError)
         }
     }
 }

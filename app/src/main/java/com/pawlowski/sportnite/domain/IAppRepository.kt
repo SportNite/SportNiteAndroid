@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.domain
 
+import androidx.paging.PagingData
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
@@ -21,6 +22,8 @@ interface IAppRepository {
     fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>>
     fun getUserNotifications(): Flow<UiData<List<Notification>>>
     fun getInfoAboutMe() : Flow<User?>
+
+    fun getPagedOffers(): Flow<PagingData<GameOffer>>
 
     suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit>
     suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>
