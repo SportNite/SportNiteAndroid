@@ -1,16 +1,16 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +38,35 @@ fun HomeScreen(
     onNavigateToSettingsScreen: () -> Unit = {},
     onNavigateToMeetingDetails: (String) -> Unit = {},
 ) {
+    val isExitAppDialogVisible = remember {
+        mutableStateOf(false)
+    }
+    val context = LocalContext.current
+    BackHandler {
+        isExitAppDialogVisible.value = true
+    }
+    if(isExitAppDialogVisible.value) {
+        AlertDialog(
+            onDismissRequest = { isExitAppDialogVisible.value = false },
+            text = { Text(text = "Napewno chcesz opuścić aplikację?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    (context as? Activity)?.finish()
+                }) {
+                    Text(text = "Tak")
+                }
+            },
+            title = {
+                Text(text = "Zamknięcie aplikacji")
+            },
+            dismissButton = {
+                TextButton(onClick = { isExitAppDialogVisible.value = false }) {
+                    Text(text = "Anuluj")
+                }
+            }
+        )
+    }
+
     val uiState = viewModel.container.stateFlow.collectAsState()
     val userState = remember {
         derivedStateOf {
@@ -51,10 +80,9 @@ fun HomeScreen(
     }
 
 
-
     val sportsValueState = remember {
         derivedStateOf {
-            uiState.value.userSports.dataOrNull()?: listOf()
+            uiState.value.userSports.dataOrNull() ?: listOf()
         }
     }
     Surface(modifier.fillMaxSize()) {
@@ -92,8 +120,7 @@ fun SportsRow(
     headersPadding: PaddingValues = PaddingValues(),
     sports: List<Sport>,
     onSportClick: (Sport) -> Unit = {}
-)
-{
+) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.padding(headersPadding)) {
             Text(text = "Twoje sporty")
@@ -119,20 +146,22 @@ fun SportsRow(
 @Composable
 fun ProfileSegment(
     modifier: Modifier = Modifier,
-                   user: User?,
-                   onSettingsButtonClick: () -> Unit = {}
+    user: User?,
+    onSettingsButtonClick: () -> Unit = {}
 ) {
-    Row(modifier = modifier
-        .fillMaxWidth()) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
         ProfileImageCard(
-            modifier= Modifier.size(50.dp),
-            profileUrl = user?.userPhotoUrl?:""
+            modifier = Modifier.size(50.dp),
+            profileUrl = user?.userPhotoUrl ?: ""
         )
         Spacer(modifier = Modifier.width(10.dp))
         Column(modifier = Modifier.height(50.dp), verticalArrangement = Arrangement.Center) {
             Text(text = "Witaj!")
             Spacer(modifier = Modifier.height(3.dp))
-            Text(text = user?.userName?:"")
+            Text(text = user?.userName ?: "")
         }
         Spacer(modifier = Modifier.weight(1f))
         FilledIconButton(onClick = { /*TODO*/ }) {
@@ -151,12 +180,10 @@ fun ProfileSegment(
 }
 
 
-
 @Composable
 fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {
     Card(modifier = modifier, shape = CircleShape) {
-        if(profileUrl.isNotEmpty())
-        {
+        if (profileUrl.isNotEmpty()) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
                 model = profileUrl,
@@ -171,7 +198,8 @@ fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(viewModel = object : OrbitMviPreviewViewModel<HomeScreenUiState, HomeScreenSideEffect>(), IHomeScreenViewModel {
+    HomeScreen(viewModel = object :
+        OrbitMviPreviewViewModel<HomeScreenUiState, HomeScreenSideEffect>(), IHomeScreenViewModel {
         override fun stateForPreview(): HomeScreenUiState {
             return HomeScreenUiState(
                 user = getUserForPreview(),
