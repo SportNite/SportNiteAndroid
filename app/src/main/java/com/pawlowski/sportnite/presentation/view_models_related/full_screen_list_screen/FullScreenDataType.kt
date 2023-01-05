@@ -10,7 +10,7 @@ sealed class FullScreenDataType(val columnsInRow: Int) {
             return when(codedType) {
                 "Meetings" -> MeetingsData
                 "Offers" -> OffersData
-                "Users" -> UserSportsData
+                "Sports" -> UserSportsData
                 else -> throw Exception("Unknown coded type")
             }
         }

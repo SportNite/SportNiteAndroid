@@ -104,10 +104,17 @@ fun LoggedInRootComposable(
                         navController.navigate("MeetingDetails/$it") {
                             launchSingleTop = true
                         }
+                    },
+                    onNavigateToFullScreenList = {
+                        navController.navigate("FullScreenList/$it") {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
-            composable("MyMeetings") {
+            composable(
+                route = "MyMeetings"
+            ) {
                 MyMeetingsScreen(
                     onNavigateToHomeScreen = {
                         navController.navigate("Home")
@@ -206,6 +213,15 @@ fun LoggedInRootComposable(
                         navController.navigate("PlayerDetails/$it")
                     }
                 )
+            }
+            composable(route = "FullScreenList/{dataType}",
+                arguments = listOf(
+                    navArgument("dataType") {
+                        type= NavType.StringType
+                        nullable = false
+                    }
+                )) {
+                FullScreenListScreen()
             }
         }
     }

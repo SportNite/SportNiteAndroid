@@ -37,6 +37,7 @@ fun HomeScreen(
     onNavigateToSportScreen: (Sport) -> Unit = {},
     onNavigateToSettingsScreen: () -> Unit = {},
     onNavigateToMeetingDetails: (String) -> Unit = {},
+    onNavigateToFullScreenList: (String) -> Unit = {}
 ) {
     val isExitAppDialogVisible = remember {
         mutableStateOf(false)
@@ -99,6 +100,9 @@ fun HomeScreen(
                 meetings = meetingsState.value,
                 onMeetingCardClick = {
                     onNavigateToMeetingDetails(it.meetingUid)
+                },
+                onSeeMoreClick = {
+                    onNavigateToFullScreenList("Offers")
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -108,6 +112,9 @@ fun HomeScreen(
                 sports = sportsValueState.value,
                 onSportClick = {
                     onNavigateToSportScreen(it)
+                },
+                onSeeMoreClick = {
+                    onNavigateToFullScreenList("Sports")
                 }
             )
         }
@@ -119,13 +126,16 @@ fun SportsRow(
     modifier: Modifier = Modifier,
     headersPadding: PaddingValues = PaddingValues(),
     sports: List<Sport>,
-    onSportClick: (Sport) -> Unit = {}
+    onSportClick: (Sport) -> Unit = {},
+    onSeeMoreClick: () -> Unit = {}
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.padding(headersPadding)) {
             Text(text = "Twoje sporty")
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "Zobacz wszystkie", color = MaterialTheme.colorScheme.primary)
+            TextButton(onClick = onSeeMoreClick) {
+                Text(text = "Zobacz wszystkie", color = MaterialTheme.colorScheme.primary)
+            }
         }
         Spacer(modifier = Modifier.height(5.dp))
         LazyRow {

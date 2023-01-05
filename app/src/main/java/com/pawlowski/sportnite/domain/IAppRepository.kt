@@ -24,6 +24,8 @@ interface IAppRepository {
     fun getInfoAboutMe() : Flow<User?>
 
     fun getPagedOffers(): Flow<PagingData<GameOffer>>
+    fun getPagedMeetings(): Flow<PagingData<Meeting>>
+
 
     suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit>
     suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>

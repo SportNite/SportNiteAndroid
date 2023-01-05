@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
@@ -163,22 +164,60 @@ class AppRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                PagingFactory<GameOffer>(
+                PagingFactory(
                     request = { page, pageSize ->
                     executeApolloQuery(
                             request = {
-                                //TODO: use page and pageSize
-                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput())).execute()
+                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(), after = Optional.present(page), first = Optional.present(pageSize))).execute()
                             },
                             mapper = {
-                                it.toGameOfferList()!!
+                                val pageInfo = it.offers?.pageInfo!!
+                                PaginationPage(data = it.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
                             }
                         )
+
                     }
                 )
             }
         ).flow
     }
+
+    override fun getPagedMeetings(): Flow<PagingData<Meeting>> {
+        TODO()
+//        return Pager(
+//            config = PagingConfig(
+//                pageSize = 10,
+//                enablePlaceholders = false
+//            ),
+//            pagingSourceFactory = {
+//                PagingFactory(
+//                    request = { page, pageSize ->
+//                        executeApolloQuery(
+//                            request = {
+//                                apolloClient.query(
+//                                    IncomingOffersQuery(
+//                                        offersFilter = MeetingsFilter(null).toOfferFilterInput()
+//                                    )
+//                                ).execute()
+//                            },
+//                            mapper = {
+//                                val data = it.incomingOffers.let { beforeMappingData ->
+//                                    val userUid = authManager.getCurrentUserUid()!!
+//                                    beforeMappingData.map {
+//                                        it.toMeeting(userUid)
+//                                    }
+//                                }
+//                                //val pageInfo = it.offers?.pageInfo!!
+//                                PaginationPage(data = data, hasNextPage = pageInfo.hasNextPage, endCursor = /pageInfo.endCursor)
+//                            }
+//                        )
+//
+//                    }
+//                )
+//            }
+//        ).flow
+    }
+
 
     override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
         return executeApolloMutation(request = {
@@ -379,7 +418,7 @@ class AppRepository @Inject constructor(
     ): Resource<D> {
         return withContext(ioDispatcher) {
             val response = try {
-                request().data!!
+                request().dataAssertNoErrors
             } catch (e: Exception) {
                 ensureActive()
                 e.printStackTrace()

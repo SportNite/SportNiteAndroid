@@ -1,31 +1,36 @@
 package com.pawlowski.sportnite.domain
 
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.pawlowski.sportnite.domain.models.PaginationPage
 import com.pawlowski.sportnite.utils.Resource
 import javax.inject.Inject
 
-private const val START_PAGE_INDEX = 1
 
 class PagingFactory<T: Any> @Inject constructor(
-    private val request: suspend (page: Int, pageSize: Int) -> Resource<List<T>>,
-): PagingSource<Int, T>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
-        val position = params.key ?: START_PAGE_INDEX
+    private val request: suspend (page: String?, pageSize: Int) -> Resource<PaginationPage<T>>,
+): PagingSource<String, T>() {
+    private val previousKeysMap = mutableStateMapOf<String, String?>()
+    private val nextKeysMap = mutableStateMapOf<String, String?>()
 
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, T> {
+        val position = params.key
         return when(val result = request(position, params.loadSize)) {
             is Resource.Success -> {
                 result.data?.let {
-                    val nextKey = if(result.data.isEmpty())
-                        null
-                    else
-                        position + (params.loadSize / 10)
+                    val nextKey = it.endCursor
+
+                    nextKey?.let {
+                        previousKeysMap[nextKey] = position
+                        position?.let {
+                            nextKeysMap[position] = nextKey
+                        }
+                    }
+
                     LoadResult.Page(
-                        data = result.data,
-                        prevKey = if(position == START_PAGE_INDEX)
-                            null
-                        else
-                            position - 1,
+                        data = it.data,
+                        prevKey = previousKeysMap[position],
                         nextKey = nextKey
                     )
                 }?:LoadResult.Error(Exception())
@@ -40,10 +45,13 @@ class PagingFactory<T: Any> @Inject constructor(
 
     }
 
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
+    override fun getRefreshKey(state: PagingState<String, T>): String? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+            nextKeysMap[state.closestPageToPosition(anchorPosition)?.prevKey]
+                ?:previousKeysMap[state.closestPageToPosition(anchorPosition)?.nextKey]
+
+//            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+//                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 }

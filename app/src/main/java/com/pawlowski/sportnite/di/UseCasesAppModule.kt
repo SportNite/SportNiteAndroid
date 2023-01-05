@@ -76,4 +76,12 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun updateAdvanceLevelInfoUseCase(appRepository: IAppRepository) = UpdateAdvanceLevelInfoUseCase(appRepository::updateAdvanceLevelInfo)
+
+    @Singleton
+    @Provides
+    fun getPagedOffersUseCase(appRepository: IAppRepository) = GetPagedOffersUseCase(appRepository::getPagedOffers)
+
+    @Singleton
+    @Provides
+    fun getPagedMeetingsUseCase(appRepository: IAppRepository) = GetPagedMeetingsUseCase(appRepository::getPagedMeetings)
 }

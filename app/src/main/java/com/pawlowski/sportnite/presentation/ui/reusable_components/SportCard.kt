@@ -18,10 +18,11 @@ import com.pawlowski.sportnite.presentation.models.Sport
 
 @Composable
 fun SportCard(
+    modifier: Modifier = Modifier,
     sport: Sport,
     onSportClick: (Sport) -> Unit ={}
 ) {
-    Card(modifier = Modifier
+    Card(modifier = modifier
         .height(80.dp)
         .width(130.dp)
         .clickable {
