@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayersRow
@@ -41,6 +40,8 @@ fun SportScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToPlayerDetailsScreen: (String) -> Unit = {},
     onNavigateToMeetingDetailsScreen: (String) -> Unit = {},
+    onNavigateToFindPlayersScreen: () -> Unit = {},
+    onNavigateToFullScreenList: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
 
@@ -140,6 +141,9 @@ fun SportScreen(
                 headersPadding = PaddingValues(horizontal = 10.dp),
                 onOfferTextButtonClick = {
                     viewModel.acceptOfferToAccept(it.offerUid)
+                },
+                onSeeMoreClick = {
+                    onNavigateToFullScreenList("OffersToAccept")
                 }
             )
             item {
@@ -165,6 +169,9 @@ fun SportScreen(
                     headersPadding = PaddingValues(horizontal = 10.dp),
                     onPlayerCardClick = {
                         onNavigateToPlayerDetailsScreen(it.uid)
+                    },
+                    onSeeMoreClick = {
+                        onNavigateToFindPlayersScreen()
                     }
                 )
             }
@@ -179,6 +186,9 @@ fun SportScreen(
                 headersPadding = PaddingValues(horizontal = 10.dp),
                 onOfferTextButtonClick = {
                     viewModel.sendGameOfferToAccept(it)
+                },
+                onSeeMoreClick = {
+                    onNavigateToFullScreenList("Offers")
                 }
             )
 

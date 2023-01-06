@@ -85,7 +85,7 @@ class StoresModule {
     @Provides
     fun offersToAcceptStore(apolloClient: ApolloClient, offersToAcceptMemoryCache: OffersToAcceptMemoryCache): Store<OffersFilter, List<GameOfferToAccept>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            apolloClient.query(ResponsesQuery(filters.sportFilter!!.toSportType())).execute().data!!.toGameOfferToAcceptList()!!
+            apolloClient.query(ResponsesQuery(filters.sportFilter!!.toSportType(), first = Optional.present(50))).execute().data!!.toGameOfferToAcceptList()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersToAcceptMemoryCache.observeData(key)

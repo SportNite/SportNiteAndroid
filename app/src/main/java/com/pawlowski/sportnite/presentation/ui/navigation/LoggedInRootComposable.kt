@@ -5,7 +5,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -155,6 +154,16 @@ fun LoggedInRootComposable(
                         navController.navigate("MeetingDetails/$it") {
                             launchSingleTop = true
                         }
+                    },
+                    onNavigateToFindPlayersScreen = {
+                        navController.navigate("FindPlayers") {
+                            popUpTo("Home")
+                            restoreState = true
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToFullScreenList = {
+                        navController.navigate("FullScreenList/$it")
                     }
                 )
             }
@@ -221,7 +230,16 @@ fun LoggedInRootComposable(
                         nullable = false
                     }
                 )) {
-                FullScreenListScreen()
+                FullScreenListScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToSportScreen = {
+                        navController.navigate("Sport/${it.sportId}") {
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
         }
     }

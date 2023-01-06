@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +38,7 @@ fun HomeScreen(
     onNavigateToSportScreen: (Sport) -> Unit = {},
     onNavigateToSettingsScreen: () -> Unit = {},
     onNavigateToMeetingDetails: (String) -> Unit = {},
-    onNavigateToFullScreenList: (String) -> Unit = {}
+    onNavigateToFullScreenList: (String) -> Unit = {},
 ) {
     val isExitAppDialogVisible = remember {
         mutableStateOf(false)
@@ -102,7 +103,7 @@ fun HomeScreen(
                     onNavigateToMeetingDetails(it.meetingUid)
                 },
                 onSeeMoreClick = {
-                    onNavigateToFullScreenList("Offers")
+                    onNavigateToFullScreenList("Meetings")
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -130,7 +131,7 @@ fun SportsRow(
     onSeeMoreClick: () -> Unit = {}
 ) {
     Column(modifier = modifier) {
-        Row(modifier = Modifier.padding(headersPadding)) {
+        Row(modifier = Modifier.padding(headersPadding), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Twoje sporty")
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = onSeeMoreClick) {
