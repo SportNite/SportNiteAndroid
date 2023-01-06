@@ -122,7 +122,10 @@ fun MyMeetingsScreen(
                 offers = offersToAcceptValueState.value,
                 headerText = "Do akceptacji",
                 headersPadding = PaddingValues(horizontal = 10.dp),
-                displaySeeMore = false
+                displaySeeMore = false,
+                isLoading = {
+                    offersToAcceptDataState.value.isLoading()
+                }
             )
             item {
                 Spacer(modifier = Modifier.height(5.dp))
@@ -155,6 +158,9 @@ fun MyMeetingsScreen(
                 },
                 onOfferTextButtonClick = {
                     viewModel.deleteOffer(it)
+                },
+                isLoading = {
+                    offersDataState.value.isLoading()
                 }
             )
 

@@ -341,7 +341,6 @@ class AppRepository @Inject constructor(
     ): Flow<UiData<Output>> = flow {
         var lastData: Output? = null
         collect {
-            Log.d("uiData", it.toString())
             when (it) {
                 is StoreResponse.Loading -> {
                     if (isDataEmpty(lastData))

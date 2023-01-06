@@ -3,6 +3,7 @@ package com.pawlowski.sportnite.presentation.ui.reusable_components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,6 +23,7 @@ fun LazyListScope.gameOffersColumnItem(
     onSeeMoreClick: () -> Unit = {},
     offerTextButtonText: @Composable (GameOffer) -> Unit = { Text(text = "Akceptuj propozycję") },
     onOfferTextButtonClick: (GameOffer) -> Unit = {},
+    isLoading: () -> Boolean = {false}
 ) {
     item {
         Row(modifier = Modifier.padding(headersPadding), verticalAlignment = Alignment.CenterVertically) {
@@ -44,23 +46,34 @@ fun LazyListScope.gameOffersColumnItem(
     item {
         Spacer(modifier = Modifier.height(5.dp))
     }
-    items(offers) {
-        Spacer(modifier = Modifier.height(8.dp))
-        val isExpanded = rememberSaveable(offers) {
-            mutableStateOf(false)
-        }
-        GameOfferCard(
-            gameOffer = it,
-            isExpanded = { isExpanded.value },
-            onExpandClick = {
-                isExpanded.value = !isExpanded.value
-            },
-            textButtonText = {
-                offerTextButtonText(it)
-            },
-            onTextButtonClick = {
-                onOfferTextButtonClick(it)
+    if(offers.isNotEmpty()) {
+        items(offers) {
+            Spacer(modifier = Modifier.height(8.dp))
+            val isExpanded = rememberSaveable(offers) {
+                mutableStateOf(false)
             }
-        )
+            GameOfferCard(
+                gameOffer = it,
+                isExpanded = { isExpanded.value },
+                onExpandClick = {
+                    isExpanded.value = !isExpanded.value
+                },
+                textButtonText = {
+                    offerTextButtonText(it)
+                },
+                onTextButtonClick = {
+                    onOfferTextButtonClick(it)
+                }
+            )
+        }
     }
+    else if(isLoading()){
+        item {
+            CircularProgressIndicator(modifier = Modifier.size(30.dp))
+        }
+    }
+    else {
+        //TODO
+    }
+
 }

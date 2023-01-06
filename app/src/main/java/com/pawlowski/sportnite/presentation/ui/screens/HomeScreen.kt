@@ -110,7 +110,7 @@ fun HomeScreen(
                     onNavigateToFullScreenList("Meetings")
                 },
                 isLoading = { meetingsDataState.value is UiData.Loading<*> },
-                displaySeeMore = (!meetingsDataState.value.dataOrNull().isNullOrEmpty()) || (meetingsDataState.value.isLoading())
+                displaySeeMore = false
             )
             Spacer(modifier = Modifier.height(20.dp))
 

@@ -145,7 +145,11 @@ fun SportScreen(
                 },
                 onSeeMoreClick = {
                     onNavigateToFullScreenList("OffersToAccept")
-                }
+                },
+                isLoading = {
+                    offersToAcceptDataState.value.isLoading()
+                },
+                displaySeeMore = offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()
             )
             item {
                 Spacer(modifier = Modifier.height(5.dp))
@@ -160,7 +164,8 @@ fun SportScreen(
                     },
                     isLoading = {
                         meetingsDataState.value.isLoading()
-                    }
+                    },
+                    displaySeeMore = false
                 )
             }
             item {
@@ -176,7 +181,11 @@ fun SportScreen(
                     },
                     onSeeMoreClick = {
                         onNavigateToFindPlayersScreen()
-                    }
+                    },
+                    isLoading = {
+                        playersDataState.value.isLoading()
+                    },
+                    displaySeeMore = playersDataState.value.isLoading() || !playersDataState.value.dataOrNull().isNullOrEmpty()
                 )
             }
 
@@ -193,7 +202,11 @@ fun SportScreen(
                 },
                 onSeeMoreClick = {
                     onNavigateToFullScreenList("Offers")
-                }
+                },
+                isLoading = {
+                    offersDataState.value.isLoading()
+                },
+                displaySeeMore = offersDataState.value.isLoading() || !offersDataState.value.dataOrNull().isNullOrEmpty()
             )
 
             item {

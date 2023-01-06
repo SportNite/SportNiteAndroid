@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,7 +23,8 @@ fun PlayersRow(
     players: List<Player>?,
     displaySeeMore: Boolean = true,
     onPlayerCardClick: (Player) -> Unit,
-    onSeeMoreClick: () -> Unit = {}
+    onSeeMoreClick: () -> Unit = {},
+    isLoading: () -> Boolean = {false}
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.padding(headersPadding), verticalAlignment = Alignment.CenterVertically) {
@@ -38,12 +40,18 @@ fun PlayersRow(
         Spacer(modifier = Modifier.height(5.dp))
         LazyRow {
             item { Spacer(modifier = Modifier.width(5.dp)) }
-            players?.let {
+            if(!players.isNullOrEmpty())
+            {
                 items(players) {
                     PlayerCard(modifier = Modifier.clickable {
                         onPlayerCardClick(it)
                     }, player = it)
                     Spacer(modifier = Modifier.width(4.dp))
+                }
+            }
+            else if(isLoading()) {
+                item {
+                    CircularProgressIndicator(Modifier.size(30.dp))
                 }
             }
 
