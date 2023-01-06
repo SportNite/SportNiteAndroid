@@ -56,7 +56,7 @@ class AppRepository @Inject constructor(
                     sportFilter = sportFilter
                 ), refresh = true
             )
-        ).toUiData()
+        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -113,7 +113,7 @@ class AppRepository @Inject constructor(
                     myOffers = true
                 ), refresh = true //TODO: check is it working if something appeared in cache before was loaded (when added an offer)
             )
-        ).toUiData()
+        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
@@ -123,7 +123,7 @@ class AppRepository @Inject constructor(
                     sportFilter = sportFilter
                 ), refresh = true
             )
-        ).toUiData()
+        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {
@@ -336,12 +336,15 @@ class AppRepository @Inject constructor(
         }
     }
 
-    private fun <Output> Flow<StoreResponse<Output>>.toUiData(): Flow<UiData<Output>> = flow {
+    private fun <Output> Flow<StoreResponse<Output>>.toUiData(
+        isDataEmpty: (Output?) -> Boolean = { it != null }
+    ): Flow<UiData<Output>> = flow {
         var lastData: Output? = null
         collect {
+            Log.d("uiData", it.toString())
             when (it) {
                 is StoreResponse.Loading -> {
-                    if (lastData == null)
+                    if (isDataEmpty(lastData))
                         emit(UiData.Loading())
                 }
                 is StoreResponse.Error -> {
@@ -370,8 +373,13 @@ class AppRepository @Inject constructor(
         }
     }
 
-    private fun <Output> Flow<StoreResponse<List<Output>>>.toUiData(filterPredicateOnListData: (Output) -> Boolean): Flow<UiData<List<Output>>> {
-        return toUiData().map { data ->
+
+
+    private fun <Output> Flow<StoreResponse<List<Output>>>.toUiData(
+        isDataEmpty: (List<Output>?) -> Boolean = { it != null && it.isNotEmpty() },
+        filterPredicateOnListData: (Output) -> Boolean,
+    ): Flow<UiData<List<Output>>> {
+        return toUiData(isDataEmpty = isDataEmpty).map { data ->
             data.filteredIfDataExists(filterPredicateOnListData)
         }
     }

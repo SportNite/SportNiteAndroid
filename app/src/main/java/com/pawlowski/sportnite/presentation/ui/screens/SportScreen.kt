@@ -31,6 +31,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.Spo
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.sportnite.utils.isLoading
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -156,6 +157,9 @@ fun SportScreen(
                     headersPadding = PaddingValues(horizontal = 10.dp),
                     onMeetingCardClick = {
                         onNavigateToMeetingDetailsScreen(it.meetingUid)
+                    },
+                    isLoading = {
+                        meetingsDataState.value.isLoading()
                     }
                 )
             }

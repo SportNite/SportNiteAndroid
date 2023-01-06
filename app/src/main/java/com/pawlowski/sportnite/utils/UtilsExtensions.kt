@@ -42,6 +42,10 @@ fun <T>UiData<T>.dataOrNull(): T? {
     }
 }
 
+fun <T>UiData<T>.isLoading(): Boolean {
+    return this is UiData.Loading
+}
+
 inline fun <T>UiData<T>.onSuccess(
     action: (UiData.Success<T>) -> Unit
 ): UiData<T> = apply {

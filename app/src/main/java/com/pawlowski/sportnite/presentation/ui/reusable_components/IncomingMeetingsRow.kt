@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -21,9 +22,10 @@ fun IncomingMeetingsRow(
     meetings: List<Meeting>?,
     displaySeeMore: Boolean = true,
     onMeetingCardClick: (Meeting) -> Unit = {},
-    onSeeMoreClick: () -> Unit = {}
+    onSeeMoreClick: () -> Unit = {},
+    isLoading: () -> Boolean = {false}
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier = Modifier.padding(headersPadding), verticalAlignment = Alignment.CenterVertically) {
             Text(text = headerText)
             Spacer(modifier = Modifier.weight(1f))
@@ -35,9 +37,9 @@ fun IncomingMeetingsRow(
             }
         }
         Spacer(modifier = Modifier.height(5.dp))
-        LazyRow {
-            item { Spacer(modifier = Modifier.width(5.dp)) }
-            meetings?.let {
+        if(!meetings.isNullOrEmpty()) {
+            LazyRow {
+                item { Spacer(modifier = Modifier.width(5.dp)) }
                 items(meetings) {
                     MeetingCard(
                         modifier = Modifier.clickable { onMeetingCardClick(it) },
@@ -45,8 +47,15 @@ fun IncomingMeetingsRow(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
+
             }
+        }
+        else if(isLoading()) {
+            CircularProgressIndicator(modifier = Modifier.size(30.dp))
+        }
+        else {
 
         }
+
     }
 }

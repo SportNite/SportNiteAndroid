@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
@@ -29,6 +30,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.home_screen.Home
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.sportnite.utils.isLoading
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -75,9 +77,11 @@ fun HomeScreen(
             uiState.value.user
         }
     }
-    val meetingsState = remember {
+
+
+    val meetingsDataState = remember {
         derivedStateOf {
-            uiState.value.upcomingMeetings.dataOrNull()
+            uiState.value.upcomingMeetings
         }
     }
 
@@ -98,13 +102,15 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             IncomingMeetingsRow(
                 headersPadding = PaddingValues(horizontal = 10.dp),
-                meetings = meetingsState.value,
+                meetings = meetingsDataState.value.dataOrNull(),
                 onMeetingCardClick = {
                     onNavigateToMeetingDetails(it.meetingUid)
                 },
                 onSeeMoreClick = {
                     onNavigateToFullScreenList("Meetings")
-                }
+                },
+                isLoading = { meetingsDataState.value is UiData.Loading<*> },
+                displaySeeMore = (!meetingsDataState.value.dataOrNull().isNullOrEmpty()) || (meetingsDataState.value.isLoading())
             )
             Spacer(modifier = Modifier.height(20.dp))
 

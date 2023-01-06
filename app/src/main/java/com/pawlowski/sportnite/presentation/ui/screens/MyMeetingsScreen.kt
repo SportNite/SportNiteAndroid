@@ -26,6 +26,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_scre
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.sportnite.utils.isLoading
 
 @Composable
 fun MyMeetingsScreen(
@@ -134,6 +135,9 @@ fun MyMeetingsScreen(
                     displaySeeMore = false,
                     onMeetingCardClick = {
                         onNavigateToMeetingDetailsScreen(it.meetingUid)
+                    },
+                    isLoading = {
+                        meetingsDataState.value.isLoading()
                     }
                 )
             }
@@ -163,7 +167,8 @@ fun MyMeetingsScreen(
                     meetings = historicalMeetingsValueState.value,
                     headerText = "Historia",
                     headersPadding = PaddingValues(horizontal = 10.dp),
-                    displaySeeMore = false
+                    displaySeeMore = false,
+                    isLoading = { historicalMeetingsDataState.value.isLoading() }
                 )
             }
 
