@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -181,13 +182,19 @@ fun ProfileSegment(
             Text(text = user?.userName ?: "")
         }
         Spacer(modifier = Modifier.weight(1f))
-        FilledIconButton(onClick = { /*TODO*/ }) {
+        val context = LocalContext.current
+        FilledIconButton(onClick = {
+            //TODO
+            Toast.makeText(context, "Opcja powiadomień będzie dostępna wkrótce!", Toast.LENGTH_LONG).show()
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.notifications_icon),
                 contentDescription = ""
             )
         }
-        FilledIconButton(onClick = { onSettingsButtonClick() }) {
+        FilledIconButton(onClick = {
+            onSettingsButtonClick()
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.settings_icon),
                 contentDescription = ""

@@ -2,10 +2,7 @@ package com.pawlowski.sportnite.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -14,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.pawlowski.sportnite.data.mappers.availableSports
@@ -22,6 +20,7 @@ import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.GameOfferCard
 import com.pawlowski.sportnite.presentation.ui.reusable_components.MeetingCard
+import com.pawlowski.sportnite.presentation.ui.reusable_components.NoItemsFoundCard
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenDataType
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListViewModel
@@ -53,6 +52,8 @@ fun FullScreenListScreen(
             }
 
             LazyVerticalGrid(columns = GridCells.Fixed(dataTypeState.value.columnsInRow)) {
+
+
                 item(span = { GridItemSpan(dataTypeState.value.columnsInRow) }) {
                     Spacer(modifier = Modifier.height(10.dp))
                 }
@@ -71,6 +72,13 @@ fun FullScreenListScreen(
     }
 }
 
+private fun <T: Any> LazyPagingItems<T>.areNoResults(): Boolean
+{
+    return this.itemCount == 0 &&
+            this.loadState.refresh is LoadState.NotLoading &&
+            this.loadState.append is LoadState.NotLoading
+}
+
 private fun LazyGridScope.displayItemsBasedOnDataType(
     dataType: FullScreenDataType,
     lazyPagingOffers: () -> LazyPagingItems<GameOffer>,
@@ -78,6 +86,46 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
     sports: () -> List<Sport>,
     onSportClick: (Sport) -> Unit = {},
 ) {
+    val pagingItems = when(dataType) {
+        is FullScreenDataType.OffersData -> {
+            lazyPagingOffers()
+        }
+        is FullScreenDataType.MeetingsData -> {
+            lazyPagingMeetings()
+        }
+        is FullScreenDataType.OffersToAccept -> {
+            null
+        }
+        is FullScreenDataType.UserSportsData -> {
+            null
+        }
+    }
+
+    item(span = { GridItemSpan(2) }) {
+        if(pagingItems?.areNoResults() == true) {
+            NoItemsFoundCard()
+        }
+    }
+    item(span = { GridItemSpan(2) }) {
+        when(pagingItems?.loadState?.refresh)
+        {
+            is LoadState.Loading -> {
+                Box(contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(vertical = 5.dp)
+                            .size(30.dp),
+                    )
+                }
+            }
+            is LoadState.Error -> {
+                Button(onClick = { pagingItems.retry() }) {
+                    Text(text = "Try again")
+                }
+            }
+            else -> {}
+        }
+    }
     when(dataType) {
         is FullScreenDataType.OffersData -> {
             items(lazyPagingOffers().itemCount) {
@@ -96,8 +144,8 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
             }
         }
         is FullScreenDataType.UserSportsData -> {
-            items(sports()) {
-                SportCard(modifier = Modifier.padding(horizontal = 5.dp), sport = it) {
+            items(sports()) { sportItem ->
+                SportCard(modifier = Modifier.padding(horizontal = 5.dp), sport = sportItem) {
                     onSportClick(it)
                 }
             }
@@ -105,5 +153,28 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
         is FullScreenDataType.OffersToAccept -> {
 
         }
+    }
+
+    item(span = { GridItemSpan(2) })
+    {
+        when(pagingItems?.loadState?.append)
+        {
+            is LoadState.Loading -> {
+                Box(contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(vertical = 5.dp)
+                            .size(30.dp),
+                    )
+                }
+            }
+            is LoadState.Error -> {
+                Button(onClick = { pagingItems.retry() }) {
+                    Text(text = "Try again")
+                }
+            }
+            else -> {}
+        }
+
     }
 }
