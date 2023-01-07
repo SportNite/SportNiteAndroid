@@ -168,7 +168,7 @@ class AppRepository @Inject constructor(
                     request = { page, pageSize ->
                     executeApolloQuery(
                             request = {
-                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(), after = Optional.present(page), first = Optional.present(pageSize))).execute()
+                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(), after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
                             },
                             mapper = {
                                 val pageInfo = it.offers?.pageInfo!!

@@ -279,7 +279,7 @@ fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
                 futureOffersOfferFilterInput()
             )
         )
-    }?:Optional.absent()
+    }?:Optional.present(listOf(futureOffersOfferFilterInput()))
 }
 
 fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {

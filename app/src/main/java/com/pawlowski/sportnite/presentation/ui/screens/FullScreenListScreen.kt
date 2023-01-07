@@ -5,7 +5,9 @@ import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -130,8 +132,18 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
         is FullScreenDataType.OffersData -> {
             items(lazyPagingOffers().itemCount) {
                 val item = lazyPagingOffers()[it]
+                val isExpanded = rememberSaveable {
+                    mutableStateOf(false)
+                }
                 if (item != null) {
-                    GameOfferCard(gameOffer = item, textButtonText = { Text(text = "text")}) //TODO
+                    GameOfferCard(
+                        gameOffer = item,
+                        textButtonText = { Text(text = "text")}, //TODO: handle clicks and display correct text
+                        onExpandClick = {
+                            isExpanded.value = !isExpanded.value
+                        },
+                        isExpanded = { isExpanded.value }
+                    )
                 }
             }
         }
