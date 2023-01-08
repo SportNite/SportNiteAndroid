@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.domain
 
 import androidx.paging.PagingData
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.utils.Resource
@@ -34,4 +35,5 @@ interface IAppRepository {
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
     suspend fun deleteMyOffer(offerId: String): Resource<Unit>
     fun signOut()
+    fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>>
 }

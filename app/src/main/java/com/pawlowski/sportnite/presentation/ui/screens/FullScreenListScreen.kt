@@ -20,10 +20,7 @@ import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.ui.reusable_components.GameOfferCard
-import com.pawlowski.sportnite.presentation.ui.reusable_components.MeetingCard
-import com.pawlowski.sportnite.presentation.ui.reusable_components.NoItemsFoundCard
-import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
+import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenDataType
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.IFullScreenListViewModel
@@ -74,12 +71,7 @@ fun FullScreenListScreen(
     }
 }
 
-private fun <T: Any> LazyPagingItems<T>.areNoResults(): Boolean
-{
-    return this.itemCount == 0 &&
-            this.loadState.refresh is LoadState.NotLoading &&
-            this.loadState.append is LoadState.NotLoading
-}
+
 
 private fun LazyGridScope.displayItemsBasedOnDataType(
     dataType: FullScreenDataType,

@@ -1,10 +1,12 @@
 package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
-import com.pawlowski.sportnite.presentation.use_cases.GetPlayersUseCase
+import com.pawlowski.sportnite.presentation.use_cases.GetPagedPlayersUseCase
 import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,14 +21,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FindPlayersScreenViewModel @Inject constructor(
-    private val getPlayersUseCase: GetPlayersUseCase,
+    private val getPagedPlayersUseCase: GetPagedPlayersUseCase
 ): IFindPlayersScreenViewModel, ViewModel() {
     override val container: Container<FindPlayersScreenUiState, FindPlayersScreenSideEffect> =
         container(
             initialState = FindPlayersScreenUiState(
-                players = UiData.Loading()
             )
         )
+
+    private val currentAppliedFiltersFlow = MutableStateFlow(PlayersFilter())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val pagedPlayers = currentAppliedFiltersFlow.flatMapLatest {
+        getPagedPlayersUseCase(it)
+    }.cachedIn(viewModelScope)
 
     override fun changeSearchInput(newValue: String) = intent {
         reduce {
@@ -34,23 +42,6 @@ class FindPlayersScreenViewModel @Inject constructor(
         }
     }
 
-    private val filtersChangeFlow =  MutableSharedFlow<Boolean>(onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1, extraBufferCapacity = 1)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun observePlayers() = intent(registerIdling = false) {
-        repeatOnSubscription {
-            filtersChangeFlow.onStart { emit(true) }.flatMapLatest {
-                reduce {
-                    state.copy(areAnyFiltersOn = state.sportFilterInput != null || state.searchInput.isNotEmpty() || state.advanceLevelFilterInput != null)
-                }
-                getPlayersUseCase(state.sportFilterInput, state.searchInput, state.advanceLevelFilterInput)
-            }.collectLatest {
-                reduce {
-                    state.copy(players = it)
-                }
-            }
-        }
-    }
     override fun changeSportFilterInput(newValue: Sport?) = intent {
         reduce {
             state.copy(sportFilterInput = newValue, wereAnyFiltersChangedBeforeApply = true)
@@ -71,12 +62,16 @@ class FindPlayersScreenViewModel @Inject constructor(
     }
 
     override fun applyFilters() = intent {
-        reduce { state.copy(wereAnyFiltersChangedBeforeApply = false) }
-        filtersChangeFlow.emit(true)
+        reduce {
+            state.copy(
+                wereAnyFiltersChangedBeforeApply = false,
+                areAnyFiltersOn = state.sportFilterInput != null || state.searchInput.isNotEmpty() || state.advanceLevelFilterInput != null
+            )
+        }
+        currentAppliedFiltersFlow.update {
+            PlayersFilter(sportFilter = state.sportFilterInput, nameSearch = state.searchInput, level = state.advanceLevelFilterInput)
+        }
     }
 
-    init {
-        observePlayers()
-    }
 
 }

@@ -182,6 +182,32 @@ class AppRepository @Inject constructor(
         ).flow
     }
 
+    override fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>> {
+        val myUid = authManager.getCurrentUserUid()!!
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PagingFactory(
+                    request = { page, pageSize ->
+                        executeApolloQuery(
+                            request = {
+                                apolloClient.query(UsersQuery(filters.toUserFilterInput(), first = Optional.present(pageSize), cursor = Optional.presentIfNotNull(page))).execute()
+                            },
+                            mapper = { queryData ->
+                                val pageInfo = queryData.users?.pageInfo!!
+                                PaginationPage(data = queryData.toPlayersList()!!.filter { it.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+                            }
+                        )
+
+                    }
+                )
+            }
+        ).flow
+    }
+
     override fun getPagedMeetings(): Flow<PagingData<Meeting>> {
         TODO()
 //        return Pager(

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
@@ -20,6 +21,7 @@ import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayerCard
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog
+import com.pawlowski.sportnite.presentation.ui.reusable_components.displayPagingItemsWithIndicators
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.FindPlayersScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.IFindPlayersScreenViewModel
 import com.pawlowski.sportnite.utils.dataOrNull
@@ -51,17 +53,7 @@ fun FindPlayersScreen(
             uiState.value.advanceLevelFilterInput
         }
     }
-    val playersDataState = remember {
-        derivedStateOf {
-            uiState.value.players
-        }
-    }
 
-    val playersValueState = remember {
-        derivedStateOf {
-            playersDataState.value.dataOrNull()?: listOf()
-        }
-    }
 
     val isApplyButtonEnabledState = remember {
         derivedStateOf {
@@ -94,10 +86,9 @@ fun FindPlayersScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            val players = playersValueState.value
+            val players = viewModel.pagedPlayers.collectAsLazyPagingItems()
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                items(players.size) {
-                    val currentPlayer = players[it]
+                displayPagingItemsWithIndicators(pagingItems = players) { currentPlayer ->
                     PlayerCard(
                         modifier = Modifier
                             .padding(5.dp)

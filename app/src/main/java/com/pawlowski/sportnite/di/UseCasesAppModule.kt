@@ -84,4 +84,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getPagedMeetingsUseCase(appRepository: IAppRepository) = GetPagedMeetingsUseCase(appRepository::getPagedMeetings)
+
+    @Singleton
+    @Provides
+    fun getPagedPlayersUseCase(appRepository: IAppRepository) = GetPagedPlayersUseCase(appRepository::getPagedPlayers)
 }

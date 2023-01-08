@@ -1,5 +1,5 @@
-query Users($filter: UserFilterInput) {
-  users(where: $filter) {
+query Users($filter: UserFilterInput, $first: Int, $cursor: String) {
+  users(where: $filter, first: $first, after: $cursor) {
     nodes {
       userId,
       firebaseUserId,
@@ -18,6 +18,12 @@ query Users($filter: UserFilterInput) {
         weight,
         height
       }
-    }
+    },
+    pageInfo {
+          endCursor,
+          hasNextPage,
+          hasPreviousPage,
+          startCursor
+        }
   }
 }
