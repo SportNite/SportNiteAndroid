@@ -1,11 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache.RegistrationProgress.*
-import com.pawlowski.sportnite.utils.Resource
 import com.pawlowski.sportnite.utils.onError
 import com.pawlowski.sportnite.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +22,7 @@ class WaitingForUserInfoViewModel @Inject constructor(
 
     override val container: Container<WaitingForUserInfoUiState, WaitingForUserInfoSideEffect> = container(
         initialState = WaitingForUserInfoUiState(
-            message = "Please wait...",
+            message = "Initializing...",
             isLoading = false,
         )
     )
@@ -57,6 +55,7 @@ class WaitingForUserInfoViewModel @Inject constructor(
                         state.copy(isLoading = false, message = "Please wait...")
                     }
                 }
+                else -> {}
             }
         }.onError { _, _ ->
             reduce {
@@ -65,7 +64,7 @@ class WaitingForUserInfoViewModel @Inject constructor(
         }
     }
 
-    init {
+    /*init {
         checkUserInfo()
-    }
+    }*/
 }

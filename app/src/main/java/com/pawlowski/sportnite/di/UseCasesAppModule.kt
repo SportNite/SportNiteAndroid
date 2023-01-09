@@ -1,7 +1,12 @@
 package com.pawlowski.sportnite.di
 
-import com.pawlowski.sportnite.domain.AppRepository
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.fresh
 import com.pawlowski.sportnite.domain.IAppRepository
+import com.pawlowski.sportnite.domain.models.MeetingsFilter
+import com.pawlowski.sportnite.domain.models.OffersFilter
+import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.use_cases.*
 import dagger.Module
 import dagger.Provides
@@ -88,4 +93,10 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getPagedPlayersUseCase(appRepository: IAppRepository) = GetPagedPlayersUseCase(appRepository::getPagedPlayers)
+
+    @Singleton
+    @Provides
+    fun refreshMeetingsUseCase(meetingsStore: Store<MeetingsFilter, List<Meeting>>) = RefreshMeetingsUseCase {
+        meetingsStore.fresh(it)
+    }
 }

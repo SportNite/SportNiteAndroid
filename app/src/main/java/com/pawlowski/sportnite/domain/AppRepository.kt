@@ -30,6 +30,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,7 +57,7 @@ class AppRepository @Inject constructor(
                     sportFilter = sportFilter
                 ), refresh = true
             )
-        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
+        ).toUiData(isDataEmpty = { it.isNullOrEmpty() }).onEach { Log.d("meetingsData", it.toString()) }
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -89,7 +90,7 @@ class AppRepository @Inject constructor(
             )
         ).toUiData(filterPredicateOnListData = {
             it.uid != myUid
-        })
+        }, isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
@@ -102,7 +103,7 @@ class AppRepository @Inject constructor(
             )
         ).toUiData(filterPredicateOnListData = {
             it.owner.uid != myUid
-        })
+        }, isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {

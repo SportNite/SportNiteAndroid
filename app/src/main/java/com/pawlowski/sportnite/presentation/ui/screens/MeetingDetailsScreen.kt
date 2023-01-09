@@ -1,5 +1,8 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -11,14 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.IMeetingDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.MeetingDetailsViewModel
-import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
@@ -77,13 +82,25 @@ fun MeetingDetailsScreen(
             Text(text = meetingState.value?.opponent?.phoneNumber?: "")
             Spacer(modifier = Modifier.height(10.dp))
 
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Wyślij SMS")
+            val context = LocalContext.current
+            meetingState.value?.opponent?.phoneNumber?.let {  phoneValue ->
+                Button(onClick = {
+                    val smsUri: Uri = Uri.parse("smsto:$phoneValue") //Replace the phone number
+                    val sms = Intent(Intent.ACTION_VIEW, smsUri)
+                    context.startActivity(sms)
+                }) {
+                    Text(text = "Wyślij SMS")
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Button(onClick = {
+                        //TODO
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)) {
+                    Text(text = "Anuluj spotkanie", color = Color.White)
+                }
             }
-            Spacer(modifier = Modifier.height(5.dp))
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color.Red)) {
-                Text(text = "Anuluj spotkanie", color = Color.White)
-            }
+
 
         }
     }

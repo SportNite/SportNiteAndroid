@@ -6,7 +6,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
+import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
 import com.pawlowski.sportnite.presentation.ui.utils.*
@@ -31,7 +33,6 @@ import com.pawlowski.sportnite.presentation.view_models_related.home_screen.Home
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
 import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
-import com.pawlowski.sportnite.utils.isLoading
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
@@ -93,39 +94,46 @@ fun HomeScreen(
         }
     }
     Surface(modifier.fillMaxSize()) {
-        Column {
-            Spacer(modifier = Modifier.height(10.dp))
-            ProfileSegment(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                user = userState.value,
-                onSettingsButtonClick = onNavigateToSettingsScreen
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            IncomingMeetingsRow(
-                headersPadding = PaddingValues(horizontal = 10.dp),
-                meetings = meetingsDataState.value.dataOrNull(),
-                onMeetingCardClick = {
-                    onNavigateToMeetingDetails(it.meetingUid)
-                },
-                onSeeMoreClick = {
-                    onNavigateToFullScreenList("Meetings")
-                },
-                isLoading = { meetingsDataState.value is UiData.Loading<*> },
-                displaySeeMore = false
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+        DisappearingSwipeRefresh(onRefresh = {
+            viewModel.refreshData()
+        }) {
+            Column(modifier = Modifier
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())) {
+                Spacer(modifier = Modifier.height(10.dp))
+                ProfileSegment(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    user = userState.value,
+                    onSettingsButtonClick = onNavigateToSettingsScreen
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                IncomingMeetingsRow(
+                    headersPadding = PaddingValues(horizontal = 10.dp),
+                    meetings = meetingsDataState.value.dataOrNull(),
+                    onMeetingCardClick = {
+                        onNavigateToMeetingDetails(it.meetingUid)
+                    },
+                    onSeeMoreClick = {
+                        onNavigateToFullScreenList("Meetings")
+                    },
+                    isLoading = { meetingsDataState.value is UiData.Loading<*> },
+                    displaySeeMore = false
+                )
+                Spacer(modifier = Modifier.height(20.dp))
 
-            SportsRow(
-                headersPadding = PaddingValues(horizontal = 10.dp),
-                sports = sportsValueState.value,
-                onSportClick = {
-                    onNavigateToSportScreen(it)
-                },
-                onSeeMoreClick = {
-                    onNavigateToFullScreenList("Sports")
-                }
-            )
+                SportsRow(
+                    headersPadding = PaddingValues(horizontal = 10.dp),
+                    sports = sportsValueState.value,
+                    onSportClick = {
+                        onNavigateToSportScreen(it)
+                    },
+                    onSeeMoreClick = {
+                        onNavigateToFullScreenList("Sports")
+                    }
+                )
+            }
         }
+
     }
 }
 
@@ -232,6 +240,10 @@ fun HomeScreenPreview() {
                     data = getMeetingsListForPreview()
                 )
             )
+        }
+
+        override fun refreshData() {
+            TODO("Not yet implemented")
         }
 
     })

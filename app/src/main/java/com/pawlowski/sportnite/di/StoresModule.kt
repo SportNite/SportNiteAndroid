@@ -64,7 +64,7 @@ class StoresModule {
                 ).execute().data!!.toGameOfferList()!!
             }
             else
-                apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput())).execute().data!!.toGameOfferList()!!
+                apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput(), first = Optional.present(10))).execute().data!!.toGameOfferList()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersInMemoryCache.observeData(key)

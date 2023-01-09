@@ -24,7 +24,6 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersCol
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
-import com.pawlowski.sportnite.utils.UiData
 import com.pawlowski.sportnite.utils.dataOrNull
 import com.pawlowski.sportnite.utils.isLoading
 
@@ -90,17 +89,17 @@ fun MyMeetingsScreen(
         }
     }
 
-    val historicalMeetingsDataState = remember {
-        derivedStateOf {
-            uiState.value.historicalMeetings
-        }
-    }
+//    val historicalMeetingsDataState = remember {
+//        derivedStateOf {
+//            uiState.value.historicalMeetings
+//        }
+//    }
 
-    val historicalMeetingsValueState = remember {
-        derivedStateOf {
-            historicalMeetingsDataState.value.dataOrNull()?: listOf()
-        }
-    }
+//    val historicalMeetingsValueState = remember {
+//        derivedStateOf {
+//            historicalMeetingsDataState.value.dataOrNull()?: listOf()
+//        }
+//    }
 
     Surface(modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -168,15 +167,16 @@ fun MyMeetingsScreen(
                 Spacer(modifier = Modifier.height(5.dp))
             }
 
-            item {
-                IncomingMeetingsRow(
-                    meetings = historicalMeetingsValueState.value,
-                    headerText = "Historia",
-                    headersPadding = PaddingValues(horizontal = 10.dp),
-                    displaySeeMore = false,
-                    isLoading = { historicalMeetingsDataState.value.isLoading() }
-                )
-            }
+            //TODO: Add history meetings
+//            item {
+//                IncomingMeetingsRow(
+//                    meetings = historicalMeetingsValueState.value,
+//                    headerText = "Historia",
+//                    headersPadding = PaddingValues(horizontal = 10.dp),
+//                    displaySeeMore = false,
+//                    isLoading = { historicalMeetingsDataState.value.isLoading() }
+//                )
+//            }
 
 
         }

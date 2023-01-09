@@ -4,4 +4,5 @@ import org.orbitmvi.orbit.ContainerHost
 
 
 interface IHomeScreenViewModel: ContainerHost<HomeScreenUiState, HomeScreenSideEffect> {
+    fun refreshData()
 }

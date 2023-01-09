@@ -130,7 +130,6 @@ fun PlayerDetailsScreen(
                 Button(onClick = {
                     clipboardManager.setText(AnnotatedString(text = phoneValue))
                     Toast.makeText(context, "Numer telefonu został skopiowany do schowka!", Toast.LENGTH_LONG).show()
-
                 }) {
                     Text(text = "Skopiuj numer telefonu")
                 }
