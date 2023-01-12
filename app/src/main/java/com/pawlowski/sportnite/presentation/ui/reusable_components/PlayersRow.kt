@@ -38,7 +38,13 @@ fun PlayersRow(
             }
         }
         Spacer(modifier = Modifier.height(5.dp))
-        LazyRow {
+        LazyRow(
+            modifier= Modifier.fillMaxWidth(),
+            horizontalArrangement = if(isLoading())
+                Arrangement.Center
+            else
+                Arrangement.Start
+        ) {
             item { Spacer(modifier = Modifier.width(5.dp)) }
             if(!players.isNullOrEmpty())
             {

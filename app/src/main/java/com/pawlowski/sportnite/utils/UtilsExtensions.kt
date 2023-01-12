@@ -10,7 +10,10 @@ inline fun <T>Resource<T>.onSuccess(
     }
 }
 
-
+inline fun <T>onAnyResourceHasError(vararg resources: Resource<T>, action: () -> Unit) {
+    if(resources.any { it is Resource.Error })
+        action()
+}
 
 inline fun <T>Resource<T>.onError(
     action: (UiText, T?) -> Unit

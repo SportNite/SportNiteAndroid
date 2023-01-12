@@ -3,8 +3,12 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
+import com.pawlowski.sportnite.domain.models.MeetingsFilter
+import com.pawlowski.sportnite.domain.models.OffersFilter
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
+import com.pawlowski.sportnite.type.Offer
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -24,6 +28,10 @@ class SportScreenViewModel @Inject constructor(
     private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
     private val getPlayersUseCase: GetPlayersUseCase,
     private val acceptOfferToAcceptUseCase: AcceptOfferToAcceptUseCase,
+    private val refreshOffersToAcceptUseCase: RefreshOffersToAcceptUseCase,
+    private val refreshOffersUseCase: RefreshOffersUseCase,
+    private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
+    private val refreshPlayersUseCase: RefreshPlayersUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportFromSportId(savedStateHandle.get<String>("sportId")!!)
@@ -89,6 +97,18 @@ class SportScreenViewModel @Inject constructor(
         }.onError { message, _ ->
             postSideEffect(SportScreenSideEffect.ShowToastMessage(message))
         }
+    }
+
+    override fun refresh() = intent {
+        onAnyResourceHasError(
+            refreshMeetingsUseCase(MeetingsFilter(currentSport)),
+            refreshOffersUseCase(OffersFilter(sportFilter = currentSport)),
+            refreshOffersToAcceptUseCase(OffersFilter(sportFilter = currentSport)),
+            refreshPlayersUseCase(PlayersFilter(sportFilter = currentSport))
+        ) {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(defaultRequestError))
+        }
+
     }
 
     init {

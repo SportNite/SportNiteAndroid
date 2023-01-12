@@ -1,8 +1,5 @@
-query Responses($sportFilter: SportType!, $otherFilters: [OfferFilterInput!], $first: Int) {
+query Responses($otherFilters: [OfferFilterInput!], $first: Int) {
   myOffers(where: {
-    sport: {
-      eq: $sportFilter
-    }
     and: $otherFilters
   }, first: $first,
   order: {

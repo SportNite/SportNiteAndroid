@@ -1,13 +1,19 @@
 package com.pawlowski.sportnite.di
 
+import android.util.Log
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.fresh
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
+import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Meeting
+import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.presentation.use_cases.*
+import com.pawlowski.sportnite.utils.Resource
+import com.pawlowski.sportnite.utils.UiText
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -97,6 +103,48 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun refreshMeetingsUseCase(meetingsStore: Store<MeetingsFilter, List<Meeting>>) = RefreshMeetingsUseCase {
-        meetingsStore.fresh(it)
+        try {
+            meetingsStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun refreshOffersUseCase(offersStore: Store<OffersFilter, List<GameOffer>>) = RefreshOffersUseCase {
+        try {
+            offersStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun refreshOffersToAcceptUseCase(offersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>) = RefreshOffersToAcceptUseCase {
+        try {
+            offersToAcceptStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun refreshPlayersUseCase(playersStore: Store<PlayersFilter, List<Player>>) = RefreshPlayersUseCase {
+        try {
+            playersStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
     }
 }

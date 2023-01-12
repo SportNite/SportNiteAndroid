@@ -1,11 +1,10 @@
 package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.domain.models.MeetingsFilter
+import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetMyOffersUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetOffersToAcceptUseCase
+import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +21,9 @@ class MyMeetingsScreenViewModel @Inject constructor(
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getMyOffersUseCase: GetMyOffersUseCase,
     private val deleteMyOfferUseCase: DeleteMyOfferUseCase,
+    private val refreshOffersUseCase: RefreshOffersUseCase,
+    private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
+    private val refreshOffersToAcceptUseCase: RefreshOffersToAcceptUseCase
 
     ): IMyMeetingsScreenViewModel, ViewModel() {
     override val container: Container<MyMeetingsScreenUiState, MyMeetingsScreenSideEffect> =
@@ -68,6 +70,12 @@ class MyMeetingsScreenViewModel @Inject constructor(
 
         }
 
+    }
+
+    override fun refresh() = intent {
+        refreshMeetingsUseCase(MeetingsFilter(null))
+        //refreshOffersUseCase(OffersFilter(null, myOffers = true))
+        refreshOffersToAcceptUseCase(OffersFilter(sportFilter = null))
     }
 
     init {

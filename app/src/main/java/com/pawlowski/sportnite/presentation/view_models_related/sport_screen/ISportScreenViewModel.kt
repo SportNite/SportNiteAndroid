@@ -7,4 +7,5 @@ import org.orbitmvi.orbit.ContainerHost
 interface ISportScreenViewModel: ContainerHost<SportScreenUiState, SportScreenSideEffect> {
     fun sendGameOfferToAccept(gameOffer: GameOffer)
     fun acceptOfferToAccept(gameOfferToAcceptId: String)
+    fun refresh()
 }

@@ -19,10 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.presentation.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
-import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayersRow
-import com.pawlowski.sportnite.presentation.ui.reusable_components.ScreenHeader
-import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersColumnItem
+import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISportScreenViewModel
@@ -122,97 +119,101 @@ fun SportScreen(
         val offersToAcceptMapped = remember(offersToAcceptValueState.value) {
             offersToAcceptValueState.value.map { it.asGameOffer() }.take(4)
         }
+        DisappearingSwipeRefresh(onRefresh = {
+            viewModel.refresh()
+        }) {
+            LazyColumn(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
+                item {
+                    SportHeader(
+                        sport = sportState.value,
+                        onBackClick = onNavigateBack
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = sportState.value.sportName.asString(), fontSize = 20.sp)
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
 
-        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-            item {
-                SportHeader(
-                    sport = sportState.value,
-                    onBackClick = onNavigateBack
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = sportState.value.sportName.asString(), fontSize = 20.sp)
-                Spacer(modifier = Modifier.height(5.dp))
-            }
-
-            gameOffersColumnItem(
-                offers = offersToAcceptMapped,
-                headerText = "Do akceptacji",
-                headersPadding = PaddingValues(horizontal = 10.dp),
-                onOfferTextButtonClick = {
-                    viewModel.acceptOfferToAccept(it.offerUid)
-                },
-                onSeeMoreClick = {
-                    onNavigateToFullScreenList("OffersToAccept")
-                },
-                isLoading = {
-                    offersToAcceptDataState.value.isLoading()
-                },
-                displaySeeMore = offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()
-            )
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
-            }
-
-            item {
-                IncomingMeetingsRow(
-                    meetings = meetingsValueState.value,
+                gameOffersColumnItem(
+                    offers = offersToAcceptMapped,
+                    headerText = "Do akceptacji",
                     headersPadding = PaddingValues(horizontal = 10.dp),
-                    onMeetingCardClick = {
-                        onNavigateToMeetingDetailsScreen(it.meetingUid)
-                    },
-                    isLoading = {
-                        meetingsDataState.value.isLoading()
-                    },
-                    displaySeeMore = false
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
-            }
-
-            item {
-                PlayersRow(
-                    players = playersValueState.value,
-                    headersPadding = PaddingValues(horizontal = 10.dp),
-                    onPlayerCardClick = {
-                        onNavigateToPlayerDetailsScreen(it.uid)
+                    onOfferTextButtonClick = {
+                        viewModel.acceptOfferToAccept(it.offerUid)
                     },
                     onSeeMoreClick = {
-                        onNavigateToFindPlayersScreen()
+                        onNavigateToFullScreenList("OffersToAccept")
                     },
                     isLoading = {
-                        playersDataState.value.isLoading()
+                        offersToAcceptDataState.value.isLoading()
                     },
-                    displaySeeMore = playersDataState.value.isLoading() || !playersDataState.value.dataOrNull().isNullOrEmpty()
+                    displaySeeMore = offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()
                 )
-            }
+                item {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
 
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
-            }
+                item {
+                    IncomingMeetingsRow(
+                        meetings = meetingsValueState.value,
+                        headersPadding = PaddingValues(horizontal = 10.dp),
+                        onMeetingCardClick = {
+                            onNavigateToMeetingDetailsScreen(it.meetingUid)
+                        },
+                        isLoading = {
+                            meetingsDataState.value.isLoading()
+                        },
+                        displaySeeMore = false
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
 
-            gameOffersColumnItem(
-                offers = offersValueState.value.take(5),
-                headerText = "Oferty na grę",
-                headersPadding = PaddingValues(horizontal = 10.dp),
-                onOfferTextButtonClick = {
-                    viewModel.sendGameOfferToAccept(it)
-                },
-                onSeeMoreClick = {
-                    onNavigateToFullScreenList("Offers")
-                },
-                isLoading = {
-                    offersDataState.value.isLoading()
-                },
-                displaySeeMore = offersDataState.value.isLoading() || !offersDataState.value.dataOrNull().isNullOrEmpty()
-            )
+                item {
+                    PlayersRow(
+                        players = playersValueState.value,
+                        headersPadding = PaddingValues(horizontal = 10.dp),
+                        onPlayerCardClick = {
+                            onNavigateToPlayerDetailsScreen(it.uid)
+                        },
+                        onSeeMoreClick = {
+                            onNavigateToFindPlayersScreen()
+                        },
+                        isLoading = {
+                            playersDataState.value.isLoading()
+                        },
+                        displaySeeMore = playersDataState.value.isLoading() || !playersDataState.value.dataOrNull().isNullOrEmpty()
+                    )
+                }
 
-            item {
-                Spacer(modifier = Modifier.height(5.dp))
+                item {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
+
+                gameOffersColumnItem(
+                    offers = offersValueState.value.take(5),
+                    headerText = "Oferty na grę",
+                    headersPadding = PaddingValues(horizontal = 10.dp),
+                    onOfferTextButtonClick = {
+                        viewModel.sendGameOfferToAccept(it)
+                    },
+                    onSeeMoreClick = {
+                        onNavigateToFullScreenList("Offers")
+                    },
+                    isLoading = {
+                        offersDataState.value.isLoading()
+                    },
+                    displaySeeMore = offersDataState.value.isLoading() || !offersDataState.value.dataOrNull().isNullOrEmpty()
+                )
+
+                item {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
             }
         }
+
     }
 }
 
@@ -241,6 +242,7 @@ fun SportScreenPreview() {
 
         override fun sendGameOfferToAccept(gameOffer: GameOffer) {}
         override fun acceptOfferToAccept(gameOfferToAcceptId: String) {}
+        override fun refresh() {}
 
     })
 }

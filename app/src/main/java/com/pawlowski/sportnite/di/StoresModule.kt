@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.di
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
@@ -14,6 +15,8 @@ import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
+import com.pawlowski.sportnite.type.OfferFilterInput
+import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.type.StringOperationFilterInput
 import com.pawlowski.sportnite.type.UserFilterInput
 import dagger.Module
@@ -85,7 +88,17 @@ class StoresModule {
     @Provides
     fun offersToAcceptStore(apolloClient: ApolloClient, offersToAcceptMemoryCache: OffersToAcceptMemoryCache): Store<OffersFilter, List<GameOfferToAccept>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            apolloClient.query(ResponsesQuery(filters.sportFilter!!.toSportType(), first = Optional.present(50))).execute().data!!.toGameOfferToAcceptList()!!
+            apolloClient.query(
+                ResponsesQuery(
+                    first = Optional.present(50),
+                    otherFilters = filters.sportFilter?.let {
+                        Optional.present(listOf(
+                            OfferFilterInput(sport = Optional.present(SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))))
+                        ))
+                    }?:Optional.absent()
+                )
+            ).execute().dataAssertNoErrors.toGameOfferToAcceptList()!!
+
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersToAcceptMemoryCache.observeData(key)
