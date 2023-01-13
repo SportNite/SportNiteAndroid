@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 import org.orbitmvi.orbit.ContainerHost
 
 interface IFullScreenListViewModel: ContainerHost<FullScreenListUiState, FullScreenListSideEffect> {
+    fun deleteMyOfferToAccept(offerToAcceptUid: String)
+    fun sendOfferToAccept(offerUid: String)
+
     val offersFlow: Flow<PagingData<GameOffer>>
     val meetingsFlow: Flow<PagingData<Meeting>>
     val dataTypeFlow: StateFlow<FullScreenDataType>

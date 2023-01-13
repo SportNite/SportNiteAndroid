@@ -147,4 +147,8 @@ class UseCasesAppModule {
             Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
         }
     }
+
+    @Singleton
+    @Provides
+    fun deleteMyOfferToAcceptUseCase(appRepository: IAppRepository) = DeleteMyOfferToAcceptUseCase(appRepository::deleteMyOfferToAccept)
 }

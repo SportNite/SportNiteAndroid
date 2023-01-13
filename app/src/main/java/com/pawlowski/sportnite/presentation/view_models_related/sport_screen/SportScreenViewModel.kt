@@ -32,6 +32,7 @@ class SportScreenViewModel @Inject constructor(
     private val refreshOffersUseCase: RefreshOffersUseCase,
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
     private val refreshPlayersUseCase: RefreshPlayersUseCase,
+    private val deleteMyOfferToAcceptUseCase: DeleteMyOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportFromSportId(savedStateHandle.get<String>("sportId")!!)
@@ -109,6 +110,15 @@ class SportScreenViewModel @Inject constructor(
             postSideEffect(SportScreenSideEffect.ShowToastMessage(defaultRequestError))
         }
 
+    }
+
+    override fun deleteMyOfferToAccept(offerToAcceptId: String) = intent {
+        val result = deleteMyOfferToAcceptUseCase(offerToAcceptId)
+        result.onSuccess {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(offerToAcceptDeletionSuccessText))
+        }.onError { message, _ ->
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message))
+        }
     }
 
     init {

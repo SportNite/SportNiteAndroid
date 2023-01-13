@@ -8,4 +8,5 @@ interface ISportScreenViewModel: ContainerHost<SportScreenUiState, SportScreenSi
     fun sendGameOfferToAccept(gameOffer: GameOffer)
     fun acceptOfferToAccept(gameOfferToAcceptId: String)
     fun refresh()
+    fun deleteMyOfferToAccept(offerToAcceptId: String)
 }

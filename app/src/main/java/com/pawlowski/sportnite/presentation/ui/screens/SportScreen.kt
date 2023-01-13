@@ -199,7 +199,7 @@ fun SportScreen(
                     headersPadding = PaddingValues(horizontal = 10.dp),
                     onOfferTextButtonClick = {
                         if(it.myResponseIdIfExists != null) {
-                            //TODO: Delete response
+                            viewModel.deleteMyOfferToAccept(it.myResponseIdIfExists)
                         }
                         else
                         {
@@ -259,6 +259,7 @@ fun SportScreenPreview() {
         override fun sendGameOfferToAccept(gameOffer: GameOffer) {}
         override fun acceptOfferToAccept(gameOfferToAcceptId: String) {}
         override fun refresh() {}
+        override fun deleteMyOfferToAccept(offerToAcceptId: String) {}
 
     })
 }

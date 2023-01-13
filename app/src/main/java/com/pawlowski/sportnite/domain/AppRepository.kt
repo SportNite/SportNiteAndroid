@@ -371,6 +371,23 @@ class AppRepository @Inject constructor(
         }
     }
 
+    override suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
+        return withContext(ioDispatcher) {
+            executeApolloMutation(request = {
+                apolloClient.mutation(DeleteResponseMutation(offerToAcceptUid)).execute()
+            }) {
+                offersInMemoryCache.updateElements { _, offer ->
+                    if(offer.myResponseIdIfExists == offerToAcceptUid)
+                    {
+                        offer.copy(myResponseIdIfExists = null)
+                    }
+                    else
+                        offer
+                }
+            }
+        }
+    }
+
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(
         isDataEmpty: (Output?) -> Boolean = { it != null }
     ): Flow<UiData<Output>> = flow {

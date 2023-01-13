@@ -1,16 +1,15 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +22,7 @@ import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenDataType
+import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.IFullScreenListViewModel
 
@@ -33,7 +33,17 @@ fun FullScreenListScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToSportScreen: (Sport) -> Unit = {}
 ) {
-    val uiState = viewModel.container.stateFlow.collectAsState()
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.container.sideEffectFlow.collect { event ->
+            when(event) {
+                is FullScreenListSideEffect.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
     Surface(modifier = modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -64,7 +74,9 @@ fun FullScreenListScreen(
                     sports = { sports },
                     onSportClick = {
                         onNavigateToSportScreen(it)
-                    }
+                    },
+                    onRemoveOfferToAccept = { viewModel.deleteMyOfferToAccept(it) },
+                    onSendOfferToAccept = { viewModel.sendOfferToAccept(it.offerUid) }
                 )
 
             }
