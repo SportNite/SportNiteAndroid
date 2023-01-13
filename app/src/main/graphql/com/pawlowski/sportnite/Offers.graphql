@@ -20,6 +20,9 @@ query Offers($offerFilterInput: [OfferFilterInput!], $after: String, $first: Int
       isAvailable,
       city,
       street,
+      myResponse {
+        responseId
+      },
       user {
         name,
         userId,

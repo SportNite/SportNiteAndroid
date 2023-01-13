@@ -72,7 +72,8 @@ fun OffersQuery.Node.toGameOffer(): GameOffer {
         offerUid = this.offerId.toString(),
         sport = this.sport.toSport(),
         date = UiDate(OffsetDateTime.parse(this.dateTime.toString())),
-        owner = this.user.toPlayer()
+        owner = this.user.toPlayer(),
+        myResponseIdIfExists = this.myResponse?.responseId?.toString()
     )
 }
 

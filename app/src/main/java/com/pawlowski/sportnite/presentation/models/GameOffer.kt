@@ -9,5 +9,6 @@ data class GameOffer(
     val city: String,
     val additionalNotes: String,
     val sport: Sport,
-    val offerUid: String
+    val offerUid: String,
+    val myResponseIdIfExists: String? = null,
 )

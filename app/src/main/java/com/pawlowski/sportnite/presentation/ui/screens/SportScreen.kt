@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -197,7 +198,13 @@ fun SportScreen(
                     headerText = "Oferty na grę",
                     headersPadding = PaddingValues(horizontal = 10.dp),
                     onOfferTextButtonClick = {
-                        viewModel.sendGameOfferToAccept(it)
+                        if(it.myResponseIdIfExists != null) {
+                            //TODO: Delete response
+                        }
+                        else
+                        {
+                            viewModel.sendGameOfferToAccept(it)
+                        }
                     },
                     onSeeMoreClick = {
                         onNavigateToFullScreenList("Offers")
@@ -205,7 +212,16 @@ fun SportScreen(
                     isLoading = {
                         offersDataState.value.isLoading()
                     },
-                    displaySeeMore = offersDataState.value.isLoading() || !offersDataState.value.dataOrNull().isNullOrEmpty()
+                    displaySeeMore = offersDataState.value.isLoading() || !offersDataState.value.dataOrNull().isNullOrEmpty(),
+                    offerTextButtonText = {
+                        if(it.myResponseIdIfExists != null) {
+                            Text(text = "Anuluj moją propozycję", color = Color.Red)
+                        }
+                        else
+                        {
+                            Text(text = "Akceptuj propozycję")
+                        }
+                    }
                 )
 
                 item {

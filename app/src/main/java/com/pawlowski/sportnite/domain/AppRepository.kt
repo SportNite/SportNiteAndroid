@@ -168,7 +168,7 @@ class AppRepository @Inject constructor(
                 PagingFactory(
                     request = { page, pageSize ->
                     executeApolloQuery(
-                            request = {
+                            request = { //TODO: add filter not to display my offers
                                 apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(), after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
                             },
                             mapper = {
@@ -284,6 +284,14 @@ class AppRepository @Inject constructor(
                 it.createResponse?.responseId != null
             },
             onDataSuccessfullyReceived = {
+                offersInMemoryCache.updateElements { _, offer ->
+                    if(offer.offerUid == offerUid)
+                    {
+                        offer.copy(myResponseIdIfExists = it.createResponse?.responseId.toString())
+                    }
+                    else
+                        offer
+                }
                 Log.d("New response id", it.createResponse?.responseId.toString())
             })
     }

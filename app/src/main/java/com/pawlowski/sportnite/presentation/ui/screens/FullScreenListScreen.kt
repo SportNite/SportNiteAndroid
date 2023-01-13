@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -79,6 +80,9 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
     lazyPagingMeetings: () -> LazyPagingItems<Meeting>,
     sports: () -> List<Sport>,
     onSportClick: (Sport) -> Unit = {},
+    onRemoveOffer: (GameOffer) -> Unit = {},
+    onRemoveOfferToAccept: (String) -> Unit = {},
+    onSendOfferToAccept: (GameOffer) -> Unit = {}
 ) {
     val pagingItems = when(dataType) {
         is FullScreenDataType.OffersData -> {
@@ -114,7 +118,7 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
             }
             is LoadState.Error -> {
                 Button(onClick = { pagingItems.retry() }) {
-                    Text(text = "Try again")
+                    Text(text = "Spróbuj ponownie")
                 }
             }
             else -> {}
@@ -130,7 +134,24 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
                 if (item != null) {
                     GameOfferCard(
                         gameOffer = item,
-                        textButtonText = { Text(text = "text")}, //TODO: handle clicks and display correct text
+                        onTextButtonClick = {
+                            if(item.myResponseIdIfExists != null) {
+                                onRemoveOfferToAccept(item.myResponseIdIfExists)
+                            }
+                            else
+                            {
+                                onSendOfferToAccept(item)
+                            }
+                        },
+                        textButtonText = {
+                            if(item.myResponseIdIfExists != null) {
+                                Text(text = "Anuluj moją propozycję", color = Color.Red)
+                            }
+                            else
+                            {
+                                Text(text = "Akceptuj propozycję")
+                            }
+                         },
                         onExpandClick = {
                             isExpanded.value = !isExpanded.value
                         },

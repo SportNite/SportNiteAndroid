@@ -3,6 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_c
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthResponse
+import com.pawlowski.sportnite.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
@@ -32,7 +33,12 @@ class EnterSignInCodeScreenViewModel @Inject constructor(
     }
 
     override fun confirmCodeClick() = intent {
-        authManager.onVerifyOtp(state.codeInput)
+        try {
+            authManager.onVerifyOtp(state.codeInput)
+        }
+        catch (e: Exception) {
+            postSideEffect(EnterSignInCodeSideEffect.ShowErrorToast(UiText.NonTranslatable("Wystąpił błąd uwierzytelniania")))
+        }
 
     }
 

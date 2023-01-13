@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.di
 
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
@@ -24,6 +25,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
+import java.time.ZoneOffset
 import javax.inject.Singleton
 
 @Module
@@ -33,7 +35,12 @@ class StoresModule {
     @Provides
     fun playersStore(apolloClient: ApolloClient, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
-            apolloClient.query(UsersQuery(filters.toUserFilterInput())).execute().data!!.toPlayersList()!!
+            try {
+                apolloClient.query(UsersQuery(filters.toUserFilterInput())).execute().data!!.toPlayersList()!!
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e
+            }
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: PlayersFilter ->
                 playersInMemoryCache.observeData(key)
@@ -67,10 +74,20 @@ class StoresModule {
                 ).execute().data!!.toGameOfferList()!!
             }
             else
-                apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput(), first = Optional.present(10))).execute().data!!.toGameOfferList()!!
+            {
+                try {
+                    apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput(), first = Optional.present(10))).execute().data!!.toGameOfferList()!!
+                }
+                catch (e: Exception) {
+                    e.printStackTrace()
+                    throw e
+                }
+            }
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
-                offersInMemoryCache.observeData(key)
+                offersInMemoryCache.observeData(key, sortBy = {
+                    it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
+                })
             },
             writer = { key: OffersFilter, input: List<GameOffer> ->
                 offersInMemoryCache.addManyElements(key, input) {

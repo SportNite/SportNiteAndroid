@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.data.auth
 
+import android.util.Log
 import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.network.http.HttpInterceptor
