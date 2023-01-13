@@ -29,7 +29,7 @@ interface IAppRepository {
 
 
     suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit>
-    suspend fun sendOfferToAccept(offerUid: String): Resource<Unit>
+    suspend fun sendOfferToAccept(offerUid: String): Resource<String>
     suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit>
     suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>

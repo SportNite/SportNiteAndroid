@@ -76,7 +76,7 @@ fun FullScreenListScreen(
                         onNavigateToSportScreen(it)
                     },
                     onRemoveOfferToAccept = { viewModel.deleteMyOfferToAccept(it) },
-                    onSendOfferToAccept = { viewModel.sendOfferToAccept(it.offerUid) }
+                    onSendOfferToAccept = { viewModel.sendOfferToAccept(it) }
                 )
 
             }
@@ -93,7 +93,7 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
     sports: () -> List<Sport>,
     onSportClick: (Sport) -> Unit = {},
     onRemoveOffer: (GameOffer) -> Unit = {},
-    onRemoveOfferToAccept: (String) -> Unit = {},
+    onRemoveOfferToAccept: (GameOffer) -> Unit = {},
     onSendOfferToAccept: (GameOffer) -> Unit = {}
 ) {
     val pagingItems = when(dataType) {
@@ -148,7 +148,7 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
                         gameOffer = item,
                         onTextButtonClick = {
                             if(item.myResponseIdIfExists != null) {
-                                onRemoveOfferToAccept(item.myResponseIdIfExists)
+                                onRemoveOfferToAccept(item)
                             }
                             else
                             {

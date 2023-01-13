@@ -26,11 +26,14 @@ import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.utils.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -159,6 +162,7 @@ class AppRepository @Inject constructor(
     }
 
     override fun getPagedOffers(): Flow<PagingData<GameOffer>> {
+        val myUid = authManager.getCurrentUserUid()!!
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -168,12 +172,13 @@ class AppRepository @Inject constructor(
                 PagingFactory(
                     request = { page, pageSize ->
                     executeApolloQuery(
-                            request = { //TODO: add filter not to display my offers
-                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(), after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
+                            request = {
+                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(),
+                                    after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
                             },
                             mapper = {
                                 val pageInfo = it.offers?.pageInfo!!
-                                PaginationPage(data = it.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+                                PaginationPage(data = it.toGameOfferList()!!.filter { it.owner.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
                             }
                         )
 
@@ -269,10 +274,10 @@ class AppRepository @Inject constructor(
                     ),
                     element = paramsAsGameOffer
                 )*/
-            })
+            }).asUnitResource()
     }
 
-    override suspend fun sendOfferToAccept(offerUid: String): Resource<Unit> {
+    override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
         return executeApolloMutation(request = {
             apolloClient.mutation(
                 CreateResponseMutation(
@@ -292,8 +297,10 @@ class AppRepository @Inject constructor(
                     else
                         offer
                 }
-                Log.d("New response id", it.createResponse?.responseId.toString())
-            })
+            },
+        returnValue = {
+            it.createResponse?.responseId.toString()
+        })
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
@@ -303,7 +310,7 @@ class AppRepository @Inject constructor(
         }).onSuccess {
             offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
             //TODO: Add meeting to cache
-        }
+        }.asUnitResource()
     }
 
     override fun signOut() {
@@ -335,7 +342,7 @@ class AppRepository @Inject constructor(
                 )
             )
         }
-        return result
+        return result.asUnitResource()
     }
 
     override suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit> {
@@ -368,7 +375,7 @@ class AppRepository @Inject constructor(
                     it.offerUid == offerId
                 }
             }
-        }
+        }.asUnitResource()
     }
 
     override suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
@@ -385,7 +392,7 @@ class AppRepository @Inject constructor(
                         offer
                 }
             }
-        }
+        }.asUnitResource()
     }
 
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(
@@ -438,8 +445,9 @@ class AppRepository @Inject constructor(
     private suspend fun <T : Operation.Data> executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
         validateResult: (T) -> Boolean = { true },
-        onDataSuccessfullyReceived: (T) -> Unit = {},
-    ): Resource<Unit> {
+        returnValue: (T) -> String = { "" },
+        onDataSuccessfullyReceived: (T) -> Unit = {}
+    ): Resource<String> {
         return withContext(ioDispatcher) {
             val response = try {
                 request()
@@ -460,7 +468,7 @@ class AppRepository @Inject constructor(
             }
             return@withContext response?.data?.let {
                 onDataSuccessfullyReceived(it)
-                Resource.Success(Unit)
+                Resource.Success(returnValue(it))
             } ?: let {
                 Resource.Error(
                     message = UiText.NonTranslatable(

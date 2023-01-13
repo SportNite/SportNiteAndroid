@@ -3,26 +3,20 @@ package com.pawlowski.sportnite.presentation.view_models_related.full_screen_lis
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.pawlowski.sportnite.domain.AppRepository
-import com.pawlowski.sportnite.domain.IAppRepository
+import androidx.paging.map
+import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedMeetingsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
-import com.pawlowski.sportnite.utils.offerAcceptingSuccessText
-import com.pawlowski.sportnite.utils.offerToAcceptDeletionSuccessText
-import com.pawlowski.sportnite.utils.onError
-import com.pawlowski.sportnite.utils.onSuccess
+import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
-import org.orbitmvi.orbit.syntax.simple.repeatOnSubscription
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -41,31 +35,56 @@ class FullScreenListViewModel @Inject constructor(
             initialState = FullScreenListUiState.Initializing
         )
 
-    override fun deleteMyOfferToAccept(offerToAcceptUid: String) = intent {
-        val result = deleteMyOfferToAcceptUseCase(offerToAcceptUid)
+    override fun deleteMyOfferToAccept(offer: GameOffer) = intent {
+        val result = deleteMyOfferToAcceptUseCase(offer.myResponseIdIfExists!!)
         result.onSuccess {
+            changedOffers.update {
+                it.toMutableList().apply {
+                    removeIf { it.offerUid == offer.offerUid }
+                    add(offer.copy(myResponseIdIfExists = null))
+                }
+            }
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(offerToAcceptDeletionSuccessText))
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
         }
     }
 
-    override fun sendOfferToAccept(offerUid: String) = intent {
-        val result = sendGameOfferToAcceptUseCase(offerUid)
+    override fun sendOfferToAccept(offer: GameOffer) = intent {
+        val result = sendGameOfferToAcceptUseCase(offer.offerUid)
         result.onSuccess {
+            changedOffers.update {
+                it.toMutableList().apply {
+                    removeIf { it.offerUid == offer.offerUid }
+                    add(offer.copy(myResponseIdIfExists = result.dataOrNull()))
+                }
+            }
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(offerAcceptingSuccessText))
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
-        }
+        }//TODO: change changedOffers
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val offersFlow = dataTypeFlow.flatMapLatest { type ->
-        flow {
-            if(type is FullScreenDataType.OffersData)
-                emitAll(getPagedOffersUseCase().cachedIn(viewModelScope))
-        }
+    val pagedOffers = dataTypeFlow.flatMapLatest { type ->
+        if(type is FullScreenDataType.OffersData)
+            getPagedOffersUseCase().cachedIn(viewModelScope)
+        else
+            flowOf()
     }
+
+    private val changedOffers = MutableStateFlow(listOf<GameOffer>())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val offersFlow = changedOffers.flatMapLatest {
+        pagedOffers.map { pagingData ->
+            pagingData.map { offer ->
+                val changedOffersValue = changedOffers.value
+                changedOffersValue.firstOrNull { offer.offerUid == it.offerUid }?:offer
+            }
+        } //TODO:
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override val meetingsFlow = dataTypeFlow.flatMapLatest { type ->
         flow {

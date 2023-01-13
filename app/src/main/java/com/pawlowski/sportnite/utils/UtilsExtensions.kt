@@ -10,6 +10,13 @@ inline fun <T>Resource<T>.onSuccess(
     }
 }
 
+fun <T> Resource<T>.asUnitResource(): Resource<Unit> {
+    return when(this) {
+        is Resource.Success -> Resource.Success(Unit)
+        is Resource.Error -> Resource.Error(this.message)
+    }
+}
+
 inline fun <T>onAnyResourceHasError(vararg resources: Resource<T>, action: () -> Unit) {
     if(resources.any { it is Resource.Error })
         action()
