@@ -118,7 +118,7 @@ fun SportScreen(
     Surface(modifier = modifier.fillMaxSize()) {
 
         val offersToAcceptMapped = remember(offersToAcceptValueState.value) {
-            offersToAcceptValueState.value.map { it.asGameOffer() }.take(4)
+            offersToAcceptValueState.value.map { it.asGameOffer() }
         }
         DisappearingSwipeRefresh(onRefresh = {
             viewModel.refresh()
@@ -149,7 +149,7 @@ fun SportScreen(
                     isLoading = {
                         offersToAcceptDataState.value.isLoading()
                     },
-                    displaySeeMore = offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()
+                    displaySeeMore = false/*offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()*/
                 )
                 item {
                     Spacer(modifier = Modifier.height(5.dp))

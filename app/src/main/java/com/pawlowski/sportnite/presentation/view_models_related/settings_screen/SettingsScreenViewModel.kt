@@ -1,7 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.settings_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetInfoAboutMeUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SignOutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

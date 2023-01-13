@@ -9,10 +9,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
-import com.dropbox.android.external.store4.ResponseOrigin
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
+import com.dropbox.android.external.store4.*
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
@@ -60,7 +57,7 @@ class AppRepository @Inject constructor(
                     sportFilter = sportFilter
                 ), refresh = true
             )
-        ).toUiData(isDataEmpty = { it.isNullOrEmpty() }).onEach { Log.d("meetingsData", it.toString()) }
+        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
@@ -304,12 +301,12 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        //Log.d("offerToAcceptId", offerToAcceptUid)
         return executeApolloMutation(request = {
             apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
         }).onSuccess {
             offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
-            //TODO: Add meeting to cache
+            meetingsStore.fresh(MeetingsFilter(sportFilter = null))
+            //TODO: Add meeting to cache or refresh cache with sportFilter
         }.asUnitResource()
     }
 

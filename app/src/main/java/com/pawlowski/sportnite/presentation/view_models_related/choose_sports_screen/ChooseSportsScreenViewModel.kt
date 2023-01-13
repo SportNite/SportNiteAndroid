@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
 import com.pawlowski.sportnite.data.mappers.availableSports
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.view_models_related.choose_city_screen.ChooseCityScreenSideEffect
+import com.pawlowski.sportnite.utils.selectMinimumOneSport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -31,15 +31,24 @@ class ChooseSportsScreenViewModel @Inject constructor(
                 isLoading = true
             )
         }
-        chooseLevelUpdatingCache.setSportsAndClearLevels(
-            sports = state.sports.mapNotNull {
-                if(it.value)
-                    it.key
-                else
-                    null
-            }
-        )
-        postSideEffect(sideEffect = ChooseSportsScreenSideEffect.NavigateToChoseAdvanceLevelScreen)
+        val chosenSports = state.sports.mapNotNull {
+            if(it.value)
+                it.key
+            else
+                null
+        }
+        if(chosenSports.isEmpty())
+        {
+            postSideEffect(ChooseSportsScreenSideEffect.ShowToastMessage(selectMinimumOneSport))
+        }
+        else
+        {
+            chooseLevelUpdatingCache.setSportsAndClearLevels(
+                sports = chosenSports
+            )
+            postSideEffect(sideEffect = ChooseSportsScreenSideEffect.NavigateToChoseAdvanceLevelScreen)
+        }
+
         reduce {
             state.copy(
                 isLoading = false

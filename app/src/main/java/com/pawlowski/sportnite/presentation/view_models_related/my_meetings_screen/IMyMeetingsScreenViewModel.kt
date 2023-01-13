@@ -6,4 +6,5 @@ import org.orbitmvi.orbit.ContainerHost
 interface IMyMeetingsScreenViewModel: ContainerHost<MyMeetingsScreenUiState, MyMeetingsScreenSideEffect> {
     fun deleteOffer(offer: GameOffer)
     fun refresh()
+    fun acceptOfferToAccept(offerToAcceptUid: String)
 }

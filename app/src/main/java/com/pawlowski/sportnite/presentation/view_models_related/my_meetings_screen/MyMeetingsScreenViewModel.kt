@@ -23,7 +23,8 @@ class MyMeetingsScreenViewModel @Inject constructor(
     private val deleteMyOfferUseCase: DeleteMyOfferUseCase,
     private val refreshOffersUseCase: RefreshOffersUseCase,
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
-    private val refreshOffersToAcceptUseCase: RefreshOffersToAcceptUseCase
+    private val refreshOffersToAcceptUseCase: RefreshOffersToAcceptUseCase,
+    private val acceptOfferToAcceptUseCase: AcceptOfferToAcceptUseCase,
 
     ): IMyMeetingsScreenViewModel, ViewModel() {
     override val container: Container<MyMeetingsScreenUiState, MyMeetingsScreenSideEffect> =
@@ -76,6 +77,16 @@ class MyMeetingsScreenViewModel @Inject constructor(
         refreshMeetingsUseCase(MeetingsFilter(null))
         //refreshOffersUseCase(OffersFilter(null, myOffers = true))
         refreshOffersToAcceptUseCase(OffersFilter(sportFilter = null))
+    }
+
+    override fun acceptOfferToAccept(offerToAcceptUid: String) = intent {
+        val response = acceptOfferToAcceptUseCase(offerToAcceptUid)
+        response.onSuccess {
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(offerToAcceptAcceptSuccessText))
+        }.onError { message, _ ->
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
+
+        }
     }
 
     init {

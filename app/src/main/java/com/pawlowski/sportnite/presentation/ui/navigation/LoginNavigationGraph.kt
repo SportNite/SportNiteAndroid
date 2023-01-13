@@ -77,7 +77,7 @@ fun LoginNavigationGraph(
         composable(route = "AccountDetails")
         {
             AccountDetailsScreen(
-                onNavigateBack = { navController.popBackStack() },
+                onNavigateBack = { /*navController.popBackStack()*/ }, //TODO: add logout option
                 onNavigateToNextScreen = {
                     navController.navigate("ChooseSports") {
                         launchSingleTop = true

@@ -58,6 +58,14 @@ class AccountDetailsScreenViewModel @Inject constructor(
             }
             return@intent
         }
+        else if(currentState.photo.isNullOrEmpty())
+        {
+            postSideEffect(AccountDetailsScreenSideEffect.ShowToastMessage(photoRequiredText))
+            reduce {
+                state.copy(isLoading = false)
+            }
+            return@intent
+        }
 
         val result = updateUserInfoUseCase(UserUpdateInfoParams(
             name = currentState.nameAndSurnameInput.trim(),
@@ -67,7 +75,6 @@ class AccountDetailsScreenViewModel @Inject constructor(
         ))
 
 
-        //TODO add loading
         result.onSuccess {
             postSideEffect(AccountDetailsScreenSideEffect.NavigateToNextScreen)
 

@@ -94,7 +94,7 @@ fun MeetingDetailsScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Button(onClick = {
-                        //TODO
+                        Toast.makeText(context, "Opcja dostępna wkrótce. Napisz do przeciwnika. Spotkanie pozostanie w systemie", Toast.LENGTH_LONG).show()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)) {
                     Text(text = "Anuluj spotkanie", color = Color.White)

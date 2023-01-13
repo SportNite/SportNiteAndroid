@@ -38,7 +38,7 @@ fun IncomingMeetingsRow(
         }
         Spacer(modifier = Modifier.height(5.dp))
         if(!meetings.isNullOrEmpty()) {
-            LazyRow {
+            LazyRow(modifier= Modifier.fillMaxWidth()) {
                 item { Spacer(modifier = Modifier.width(5.dp)) }
                 items(meetings) {
                     MeetingCard(

@@ -156,7 +156,15 @@ fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
     return GameOfferToAccept(
         offerToAcceptUid = this.responseId.toString(),
         from = this.user.toPlayer(),
-        offer = getGameOfferForPreview().copy(offerUid = this.offerId.toString()) //TODO fix when backand error will be fixed
+        offer = GameOffer(
+            city = this.offer.city,
+            placeOrAddress = this.offer.street,
+            additionalNotes = this.offer.description,
+            offerUid = this.offerId.toString(),
+            sport = this.offer.sport.toSport(),
+            date = UiDate(OffsetDateTime.parse(this.offer.dateTime.toString())),
+            owner = this.user.toPlayer() //TODO: Change if it's used
+        )
     )
 }
 
@@ -333,6 +341,7 @@ fun Sport.toSportType(): SportType {
         SportType.valueOf(sportId)
     }
     catch (e: IllegalArgumentException) {
+        e.printStackTrace()
         SportType.RUN
     }
 }

@@ -1,9 +1,7 @@
 package com.pawlowski.sportnite.di
 
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.exception.ApolloException
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
@@ -118,7 +116,9 @@ class StoresModule {
 
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
-                offersToAcceptMemoryCache.observeData(key)
+                offersToAcceptMemoryCache.observeData(key, sortBy = {
+                    it.offer.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
+                })
             },
             writer = { key: OffersFilter, input: List<GameOfferToAccept> ->
                 offersToAcceptMemoryCache.addManyElements(key, input) {
@@ -180,7 +180,9 @@ class StoresModule {
             }
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: MeetingsFilter ->
-                meetingsInMemoryCache.observeData(key)
+                meetingsInMemoryCache.observeData(key, sortBy= {
+                    it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
+                })
             },
             writer = { key: MeetingsFilter, input: List<Meeting> ->
                 meetingsInMemoryCache.addManyElements(key, input)

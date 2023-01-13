@@ -1,9 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.sportnite.data.mappers.getSportFromSportId
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
 import com.pawlowski.sportnite.presentation.use_cases.AddGameOfferUseCase
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class AddOfferScreenViewModel @Inject constructor(
 ): IAddOfferScreenViewModel, ViewModel() {
 
     override val container: Container<AddOfferScreenUiState, AddOfferScreenSideEffect> = container(
-        initialState = AddOfferScreenUiState(sport = getSportForPreview())
+        initialState = AddOfferScreenUiState(sport = getSportFromSportId("TENNIS"))
     )
 
     override fun changeDateTimeInput(newValue: UiDate) = intent {

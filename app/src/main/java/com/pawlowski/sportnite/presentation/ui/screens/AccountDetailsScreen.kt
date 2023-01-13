@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.presentation.ui.screens
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,6 +42,9 @@ fun AccountDetailsScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToNextScreen: () -> Unit = {}
 ) {
+    BackHandler {
+        onNavigateBack()
+    }
     val uiState = viewModel.container.stateFlow.collectAsState()
     val photoUrlState = remember {
         derivedStateOf {

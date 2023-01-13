@@ -128,6 +128,9 @@ fun MyMeetingsScreen(
                     displaySeeMore = false,
                     isLoading = {
                         offersToAcceptDataState.value.isLoading()
+                    },
+                    onOfferTextButtonClick = {
+                        viewModel.acceptOfferToAccept(it.offerUid)
                     }
                 )
                 item {

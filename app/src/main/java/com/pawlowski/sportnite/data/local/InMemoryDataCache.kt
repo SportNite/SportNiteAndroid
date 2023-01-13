@@ -91,14 +91,14 @@ abstract class InMemoryDataCache<T, K> {
 
     fun deleteElementFromAllKeys(predicate: (T) -> Boolean) {
         data.update { lastMapState ->
-            lastMapState.toMutableMap().apply {
-                mapValues {
-                    it.value.toMutableList().apply {
+            lastMapState.toMutableMap().map {
+                Pair(
+                    first = it.key,
+                    second = it.value.toMutableList().apply {
                         removeIf(predicate)
                     }
-                }
-
-            }
+                )
+            }.toMap()
         }
     }
 
