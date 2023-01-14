@@ -86,8 +86,4 @@ class AccountDetailsScreenViewModel @Inject constructor(
         }
     }
 
-    override fun backClick() {
-        TODO("Not yet implemented")
-    }
-
 }

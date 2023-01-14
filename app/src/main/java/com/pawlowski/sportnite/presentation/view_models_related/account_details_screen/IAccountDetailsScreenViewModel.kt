@@ -10,5 +10,4 @@ interface IAccountDetailsScreenViewModel: ContainerHost<AccountDetailsScreenUiSt
     fun changePhotoInput(newValue: String?)
     fun changeTimeAvailabilityInput(newValue: String)
     fun continueClick()
-    fun backClick()
 }

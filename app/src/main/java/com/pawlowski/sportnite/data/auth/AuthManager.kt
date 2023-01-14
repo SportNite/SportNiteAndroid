@@ -141,6 +141,9 @@ class AuthManager @Inject constructor(
 
     override fun signOut() {
         auth.signOut()
+        _signUpState.value = AuthResponse.NotInitialized
+        verificationOtp = ""
+        resentToken = null
     }
 
 
