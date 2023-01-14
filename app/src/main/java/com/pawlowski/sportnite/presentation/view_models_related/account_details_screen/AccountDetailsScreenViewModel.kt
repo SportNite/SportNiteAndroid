@@ -42,7 +42,6 @@ class AccountDetailsScreenViewModel @Inject constructor(
     }
 
     override fun continueClick() = intent {
-        //TODO: Validate more inputs
         val currentState = state
         if(currentState.isLoading)
             return@intent

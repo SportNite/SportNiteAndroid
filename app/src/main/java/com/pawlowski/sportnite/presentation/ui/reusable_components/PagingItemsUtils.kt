@@ -42,7 +42,9 @@ fun <T: Any>LazyGridScope.displayPagingItemsWithIndicators(
                     Text(text = "Try again")
                 }
             }
-            else -> {}
+            else -> {
+                //Do nothing
+            }
         }
     }
     pagingItems?.let {
@@ -71,7 +73,9 @@ fun <T: Any>LazyGridScope.displayPagingItemsWithIndicators(
                     Text(text = "Try again")
                 }
             }
-            else -> {}
+            else -> {
+                //Do nothing
+            }
         }
 
     }

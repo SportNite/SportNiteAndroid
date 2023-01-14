@@ -4,7 +4,6 @@ import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.UiDate
@@ -125,7 +124,7 @@ fun IncomingOffersQuery.User.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
         age = ageInYears,
         phoneNumber = phone?:""
     )
@@ -140,7 +139,7 @@ fun IncomingOffersQuery.User1.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
         age = ageInYears,
         phoneNumber = phone?:""
     )
@@ -248,7 +247,7 @@ fun UsersQuery.Node.toPlayer(): Player {
         uid = firebaseUserId,
         name = name,
         photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Change
+        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
         age = ageInYears,
         phoneNumber = phone?:""
     )

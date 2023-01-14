@@ -29,7 +29,4 @@ class AdvanceLevelUpdatingCache @Inject constructor() {
         }
     }
 
-    fun clearCache() {
-        _chosenSports.value = mapOf()
-    }
 }

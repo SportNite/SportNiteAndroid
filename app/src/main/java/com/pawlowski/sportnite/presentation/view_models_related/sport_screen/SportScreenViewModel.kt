@@ -8,7 +8,6 @@ import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
-import com.pawlowski.sportnite.type.Offer
 import com.pawlowski.sportnite.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

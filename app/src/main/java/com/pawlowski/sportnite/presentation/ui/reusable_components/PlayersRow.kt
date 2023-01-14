@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Player
 
 @Composable

@@ -24,7 +24,6 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDi
 import com.pawlowski.sportnite.presentation.ui.reusable_components.displayPagingItemsWithIndicators
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.FindPlayersScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.IFindPlayersScreenViewModel
-import com.pawlowski.sportnite.utils.dataOrNull
 
 @Composable
 fun FindPlayersScreen(

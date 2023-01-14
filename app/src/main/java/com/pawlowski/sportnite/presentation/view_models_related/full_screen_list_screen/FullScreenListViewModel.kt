@@ -7,7 +7,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetPagedMeetingsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
 import com.pawlowski.sportnite.utils.*
@@ -23,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class FullScreenListViewModel @Inject constructor(
     private val getPagedOffersUseCase: GetPagedOffersUseCase,
-    private val getPagedMeetingsUseCase: GetPagedMeetingsUseCase,
     private val deleteMyOfferToAcceptUseCase: DeleteMyOfferToAcceptUseCase,
     private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
@@ -38,8 +36,8 @@ class FullScreenListViewModel @Inject constructor(
     override fun deleteMyOfferToAccept(offer: GameOffer) = intent {
         val result = deleteMyOfferToAcceptUseCase(offer.myResponseIdIfExists!!)
         result.onSuccess {
-            changedOffers.update {
-                it.toMutableList().apply {
+            changedOffers.update { offersList ->
+                offersList.toMutableList().apply {
                     removeIf { it.offerUid == offer.offerUid }
                     add(offer.copy(myResponseIdIfExists = null))
                 }
@@ -53,8 +51,8 @@ class FullScreenListViewModel @Inject constructor(
     override fun sendOfferToAccept(offer: GameOffer) = intent {
         val result = sendGameOfferToAcceptUseCase(offer.offerUid)
         result.onSuccess {
-            changedOffers.update {
-                it.toMutableList().apply {
+            changedOffers.update { offerList ->
+                offerList.toMutableList().apply {
                     removeIf { it.offerUid == offer.offerUid }
                     add(offer.copy(myResponseIdIfExists = result.dataOrNull()))
                 }
@@ -62,7 +60,7 @@ class FullScreenListViewModel @Inject constructor(
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(offerAcceptingSuccessText))
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
-        }//TODO: change changedOffers
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,16 +80,10 @@ class FullScreenListViewModel @Inject constructor(
                 val changedOffersValue = changedOffers.value
                 changedOffersValue.firstOrNull { offer.offerUid == it.offerUid }?:offer
             }
-        } //TODO:
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val meetingsFlow = dataTypeFlow.flatMapLatest { type ->
-        flow {
-            if(type is FullScreenDataType.MeetingsData)
-                emitAll(getPagedMeetingsUseCase().cachedIn(viewModelScope))
         }
     }
+
+
 
 
 

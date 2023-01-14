@@ -7,15 +7,12 @@ import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedPlayersUseCase
-import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.syntax.simple.repeatOnSubscription
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 

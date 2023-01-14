@@ -140,18 +140,9 @@ fun EnterSignInCodeScreenPreview() {
         override fun stateForPreview(): EnterSignInCodeUiState {
             return EnterSignInCodeUiState(phoneNumber = "762821051")
         }
-
-        override fun changeCodeInput(newValue: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun sendVerificationCodeAgainClick() {
-            TODO("Not yet implemented")
-        }
-
-        override fun confirmCodeClick() {
-            TODO("Not yet implemented")
-        }
+        override fun changeCodeInput(newValue: String) {}
+        override fun sendVerificationCodeAgainClick() {}
+        override fun confirmCodeClick() {}
 
     })
 }

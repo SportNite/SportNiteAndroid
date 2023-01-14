@@ -4,7 +4,6 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -123,7 +122,7 @@ fun AccountDetailsScreen(
                     }
                 } else {
                     // an error occurred cropping
-                    val exception = result.error
+                    //result.error
                 }
             }
             val imagePickerLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -158,7 +157,6 @@ fun AccountDetailsScreen(
             )
 
             Spacer(modifier = Modifier.height(15.dp))
-            val context = LocalContext.current
             DateInputField(
                 onClick = {
                     showDatePicker(context = context) {
@@ -268,34 +266,11 @@ fun AccountDetailsScreenPreview() {
         override fun stateForPreview(): AccountDetailsScreenUiState {
             return AccountDetailsScreenUiState()
         }
-
-        override fun changeNameAndSurnameInput(newValue: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun changeDateInput(newValue: UiDate) {
-            TODO("Not yet implemented")
-        }
-
-        override fun changeIsMaleInput(newValue: Boolean) {
-            TODO("Not yet implemented")
-        }
-
-        override fun changePhotoInput(newValue: String?) {
-            TODO("Not yet implemented")
-        }
-
-        override fun changeTimeAvailabilityInput(newValue: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun continueClick() {
-            TODO("Not yet implemented")
-        }
-
-        override fun backClick() {
-            TODO("Not yet implemented")
-        }
-
+        override fun changeNameAndSurnameInput(newValue: String) {}
+        override fun changeDateInput(newValue: UiDate) {}
+        override fun changeIsMaleInput(newValue: Boolean) {}
+        override fun changePhotoInput(newValue: String?) {}
+        override fun changeTimeAvailabilityInput(newValue: String) {}
+        override fun continueClick() {}
     })
 }

@@ -1,13 +1,15 @@
 package com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
 import com.pawlowski.sportnite.data.mappers.getAvailableLevelsForSport
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
-import com.pawlowski.sportnite.utils.*
+import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.sportnite.utils.onError
+import com.pawlowski.sportnite.utils.onSuccess
+import com.pawlowski.sportnite.utils.skillsSuccessText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest

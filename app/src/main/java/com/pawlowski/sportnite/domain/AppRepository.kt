@@ -1,7 +1,6 @@
 package com.pawlowski.sportnite.domain
 
 import android.net.Uri
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -29,7 +28,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -112,7 +110,7 @@ class AppRepository @Inject constructor(
                 key = OffersFilter(
                     sportFilter = sportFilter,
                     myOffers = true
-                ), refresh = true //TODO: check is it working if something appeared in cache before was loaded (when added an offer)
+                ), refresh = true
             )
         ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
@@ -173,9 +171,9 @@ class AppRepository @Inject constructor(
                                 apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(),
                                     after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
                             },
-                            mapper = {
-                                val pageInfo = it.offers?.pageInfo!!
-                                PaginationPage(data = it.toGameOfferList()!!.filter { it.owner.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+                            mapper = { data ->
+                                val pageInfo = data.offers?.pageInfo!!
+                                PaginationPage(data = data.toGameOfferList()!!.filter { it.owner.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
                             }
                         )
 

@@ -1,6 +1,5 @@
 package com.pawlowski.sportnite.di
 
-import android.util.Log
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.fresh
 import com.pawlowski.sportnite.domain.IAppRepository

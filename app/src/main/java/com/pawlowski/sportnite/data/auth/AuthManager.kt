@@ -15,7 +15,7 @@ class AuthManager @Inject constructor(
     private val auth: FirebaseAuth,
     mainActivity: MainActivity
 ): IAuthManager {
-    private val TAG = this::class.java.simpleName
+    private val tag = this::class.java.simpleName
 
     private var verificationOtp: String = ""
     private var resentToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -31,7 +31,7 @@ class AuthManager @Inject constructor(
                                              PhoneAuthCredential
         ) {
             Log.i(
-                TAG,
+                tag,
                 "onVerificationCompleted: Verification completed."
             )
             _signUpState.value =
@@ -41,23 +41,7 @@ class AuthManager @Inject constructor(
         }
 
         override fun onVerificationFailed(exception: FirebaseException) {
-//            when (exception) {
-//                is FirebaseAuthInvalidCredentialsException -> {
-//                    signUpState.value =
-//                        AuthResponse.Error(exception)
-//
-//                }
-//                is FirebaseTooManyRequestsException -> {
-//                    signUpState.value =
-//                        AuthResponse.Error(exception)
-//
-//                }
-//                else -> {
             _signUpState.value = AuthResponse.Error(exception)
-
-//                }
-//            }
-
         }
 
         override fun onCodeSent(code: String, token: PhoneAuthProvider.ForceResendingToken) {
@@ -78,20 +62,20 @@ class AuthManager @Inject constructor(
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.i(TAG, "signInWithAuthCredential:The sign in succeeded ")
+                    Log.i(tag, "signInWithAuthCredential:The sign in succeeded ")
                     _signUpState.value =
                         AuthResponse.Success(message = "success")
                 } else {
 
 
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        Log.e(TAG, "invalid code")
+                        Log.e(tag, "invalid code")
                         _signUpState.value = AuthResponse.Error(exception = task.exception)
 
                         return@addOnCompleteListener
                     } else {
                         _signUpState.value = AuthResponse.Error(task.exception)
-                        Log.e(TAG, "signInWithAuthCredential: Error ${task.exception?.message}")
+                        Log.e(tag, "signInWithAuthCredential: Error ${task.exception?.message}")
 
                     }
                 }

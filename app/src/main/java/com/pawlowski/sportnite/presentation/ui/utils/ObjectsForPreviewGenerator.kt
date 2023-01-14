@@ -2,7 +2,6 @@ package com.pawlowski.sportnite.presentation.ui.utils
 
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.type.SportType
 import com.pawlowski.sportnite.utils.UiDate
 import com.pawlowski.sportnite.utils.UiText
 import java.time.OffsetDateTime

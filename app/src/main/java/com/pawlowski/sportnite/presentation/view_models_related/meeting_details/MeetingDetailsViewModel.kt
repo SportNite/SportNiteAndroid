@@ -2,7 +2,6 @@ package com.pawlowski.sportnite.presentation.view_models_related.meeting_details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.presentation.ui.utils.getMeetingForPreview
 import com.pawlowski.sportnite.presentation.use_cases.GetMeetingByIdUseCase
 import com.pawlowski.sportnite.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel

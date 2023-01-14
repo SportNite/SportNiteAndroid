@@ -54,8 +54,8 @@ abstract class InMemoryDataCache<T, K> {
     }
 
     fun observeFirstFromAnyKey(predicate: (T) -> Boolean): Flow<T> {
-        return data.map {
-            it.flatMap { it.value }.first { predicate(it) }
+        return data.map { map ->
+            map.flatMap { it.value }.first { predicate(it) }
         }
     }
 
