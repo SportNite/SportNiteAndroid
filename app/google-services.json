@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1021225306358",
+    "project_id": "sportnite-7b070",
+    "storage_bucket": "sportnite-7b070.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021225306358:android:09e98206e229f026b944d7",
+        "android_client_info": {
+          "package_name": "com.pawlowski.sportnite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021225306358-snefrmgsasmbgmueb5t7psnl3gfis621.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pawlowski.sportnite",
+            "certificate_hash": "d18b92a5ef32b8ba33d356eb93945953c04fcc50"
+          }
+        },
+        {
+          "client_id": "1021225306358-jt443aa230p01o5av7ng44rv3u3di1dc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHpzM-GOIDn05YObFDVUAPjdEE78ffqm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021225306358-jt443aa230p01o5av7ng44rv3u3di1dc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
