@@ -1,7 +1,5 @@
 package com.pawlowski.sportnite.di
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
@@ -15,8 +13,6 @@ import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.type.StringOperationFilterInput
-import com.pawlowski.sportnite.type.UserFilterInput
 import com.pawlowski.sportnite.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
@@ -105,18 +101,12 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun playerDetailsStore(apolloClient: ApolloClient, playerDetailsInMemoryCache: PlayerDetailsInMemoryCache): Store<String, PlayerDetails> {
+    fun playerDetailsStore(
+        graphQLService: IGraphQLService,
+        playerDetailsInMemoryCache: PlayerDetailsInMemoryCache
+    ): Store<String, PlayerDetails> {
         return StoreBuilder.from(fetcher = Fetcher.of { filter: String ->
-            apolloClient.query(
-                UsersQuery(filter =
-            Optional.present(
-                UserFilterInput(firebaseUserId = Optional.present(
-                    StringOperationFilterInput(
-                        eq = Optional.present(filter)
-                    )
-                ))
-            ))
-            ).execute().data!!.toPlayerDetails()!!
+            graphQLService.getPlayerDetails(filter).dataOrNull()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: String ->
                 playerDetailsInMemoryCache.observeData(key).map { it.first() }
@@ -137,18 +127,14 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun meetingStore(apolloClient: ApolloClient, meetingsInMemoryCache: MeetingsInMemoryCache, authManager: AuthManager): Store<MeetingsFilter, List<Meeting>> {
+    fun meetingStore(
+        graphQLService: IGraphQLService,
+        meetingsInMemoryCache: MeetingsInMemoryCache,
+        authManager: AuthManager
+    ): Store<MeetingsFilter, List<Meeting>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
-            apolloClient.query(
-                IncomingOffersQuery(
-                    offersFilter = filters.toOfferFilterInput()
-                )
-            ).execute().data!!.incomingOffers.let { beforeMappingData ->
-                val userUid = authManager.getCurrentUserUid()!!
-                beforeMappingData.map {
-                    it.toMeeting(userUid)
-                }
-            }
+            val userUid = authManager.getCurrentUserUid()!!
+            graphQLService.getIncomingMeetings(filters, userUid).dataOrNull()!!
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: MeetingsFilter ->
                 meetingsInMemoryCache.observeData(key, sortBy= {
