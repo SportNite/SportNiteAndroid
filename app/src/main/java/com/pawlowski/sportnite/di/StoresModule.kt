@@ -15,8 +15,6 @@ import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.type.OfferFilterInput
-import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.type.StringOperationFilterInput
 import com.pawlowski.sportnite.type.UserFilterInput
 import com.pawlowski.sportnite.utils.dataOrNull
@@ -81,19 +79,12 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun offersToAcceptStore(apolloClient: ApolloClient, offersToAcceptMemoryCache: OffersToAcceptMemoryCache): Store<OffersFilter, List<GameOfferToAccept>> {
+    fun offersToAcceptStore(
+        graphQLService: IGraphQLService,
+        offersToAcceptMemoryCache: OffersToAcceptMemoryCache
+    ): Store<OffersFilter, List<GameOfferToAccept>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            apolloClient.query(
-                ResponsesQuery(
-                    first = Optional.present(50),
-                    otherFilters = filters.sportFilter?.let {
-                        Optional.present(listOf(
-                            OfferFilterInput(sport = Optional.present(SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))))
-                        ))
-                    }?:Optional.absent()
-                )
-            ).execute().dataAssertNoErrors.toGameOfferToAcceptList()!!
-
+            graphQLService.getOffersToAccept(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersToAcceptMemoryCache.observeData(key, sortBy = {

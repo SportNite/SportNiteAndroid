@@ -8,9 +8,12 @@ import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.type.CreateResponseInput
+import com.pawlowski.sportnite.type.OfferFilterInput
 import com.pawlowski.sportnite.type.SetSkillInput
+import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -76,6 +79,32 @@ class GraphQLService @Inject constructor(
             mapper = { queryData ->
                 val pageInfo = queryData.users?.pageInfo!!
                 PaginationPage(data = queryData.toPlayersList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+            }
+        )
+    }
+
+    override suspend fun getOffersToAccept(
+        filters: OffersFilter,
+        cursor: String?,
+        pageSize: Int
+    ): Resource<PaginationPage<GameOfferToAccept>> {
+        return executeApolloQuery(
+            request = {
+                apolloClient.query(
+                    ResponsesQuery(
+                        first = Optional.present(50),
+                        otherFilters = filters.sportFilter?.let {
+                            Optional.present(listOf(
+                                OfferFilterInput(sport = Optional.present(SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))))
+                            ))
+                        }?:Optional.absent()
+                    )
+                ).execute()
+            },
+            mapper = { data ->
+                val pageInfo = data.myOffers?.pageInfo!!
+                PaginationPage(data = data.toGameOfferToAcceptList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+
             }
         )
     }

@@ -1,7 +1,9 @@
-query Responses($otherFilters: [OfferFilterInput!], $first: Int) {
+query Responses($otherFilters: [OfferFilterInput!], $first: Int, $after: String) {
   myOffers(where: {
     and: $otherFilters
-  }, first: $first,
+  },
+  first: $first,
+  after: $after,
   order: {
           dateTime: ASC
         }
@@ -26,6 +28,10 @@ query Responses($otherFilters: [OfferFilterInput!], $first: Int) {
           street
         }
       }
+    },
+    pageInfo {
+       endCursor,
+       hasNextPage,
     }
   }
 }
