@@ -10,6 +10,7 @@ import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.local.*
 import com.pawlowski.sportnite.data.mappers.*
+import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
@@ -18,6 +19,7 @@ import com.pawlowski.sportnite.type.OfferFilterInput
 import com.pawlowski.sportnite.type.SportTypeOperationFilterInput
 import com.pawlowski.sportnite.type.StringOperationFilterInput
 import com.pawlowski.sportnite.type.UserFilterInput
+import com.pawlowski.sportnite.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,14 +33,13 @@ import javax.inject.Singleton
 class StoresModule {
     @Singleton
     @Provides
-    fun playersStore(apolloClient: ApolloClient, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
+    fun playersStore(graphQLService: IGraphQLService, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
-            try {
-                apolloClient.query(UsersQuery(filters.toUserFilterInput())).execute().data!!.toPlayersList()!!
-            } catch (e: Exception) {
-                e.printStackTrace()
-                throw e
-            }
+            graphQLService.getPlayers(
+                filters = filters,
+                cursor = null,
+                pageSize = 10
+            ).dataOrNull()!!.data
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: PlayersFilter ->
                 playersInMemoryCache.observeData(key)
@@ -57,30 +58,9 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun offersStore(apolloClient: ApolloClient, offersInMemoryCache: OffersInMemoryCache): Store<OffersFilter, List<GameOffer>> {
+    fun offersStore(graphQLService: IGraphQLService, offersInMemoryCache: OffersInMemoryCache): Store<OffersFilter, List<GameOffer>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            return@of if(filters.myOffers)
-            {
-                apolloClient.query(
-                    MyOffersQuery(
-                    filters = Optional.present(
-                        listOf(
-                            futureOffersOfferFilterInput()
-                        )
-                    )
-                )
-                ).execute().data!!.toGameOfferList()!!
-            }
-            else
-            {
-                try {
-                    apolloClient.query(OffersQuery(offerFilterInput = filters.toOfferFilterInput(), first = Optional.present(10))).execute().data!!.toGameOfferList()!!
-                }
-                catch (e: Exception) {
-                    e.printStackTrace()
-                    throw e
-                }
-            }
+            graphQLService.getOffers(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
                 offersInMemoryCache.observeData(key, sortBy = {

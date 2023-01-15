@@ -1,7 +1,5 @@
 package com.pawlowski.sportnite.utils
 
-import com.pawlowski.sportnite.domain.models.PaginationPage
-
 
 inline fun <T>Resource<T>.onSuccess(
     action: (T?) -> Unit
@@ -17,6 +15,7 @@ fun <T> Resource<T>.asUnitResource(): Resource<Unit> {
         is Resource.Error -> Resource.Error(this.message)
     }
 }
+
 
 inline fun <T>Resource<PaginationPage<T>>.filterIfSuccess(
     predicate: (T) -> Boolean

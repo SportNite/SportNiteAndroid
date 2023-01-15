@@ -11,10 +11,7 @@ import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.type.SetSkillInput
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiText
-import com.pawlowski.sportnite.utils.asUnitResource
-import com.pawlowski.sportnite.utils.defaultRequestError
+import com.pawlowski.sportnite.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -29,16 +26,42 @@ class GraphQLService @Inject constructor(
         cursor: String?,
         pageSize: Int
     ): Resource<PaginationPage<GameOffer>> {
-        return executeApolloQuery(
-            request = {
-                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(),
-                    after = Optional.presentIfNotNull(cursor), first = Optional.present(pageSize))).execute()
-            },
-            mapper = { data ->
-                val pageInfo = data.offers?.pageInfo!!
-                PaginationPage(data = data.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+        return when(filters.myOffers) {
+            false -> {
+                executeApolloQuery(
+                    request = {
+                        apolloClient.query(
+                            OffersQuery(
+                                offerFilterInput = filters.toOfferFilterInput(),
+                                after = Optional.presentIfNotNull(cursor),
+                                first = Optional.present(pageSize)
+                            )
+                        ).execute()
+                    },
+                    mapper = { data ->
+                        val pageInfo = data.offers?.pageInfo!!
+                        PaginationPage(data = data.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+                    }
+                )
             }
-        )
+            true -> {
+                executeApolloQuery(
+                    request = {
+                        apolloClient.query(
+                            MyOffersQuery(
+                                filters = filters.toOfferFilterInput(),
+                                after = Optional.presentIfNotNull(cursor),
+                                first = Optional.present(pageSize)
+                            )
+                        ).execute()
+                    },
+                    mapper = { data ->
+                        val pageInfo = data.myOffers?.pageInfo!!
+                        PaginationPage(data = data.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+                    }
+                )
+            }
+        }
     }
 
     override suspend fun getPlayers(

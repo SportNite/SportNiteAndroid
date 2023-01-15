@@ -3,12 +3,11 @@ package com.pawlowski.sportnite.domain
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.pawlowski.sportnite.domain.models.PaginationPage
+import com.pawlowski.sportnite.utils.PaginationPage
 import com.pawlowski.sportnite.utils.Resource
-import javax.inject.Inject
 
 
-class PagingFactory<T: Any> @Inject constructor(
+class PagingFactory<T: Any> constructor(
     private val request: suspend (page: String?, pageSize: Int) -> Resource<PaginationPage<T>>,
 ): PagingSource<String, T>() {
     private val previousKeysMap = mutableStateMapOf<String, String?>()
@@ -18,7 +17,7 @@ class PagingFactory<T: Any> @Inject constructor(
         val position = params.key
         return when(val result = request(position, params.loadSize)) {
             is Resource.Success -> {
-                result.data?.let {
+                result.data.let {
                     val nextKey = it.endCursor
 
                     nextKey?.let {
@@ -33,7 +32,7 @@ class PagingFactory<T: Any> @Inject constructor(
                         prevKey = previousKeysMap[position],
                         nextKey = nextKey
                     )
-                }?:LoadResult.Error(Exception())
+                }
 
             }
             is Resource.Error -> {

@@ -4,6 +4,7 @@ import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.type.SetSkillInput
+import com.pawlowski.sportnite.utils.PaginationPage
 import com.pawlowski.sportnite.utils.Resource
 
 interface IGraphQLService {
