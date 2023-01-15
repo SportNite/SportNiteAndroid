@@ -9,7 +9,8 @@ import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.*
-import com.pawlowski.sportnite.*
+import com.pawlowski.sportnite.OffersQuery
+import com.pawlowski.sportnite.UsersQuery
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
@@ -17,10 +18,10 @@ import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.mappers.*
+import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -46,7 +47,8 @@ class AppRepository @Inject constructor(
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
     private val meetingsInMemoryCache: MeetingsInMemoryCache,
     private val offersInMemoryCache: OffersInMemoryCache,
-    private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache
+    private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache,
+    private val graphQLService: IGraphQLService,
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
         return meetingsStore.stream(
@@ -247,14 +249,13 @@ class AppRepository @Inject constructor(
 
 
     override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
-        return executeApolloMutation(request = {
-            apolloClient.mutation(CreateOfferMutation(gameParams.toCreateOfferInput())).execute()
-        },
-            onDataSuccessfullyReceived = {
-                //Log.d("New offer id", it.createOffer.offerId.toString())
+        return graphQLService.createOffer(gameParams)
+            .onSuccess {
                 val paramsAsGameOffer = gameParams.toGameOffer(
-                    offerId = it.createOffer.offerId.toString(),
-                    playerName = userInfoUpdateCache.cachedUser.value?.userName?:"")
+                    offerId = it!!,
+                    playerName = userInfoUpdateCache.cachedUser.value?.userName?:""
+                )
+
                 offersInMemoryCache.addElement(
                     key = OffersFilter(
                         myOffers = true,
@@ -269,43 +270,30 @@ class AppRepository @Inject constructor(
                     ),
                     element = paramsAsGameOffer
                 )*/
-            }).asUnitResource()
+            }.asUnitResource()
     }
 
     override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
-        return executeApolloMutation(request = {
-            apolloClient.mutation(
-                CreateResponseMutation(
-                    CreateResponseInput(offerId = offerUid, description = "")
-                )
-            ).execute()
-        },
-            validateResult = {
-                it.createResponse?.responseId != null
-            },
-            onDataSuccessfullyReceived = {
+        return graphQLService.sendOfferToAccept(offerUid)
+            .onSuccess {
                 offersInMemoryCache.updateElements { _, offer ->
                     if(offer.offerUid == offerUid)
                     {
-                        offer.copy(myResponseIdIfExists = it.createResponse?.responseId.toString())
+                        offer.copy(myResponseIdIfExists = it)
                     }
                     else
                         offer
                 }
-            },
-        returnValue = {
-            it.createResponse?.responseId.toString()
-        })
+            }
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        return executeApolloMutation(request = {
-            apolloClient.mutation(AcceptResponseMutation(responseId = offerToAcceptUid)).execute()
-        }).onSuccess {
-            offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
-            meetingsStore.fresh(MeetingsFilter(sportFilter = null))
-            //TODO: Add meeting to cache or refresh cache with sportFilter
-        }.asUnitResource()
+        return graphQLService.acceptOfferToAccept(offerToAcceptUid)
+            .onSuccess {
+                offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
+                meetingsStore.fresh(MeetingsFilter(sportFilter = null))
+                //TODO: Add meeting to cache or refresh cache with sportFilter
+            }
     }
 
     override fun signOut() {
@@ -321,14 +309,9 @@ class AppRepository @Inject constructor(
             )
             result.dataOrNull()
         } ?: return Resource.Error(defaultRequestError)
-        val result = executeApolloMutation(request = {
-            apolloClient.mutation(
-                UpdateUserMutation(
-                    params.copy(photoUrl = uploadedPhotoUri).toUpdateUserInput()
-                )
-            ).execute()
-        })
-        if (result is Resource.Success) {
+        val result = graphQLService.updateUserInfo(params.copy(photoUrl = uploadedPhotoUri))
+
+        return result.onSuccess {
             userInfoUpdateCache.markUserInfoAsSaved(
                 User(
                     userName = params.name,
@@ -337,16 +320,13 @@ class AppRepository @Inject constructor(
                 )
             )
         }
-        return result.asUnitResource()
     }
 
     override suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit> {
         return withContext(ioDispatcher) {
             val isAllSuccess = levels.toSetSkillInput().map {
                 async {
-                    executeApolloMutation(request = {
-                        apolloClient.mutation(SetSkillMutation(it)).execute()
-                    })
+                    graphQLService.updateAdvanceLevelInfo(it)
                 }
             }.all {
                 it.await() is Resource.Success
@@ -362,32 +342,31 @@ class AppRepository @Inject constructor(
     }
 
     override suspend fun deleteMyOffer(offerId: String): Resource<Unit> {
+
         return withContext(ioDispatcher) {
-            executeApolloMutation(request = {
-                apolloClient.mutation(DeleteOfferMutation(offerId)).execute()
-            }) {
-                offersInMemoryCache.deleteElement(OffersFilter(sportFilter = null, myOffers = true)) {
-                    it.offerUid == offerId
+            graphQLService.deleteMyOffer(offerId)
+                .onSuccess {
+                    offersInMemoryCache.deleteElement(OffersFilter(sportFilter = null, myOffers = true)) {
+                        it.offerUid == offerId
+                    }
                 }
-            }
-        }.asUnitResource()
+        }
     }
 
     override suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
         return withContext(ioDispatcher) {
-            executeApolloMutation(request = {
-                apolloClient.mutation(DeleteResponseMutation(offerToAcceptUid)).execute()
-            }) {
-                offersInMemoryCache.updateElements { _, offer ->
-                    if(offer.myResponseIdIfExists == offerToAcceptUid)
-                    {
-                        offer.copy(myResponseIdIfExists = null)
+            graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
+                .onSuccess {
+                    offersInMemoryCache.updateElements { _, offer ->
+                        if(offer.myResponseIdIfExists == offerToAcceptUid)
+                        {
+                            offer.copy(myResponseIdIfExists = null)
+                        }
+                        else
+                            offer
                     }
-                    else
-                        offer
                 }
-            }
-        }.asUnitResource()
+        }
     }
 
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(
@@ -434,43 +413,6 @@ class AppRepository @Inject constructor(
     ): Flow<UiData<List<Output>>> {
         return toUiData(isDataEmpty = isDataEmpty).map { data ->
             data.filteredIfDataExists(filterPredicateOnListData)
-        }
-    }
-
-    private suspend fun <T : Operation.Data> executeApolloMutation(
-        request: suspend () -> ApolloResponse<T>,
-        validateResult: (T) -> Boolean = { true },
-        returnValue: (T) -> String = { "" },
-        onDataSuccessfullyReceived: (T) -> Unit = {}
-    ): Resource<String> {
-        return withContext(ioDispatcher) {
-            val response = try {
-                request()
-            } catch (e: Exception) {
-                ensureActive()
-                e.printStackTrace()
-                null
-            }
-            if (!response?.errors.isNullOrEmpty()) {
-                val message = response?.errors?.map {
-                    it.message
-                }?.reduce { acc, s -> "$acc$s " }
-                return@withContext Resource.Error(UiText.NonTranslatable("Error: $message"))
-            }
-            val responseData = response?.data
-            if (responseData != null && !validateResult(responseData)) {
-                return@withContext Resource.Error(defaultRequestError)
-            }
-            return@withContext response?.data?.let {
-                onDataSuccessfullyReceived(it)
-                Resource.Success(returnValue(it))
-            } ?: let {
-                Resource.Error(
-                    message = UiText.NonTranslatable(
-                        response?.errors?.firstOrNull()?.message ?: "Request error"
-                    )
-                )
-            }
         }
     }
 
