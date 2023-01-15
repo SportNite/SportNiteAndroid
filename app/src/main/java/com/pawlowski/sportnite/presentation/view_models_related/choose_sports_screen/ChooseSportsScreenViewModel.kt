@@ -17,6 +17,13 @@ import javax.inject.Inject
 class ChooseSportsScreenViewModel @Inject constructor(
     private val chooseLevelUpdatingCache: AdvanceLevelUpdatingCache,
 ): IChooseSportsScreenViewModel, ViewModel() {
+    override val container: Container<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> =
+        container(
+            initialState = ChooseSportsScreenUiState(
+                sports = availableSports.values.associateWith { false }
+            )
+        )
+
     override fun changeSelectionOfSport(sport: Sport) = intent {
         reduce {
             state.copy(sports = state.sports.toMutableMap().apply {
@@ -59,11 +66,4 @@ class ChooseSportsScreenViewModel @Inject constructor(
     override fun navigateBack() {
         TODO("Not yet implemented")
     }
-
-    override val container: Container<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> =
-        container(
-            initialState = ChooseSportsScreenUiState(
-                sports = availableSports.values.associateWith { false }
-            )
-        )
 }

@@ -22,7 +22,10 @@ class PlayerDetailsViewModel @Inject constructor(
         container(
             initialState = PlayerDetailsUiState(
                 UiData.Loading()
-            )
+            ),
+            onCreate = {
+                observePlayerDetails()
+            }
         )
 
     private val currentPlayerId = savedStateHandle.get<String>("playerId")!!
@@ -37,7 +40,5 @@ class PlayerDetailsViewModel @Inject constructor(
         }
     }
 
-    init {
-        observePlayerDetails()
-    }
+
 }

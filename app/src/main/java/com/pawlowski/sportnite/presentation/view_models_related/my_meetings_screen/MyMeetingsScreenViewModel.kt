@@ -34,7 +34,12 @@ class MyMeetingsScreenViewModel @Inject constructor(
                 UiData.Loading(),
                 UiData.Loading(),
                 UiData.Loading()
-            )
+            ),
+            onCreate = {
+                observeIncomingMeetings()
+                observeOffersToAccept()
+                observeMyOffers()
+            }
         )
 
     private fun observeOffersToAccept() = intent(registerIdling = false) {
@@ -89,9 +94,5 @@ class MyMeetingsScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeIncomingMeetings()
-        observeOffersToAccept()
-        observeMyOffers()
-    }
+
 }

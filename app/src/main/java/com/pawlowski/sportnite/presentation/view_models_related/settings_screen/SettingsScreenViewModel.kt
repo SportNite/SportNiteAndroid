@@ -20,7 +20,10 @@ class SettingsScreenViewModel @Inject constructor(
 ): ISettingsScreenViewModel, ViewModel() {
     override val container: Container<SettingsScreenUiState, SettingsScreenSideEffect> =
         container(
-            initialState = SettingsScreenUiState(null)
+            initialState = SettingsScreenUiState(null),
+            onCreate = {
+                observeInfoAboutMe()
+            }
         )
 
     private fun observeInfoAboutMe() = intent(registerIdling = false) {
@@ -38,7 +41,5 @@ class SettingsScreenViewModel @Inject constructor(
         postSideEffect(SettingsScreenSideEffect.NavigateToLoginScreen)
     }
 
-    init {
-        observeInfoAboutMe()
-    }
+
 }

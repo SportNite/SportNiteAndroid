@@ -33,7 +33,10 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
         container(
             initialState = ChooseAdvanceLevelScreenUiState(
                 currentSport = getSportForIndex(currentSportIndexState.value),
-            )
+            ),
+            onCreate = {
+                observeCurrentSportAndChosenLevel()
+            }
         )
 
     override fun selectLevel(level: AdvanceLevel) = intent {
@@ -114,7 +117,5 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeCurrentSportAndChosenLevel()
-    }
+
 }

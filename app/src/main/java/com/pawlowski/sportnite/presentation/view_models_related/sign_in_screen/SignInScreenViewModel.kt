@@ -19,7 +19,10 @@ class SignInScreenViewModel @Inject constructor(
     private val authManager: AuthManager,
 ): ISignInScreenViewModel, ViewModel() {
     override val container: Container<SignInScreenUiState, SignInScreenSideEffect> = container(
-        SignInScreenUiState()
+        initialState = SignInScreenUiState(),
+        onCreate = {
+            observeAuthState()
+        }
     )
 
     override fun changePhoneInput(newValue: String) = intent {
@@ -72,6 +75,5 @@ class SignInScreenViewModel @Inject constructor(
     }
 
     init {
-        observeAuthState()
     }
 }

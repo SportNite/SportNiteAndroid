@@ -22,7 +22,11 @@ class MeetingDetailsViewModel @Inject constructor(
         container(
             initialState = MeetingDetailsUiState(
                 UiData.Loading()
-            )
+            ),
+            onCreate = {
+                observeMeetingData()
+
+            }
         )
 
     private val currentMeetingId = savedStateHandle.get<String>("meetingId")!!
@@ -39,7 +43,5 @@ class MeetingDetailsViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeMeetingData()
-    }
+
 }

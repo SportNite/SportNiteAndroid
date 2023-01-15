@@ -24,14 +24,19 @@ class HomeScreenViewModel @Inject constructor(
     private val getUserSportsUseCase: GetUserSportsUseCase,
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase
 ): IHomeScreenViewModel, ViewModel() {
-    override fun refreshData() = intent {
-        refreshMeetingsUseCase(MeetingsFilter(null))
-    }
-
     override val container: Container<HomeScreenUiState, HomeScreenSideEffect> = container(initialState = HomeScreenUiState(
         upcomingMeetings = UiData.Success(true, getMeetingsListForPreview()),
         user = null
-    ))
+    ),
+    onCreate = {
+        observeUserSports()
+        observeInfoAboutMe()
+        observeIncomingMeetings()
+    })
+
+    override fun refreshData() = intent {
+        refreshMeetingsUseCase(MeetingsFilter(null))
+    }
 
     private fun observeIncomingMeetings() = intent(registerIdling = false) {
         repeatOnSubscription {
@@ -63,9 +68,5 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeUserSports()
-        observeInfoAboutMe()
-        observeIncomingMeetings()
-    }
+
 }

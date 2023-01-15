@@ -19,7 +19,10 @@ class EnterSignInCodeScreenViewModel @Inject constructor(
     private val authManager: AuthManager,
 ): IEnterSignInCodeScreenViewModel, ViewModel() {
     override val container: Container<EnterSignInCodeUiState, EnterSignInCodeSideEffect> = container(
-        EnterSignInCodeUiState(phoneNumber = "33333333")
+        initialState = EnterSignInCodeUiState(phoneNumber = "33333333"),
+        onCreate = {
+            observeAuthState()
+        }
     )
 
     override fun changeCodeInput(newValue: String) = intent {
@@ -63,7 +66,5 @@ class EnterSignInCodeScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeAuthState()
-    }
+
 }

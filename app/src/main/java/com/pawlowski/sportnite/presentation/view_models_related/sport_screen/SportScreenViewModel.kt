@@ -37,6 +37,16 @@ class SportScreenViewModel @Inject constructor(
     private val currentSport = getSportFromSportId(savedStateHandle.get<String>("sportId")!!)
 
 
+    override val container: Container<SportScreenUiState, SportScreenSideEffect> = container(
+        initialState = SportScreenUiState(currentSport),
+        onCreate = {
+            observeGameOffers()
+            observeOffersToAccept()
+            observeIncomingMeetings()
+            observePlayers()
+        }
+    )
+
     override fun sendGameOfferToAccept(gameOffer: GameOffer) = intent {
         val result = sendGameOfferToAcceptUseCase(gameOffer.offerUid)
         result.onSuccess {
@@ -45,10 +55,6 @@ class SportScreenViewModel @Inject constructor(
             postSideEffect(SportScreenSideEffect.ShowToastMessage(message = message))
         }
     }
-
-    override val container: Container<SportScreenUiState, SportScreenSideEffect> = container(
-        initialState = SportScreenUiState(currentSport)
-    )
 
     private fun observeOffersToAccept() = intent(registerIdling = false) {
         repeatOnSubscription {
@@ -120,10 +126,5 @@ class SportScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-        observeGameOffers()
-        observeOffersToAccept()
-        observeIncomingMeetings()
-        observePlayers()
-    }
+
 }
