@@ -3,11 +3,12 @@ package com.pawlowski.sportnite.data.remote
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.data.mappers.toCreateOfferInput
-import com.pawlowski.sportnite.data.mappers.toUpdateUserInput
-import com.pawlowski.sportnite.domain.models.AddGameOfferParams
-import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
+import com.pawlowski.sportnite.data.mappers.*
+import com.pawlowski.sportnite.domain.models.*
+import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.type.CreateResponseInput
 import com.pawlowski.sportnite.type.SetSkillInput
 import com.pawlowski.sportnite.utils.Resource
@@ -23,6 +24,40 @@ class GraphQLService @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : IGraphQLService {
+    override suspend fun getOffers(
+        filters: OffersFilter,
+        cursor: String?,
+        pageSize: Int
+    ): Resource<PaginationPage<GameOffer>> {
+        return executeApolloQuery(
+            request = {
+                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(),
+                    after = Optional.presentIfNotNull(cursor), first = Optional.present(pageSize))).execute()
+            },
+            mapper = { data ->
+                val pageInfo = data.offers?.pageInfo!!
+                PaginationPage(data = data.toGameOfferList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+            }
+        )
+    }
+
+    override suspend fun getPlayers(
+        filters: PlayersFilter,
+        cursor: String?,
+        pageSize: Int
+    ): Resource<PaginationPage<Player>> {
+        return executeApolloQuery(
+            request = {
+                apolloClient.query(UsersQuery(filters.toUserFilterInput(), first = Optional.present(pageSize), cursor = Optional.presentIfNotNull(cursor))).execute()
+            },
+            mapper = { queryData ->
+                val pageInfo = queryData.users?.pageInfo!!
+                PaginationPage(data = queryData.toPlayersList()!!, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
+            }
+        )
+    }
+
+
     override suspend fun createOffer(offerParams: AddGameOfferParams): Resource<String> {
         return withContext(ioDispatcher) {
             executeApolloMutation(

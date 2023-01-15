@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.utils
 
+import com.pawlowski.sportnite.domain.models.PaginationPage
 
 
 inline fun <T>Resource<T>.onSuccess(
@@ -14,6 +15,22 @@ fun <T> Resource<T>.asUnitResource(): Resource<Unit> {
     return when(this) {
         is Resource.Success -> Resource.Success(Unit)
         is Resource.Error -> Resource.Error(this.message)
+    }
+}
+
+inline fun <T>Resource<PaginationPage<T>>.filterIfSuccess(
+    predicate: (T) -> Boolean
+): Resource<PaginationPage<T>> {
+    return when(this) {
+        is Resource.Success -> {
+            Resource.Success(
+                data = this.data
+                    .copy(
+                        data = this.data.data.filter(predicate)
+                    )
+            )
+        }
+        is Resource.Error -> this
     }
 }
 

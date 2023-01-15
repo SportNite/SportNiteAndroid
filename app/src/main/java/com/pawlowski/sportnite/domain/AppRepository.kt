@@ -4,20 +4,16 @@ import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
-import com.apollographql.apollo3.api.Optional
 import com.dropbox.android.external.store4.*
-import com.pawlowski.sportnite.OffersQuery
-import com.pawlowski.sportnite.UsersQuery
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.mappers.*
+import com.pawlowski.sportnite.data.mappers.toSetSkillInput
 import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
@@ -35,7 +31,6 @@ import javax.inject.Singleton
 
 @Singleton
 class AppRepository @Inject constructor(
-    private val apolloClient: ApolloClient,
     private val userInfoUpdateCache: UserInfoUpdateCache,
     private val authManager: IAuthManager,
     private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
@@ -168,17 +163,13 @@ class AppRepository @Inject constructor(
             pagingSourceFactory = {
                 PagingFactory(
                     request = { page, pageSize ->
-                    executeApolloQuery(
-                            request = {
-                                apolloClient.query(OffersQuery(offerFilterInput = OffersFilter(null, false).toOfferFilterInput(),
-                                    after = Optional.presentIfNotNull(page), first = Optional.present(pageSize))).execute()
-                            },
-                            mapper = { data ->
-                                val pageInfo = data.offers?.pageInfo!!
-                                PaginationPage(data = data.toGameOfferList()!!.filter { it.owner.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
-                            }
-                        )
-
+                        graphQLService.getOffers(
+                            filters = OffersFilter(sportFilter = null, myOffers = false),
+                            cursor = page,
+                            pageSize = pageSize
+                        ).filterIfSuccess {
+                            it.owner.uid != myUid
+                        }
                     }
                 )
             }
@@ -195,16 +186,13 @@ class AppRepository @Inject constructor(
             pagingSourceFactory = {
                 PagingFactory(
                     request = { page, pageSize ->
-                        executeApolloQuery(
-                            request = {
-                                apolloClient.query(UsersQuery(filters.toUserFilterInput(), first = Optional.present(pageSize), cursor = Optional.presentIfNotNull(page))).execute()
-                            },
-                            mapper = { queryData ->
-                                val pageInfo = queryData.users?.pageInfo!!
-                                PaginationPage(data = queryData.toPlayersList()!!.filter { it.uid != myUid }, hasNextPage = pageInfo.hasNextPage, endCursor = pageInfo.endCursor)
-                            }
-                        )
-
+                        graphQLService.getPlayers(
+                            filters = filters,
+                            cursor = page,
+                            pageSize = pageSize
+                        ).filterIfSuccess {
+                            it.uid != myUid
+                        }
                     }
                 )
             }
