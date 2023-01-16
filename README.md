@@ -28,31 +28,15 @@ App is based on MVI pattern. It consists of 3 layers:
 - `/presentation/models` - package with presentation data models
 - `/presentation/mappers` - package with functions mapping presentation models to domain models
 - `/presentation/domain` - package with repository 
+- `/presentation/data/auth` - package with authentication and classes caching user data
+- `/presentation/data/firebase_storage` - package with classes uploading user profile image to Firebase Storage
+- `/presentation/data/local` - package with classes caching data
+- `/presentation/data/mappers` - package with functions mapping graphql models to domain/presentation models
+- `/presentation/data/remote` - package with GraphQLService - class responsible with comunication with GraphQL server
 
-- `Dto` - module containing `DTO`s for GraphQL queries and mutations (`DTO` stands for `Data Transfer Object`) 
-- `Assets` - module containing data for seeding database
-- `Data` - module containing `Query` and `Mutation` classes for GraphQL schema
-- `Exceptions` - module containing custom exceptions and exception handlers
 
 #### `SportNiteAndroid/app/src/test` - package with unit tests
 
-
-### Interfaces
-
-- `Database/DatabaseContext.cs` - database context for Entity Framework Core
-- `Services/AuthService.cs` - service for handling authentication
-- `Services/OfferService.cs` - service for handling offers CRUD
-- `Services/PlaceService.cs` - service for handling places CRUD and seeding from file
-- `Services/WeatherService.cs` - service for requesting weather forecast from https://open-meteo.com/ 
-- `Services/ResponseService.cs` - service for handling responses CRUD, accepting or declining it
-- `Services/UserService.cs` - service for handling users management
-- `Services/Utils.cs` - contains utility functions
-
-## GraphQL API
-In order to explore GraphQL API you can use GraphQL Playground. "Docs" tab (on the right side) shows interactive API explorer.
-Some queries/mutations have additional descriptions for better understanding by the developer.
-
-![graphql_playground.png](screenshots/graphql_playground.png)
 
 ## Building and running
 
@@ -69,16 +53,13 @@ After starting up both services (database and server) you can access GraphQL Pla
 Assuming dotnet core toolchain is installed and MySQL database is up and running (with empty database 'sportnite' created):
 
 ```bash
-git clone https://github.com/SportNite/SportNiteServer.git
+git clone https://github.com/SportNite/SportNiteAndroid.git
 cd SportNiteServer
-dotnet test
+
 ```
 
 If you want to change database for testing, create `SportNiteServer/.env` file with following content:
 
-```env
-MYSQL_CONNECTION="server=somehost ; port=3306 ; database=somedatabase ; user=someuser ; password=somepassword"
-```
 
 ## Code quality report
 With `qodana` installed:
