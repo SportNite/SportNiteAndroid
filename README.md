@@ -100,10 +100,8 @@ With `qodana` installed:
 qodana scan --show-report
 ```
 
-![qodana.png](screenshots/qodana.png)
+<img width="1552" alt="qodana" src="https://user-images.githubusercontent.com/21008961/212775703-4be8b068-4871-4111-9b1f-49f7eaf578b9.png">
 
 
 ## License
 Project is licensed under the BSD 3-clause license. See [LICENSE](LICENSE) for more details.
-Dependencies licenses are listed in [dependencies-licenses](dependencies-licenses.txt) file.
-![deps.png](screenshots/deps.png)
