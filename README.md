@@ -9,6 +9,20 @@ SportNite Android app written in Kotlin and Jetpack Compose. Connects with Graph
 - apk is published on Google Play for testers
 - Qodana code quality report: https://qodana.cloud/projects/3wwJW/reports/AYKR2
 
+## Libraries used
+- Jetpack Compose
+- Kotlin Coroutines
+- Coroutines Flow
+- Orbit MVI
+- Firebase Auth
+- Firebase Storage
+- Store
+- Hilt
+- Coil
+- Google Acompanist
+- Lottie
+- Image Cropper
+
 ## Architecture
 App is based on MVI pattern. It consists of 3 layers:
 - Presentation (ViewModels implementing Orbit MVI containers, UI in Jetpack Compose) - handles interactions with user on particular screens and gets data from repository by use cases
