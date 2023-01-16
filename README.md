@@ -91,13 +91,8 @@ User can create offers for sport meetings. Other users than can explore existing
 - tap "Usuń ofertę"
 
 
-## Building and running
-
-Easiest way to launch service is to utilize docker-compose setup:
-```bash
-git clone https://github.com/SportNite/SportNiteServer.git
-cd SportNiteServer
-```
+## Running
+Easiest way to run SportNite Android app is to download apk from Github Releases
 
 ## Code quality report
 With `qodana` installed:
