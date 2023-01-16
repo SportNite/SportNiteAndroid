@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.pawlowski.sportnite.data.mappers.getSportFromSportId
+import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
@@ -27,6 +30,9 @@ class FullScreenListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): IFullScreenListViewModel, ViewModel() {
     private val dataType = FullScreenDataType.getTypeFromString(savedStateHandle.get<String>("dataType")!!)
+    private val sportFilter: Sport? = savedStateHandle.get<String>("sportFilter")?.let {
+        getSportFromSportId(it)
+    }
     override val dataTypeFlow = MutableStateFlow(dataType).asStateFlow()
     override val container: Container<FullScreenListUiState, FullScreenListSideEffect> =
         container(
@@ -66,7 +72,10 @@ class FullScreenListViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedOffers = dataTypeFlow.flatMapLatest { type ->
         if(type is FullScreenDataType.OffersData)
-            getPagedOffersUseCase().cachedIn(viewModelScope)
+            getPagedOffersUseCase(OffersFilter(
+                sportFilter = sportFilter,
+                myOffers = false
+            )).cachedIn(viewModelScope)
         else
             flowOf()
     }

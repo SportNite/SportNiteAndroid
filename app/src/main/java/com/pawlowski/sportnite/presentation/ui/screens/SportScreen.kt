@@ -40,7 +40,7 @@ fun SportScreen(
     onNavigateToPlayerDetailsScreen: (String) -> Unit = {},
     onNavigateToMeetingDetailsScreen: (String) -> Unit = {},
     onNavigateToFindPlayersScreen: () -> Unit = {},
-    onNavigateToFullScreenList: (String) -> Unit = {},
+    onNavigateToFullScreenList: (String, Sport) -> Unit = { _, _ ->},
 ) {
     val context = LocalContext.current
 
@@ -144,7 +144,7 @@ fun SportScreen(
                         viewModel.acceptOfferToAccept(it.offerUid)
                     },
                     onSeeMoreClick = {
-                        onNavigateToFullScreenList("OffersToAccept")
+                        onNavigateToFullScreenList("OffersToAccept", sportState.value)
                     },
                     isLoading = {
                         offersToAcceptDataState.value.isLoading()
@@ -207,7 +207,7 @@ fun SportScreen(
                         }
                     },
                     onSeeMoreClick = {
-                        onNavigateToFullScreenList("Offers")
+                        onNavigateToFullScreenList("Offers", sportState.value)
                     },
                     isLoading = {
                         offersDataState.value.isLoading()

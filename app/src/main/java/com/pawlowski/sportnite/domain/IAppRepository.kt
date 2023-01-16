@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.domain
 
 import androidx.paging.PagingData
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
@@ -24,7 +25,7 @@ interface IAppRepository {
     fun getUserNotifications(): Flow<UiData<List<Notification>>>
     fun getInfoAboutMe() : Flow<User?>
 
-    fun getPagedOffers(): Flow<PagingData<GameOffer>>
+    fun getPagedOffers(filter: OffersFilter): Flow<PagingData<GameOffer>>
     fun getPagedMeetings(): Flow<PagingData<Meeting>>
 
 

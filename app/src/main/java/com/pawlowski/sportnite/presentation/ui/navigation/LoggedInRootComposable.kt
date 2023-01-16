@@ -162,7 +162,7 @@ fun LoggedInRootComposable(
                             launchSingleTop = true
                         }
                     },
-                    onNavigateToFullScreenList = {
+                    onNavigateToFullScreenList = { dataType, sportFilter ->
                         navController.navigate("FullScreenList/$it")
                     }
                 )
@@ -223,11 +223,16 @@ fun LoggedInRootComposable(
                     }
                 )
             }
-            composable(route = "FullScreenList/{dataType}",
+            composable(route = "FullScreenList/{dataType}?sportFilter={sportFilter}",
                 arguments = listOf(
                     navArgument("dataType") {
                         type= NavType.StringType
                         nullable = false
+                    },
+                    navArgument("sportFilter") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
                     }
                 )) {
                 FullScreenListScreen(

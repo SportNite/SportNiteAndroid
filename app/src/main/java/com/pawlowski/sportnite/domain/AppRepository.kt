@@ -153,7 +153,7 @@ class AppRepository @Inject constructor(
         return userInfoUpdateCache.cachedUser
     }
 
-    override fun getPagedOffers(): Flow<PagingData<GameOffer>> {
+    override fun getPagedOffers(filter: OffersFilter): Flow<PagingData<GameOffer>> {
         val myUid = authManager.getCurrentUserUid()!!
         return Pager(
             config = PagingConfig(
@@ -164,11 +164,11 @@ class AppRepository @Inject constructor(
                 PagingFactory(
                     request = { page, pageSize ->
                         graphQLService.getOffers(
-                            filters = OffersFilter(sportFilter = null, myOffers = false),
+                            filters = filter,
                             cursor = page,
                             pageSize = pageSize
                         ).filterIfSuccess {
-                            it.owner.uid != myUid
+                            filter.myOffers || it.owner.uid != myUid
                         }
                     }
                 )
