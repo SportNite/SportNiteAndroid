@@ -52,22 +52,6 @@ App is based on MVI pattern. It consists of 3 layers:
 #### `SportNiteAndroid/app/src/test` - package with unit tests
 
 
-## Building and running
-
-Easiest way to launch service is to utilize docker-compose setup:
-```bash
-git clone https://github.com/SportNite/SportNiteServer.git
-cd SportNiteServer
-```
-
-## Code quality report
-With `qodana` installed:
-```bash
-qodana scan --show-report
-```
-
-![qodana.png](screenshots/qodana.png)
-
 
 ## User documentation
 User can create offers for sport meetings. Other users than can explore existing offers and accept offer. 
@@ -105,6 +89,24 @@ User can create offers for sport meetings. Other users than can explore existing
 - tap "Moje spotkania"
 - select offer
 - tap "Usuń ofertę"
+
+
+## Building and running
+
+Easiest way to launch service is to utilize docker-compose setup:
+```bash
+git clone https://github.com/SportNite/SportNiteServer.git
+cd SportNiteServer
+```
+
+## Code quality report
+With `qodana` installed:
+```bash
+qodana scan --show-report
+```
+
+![qodana.png](screenshots/qodana.png)
+
 
 ## License
 Project is licensed under the BSD 3-clause license. See [LICENSE](LICENSE) for more details.
