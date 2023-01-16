@@ -45,20 +45,6 @@ Easiest way to launch service is to utilize docker-compose setup:
 git clone https://github.com/SportNite/SportNiteServer.git
 cd SportNiteServer
 ```
-After starting up both services (database and server) you can access GraphQL Playground at http://localhost:7150/playground.
-
-## Testing
-
-Assuming dotnet core toolchain is installed and MySQL database is up and running (with empty database 'sportnite' created):
-
-```bash
-git clone https://github.com/SportNite/SportNiteAndroid.git
-cd SportNiteServer
-
-```
-
-If you want to change database for testing, create `SportNiteServer/.env` file with following content:
-
 
 ## Code quality report
 With `qodana` installed:
@@ -67,6 +53,44 @@ qodana scan --show-report
 ```
 
 ![qodana.png](screenshots/qodana.png)
+
+
+## User documentation
+User can create offers for sport meetings. Other users than can explore existing offers and accept offer. 
+### Create an offer (1)
+- ensure you are signed in, if not Login (2)
+- go to "Moje spotkania" tab and press "+" button on bottom right corner
+- enter date and time
+- select sport
+- select city
+- optionally enter additional informations
+- press "Dodaj ofertę"
+
+### Login (2) - if you are not signed yet
+- enter phone number
+- at next screen, enter confirmation code from SMS and tap "Potwierdź"
+- select avatar, type your name and birth date. Select sex and time availability
+- next, select in what sports are you interested in
+- confirm, and select level of advance in chosen sports 
+
+### View incoming meetings (3)
+- tap "Home" tab
+- now you can view incoming meetings
+
+### Search for people (4)
+- tap "Szukaj ludzi tab"
+- use filter to show people only interested in given sport
+- after tapping user, you can see his level of advance, phone number and time availability
+
+### Accept offer response (5)
+- tap "Moje spotkania"
+- select offer
+- tap "Akceptuj ofertę" 
+
+### Remove offer (6)
+- tap "Moje spotkania"
+- select offer
+- tap "Usuń ofertę"
 
 ## License
 Project is licensed under the BSD 3-clause license. See [LICENSE](LICENSE) for more details.
