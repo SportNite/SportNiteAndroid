@@ -44,7 +44,6 @@ Easiest way to launch service is to utilize docker-compose setup:
 ```bash
 git clone https://github.com/SportNite/SportNiteServer.git
 cd SportNiteServer
-docker-compose up -d --build
 ```
 After starting up both services (database and server) you can access GraphQL Playground at http://localhost:7150/playground.
 
