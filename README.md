@@ -126,7 +126,7 @@ qodana scan --show-report
 | :-------- | :------- | :------- |
 | <img src="screenshots/ss_home.jpg" width="250"/> | <img src="screenshots/ss_my_meetings.jpg" width="250"/> | <img src="screenshots/ss_sign_in.jpg" width="250"/> |
 
-| Choose Sports Screen | Choose Advance Level Screen | Edit Profile Screen |
+| Choose Sports Screen | Choose Advance Level Screen | Account Details Screen |
 | :-------- | :------- | :------- |
 | <img src="screenshots/ss_choose_sports.jpg" width="250"/> | <img src="screenshots/ss_choose_level.jpg" width="250"/> | <img src="screenshots/ss_edit_profile.jpg" width="250"/> |
 
