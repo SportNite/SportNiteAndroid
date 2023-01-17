@@ -107,5 +107,15 @@ qodana scan --show-report
 <img width="1552" alt="qodana" src="https://user-images.githubusercontent.com/21008961/212775703-4be8b068-4871-4111-9b1f-49f7eaf578b9.png">
 
 
+## Screenshots
+
+| Home Screen | My Meetings Screen | Sign In Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_home.jpg" width="250"/> | <img src="screenshots/ss_my_meetings.jpg" width="250"/> | <img src="screenshots/ss_sign_in.jpg" width="250"/> |
+
+| Choose Sports Screen | Choose Advance Level Screen | Edit Profile Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_choose_sports.jpg" width="250"/> | <img src="screenshots/ss_choose_level.jpg" width="250"/> | <img src="screenshots/ss_edit_profile.jpg" width="250"/> |
+
 ## License
 Project is licensed under the BSD 3-clause license. See [LICENSE](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md) for more details.
