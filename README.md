@@ -130,5 +130,9 @@ qodana scan --show-report
 | :-------- | :------- | :------- |
 | <img src="screenshots/ss_choose_sports.jpg" width="250"/> | <img src="screenshots/ss_choose_level.jpg" width="250"/> | <img src="screenshots/ss_edit_profile.jpg" width="250"/> |
 
+| Find Players Screen | Sport Screen | Add Offer Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_find_players.jpg" width="250"/> | <img src="screenshots/ss_sport_screen.jpg" width="250"/> | <img src="screenshots/ss_add_offer.jpg" width="250"/> |
+
 ## License
 Project is licensed under the BSD 3-clause license. See [LICENSE](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md) for more details.
