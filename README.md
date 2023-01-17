@@ -1,4 +1,8 @@
 # SportNiteAndroid
+<div>
+<img src="https://cdn.freebiesupply.com/logos/large/2x/kotlin-1-logo-png-transparent.png" height="100"/>
+<img src="https://2.bp.blogspot.com/--asT-h3qn_s/X0aLtRWOesI/AAAAAAAAPkY/iOkd702WAts7_4dIXlzQhyiJWGaL5f9CgCLcBGAsYHQ/s1600/JetpackCompose_logo.png" height="100"/>
+</div>
 
 ## About
 SportNite Android app written in Kotlin and Jetpack Compose. Connects with GraphQL Server, uses Firebase for Authentication (with Oauth 2)
