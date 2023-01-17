@@ -20,6 +20,7 @@ SportNite Android app written in Kotlin and Jetpack Compose. Connects with Graph
 - Kotlin Coroutines
 - Coroutines Flow
 - Orbit MVI
+- Apollo GraphQL
 - Firebase Auth
 - Firebase Storage
 - Store
