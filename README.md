@@ -13,8 +13,10 @@ SportNite Android app written in Kotlin and Jetpack Compose. Connects with Graph
 <div>
 
 [![Latest Release](https://img.shields.io/github/v/release/SportNite/SportNiteAndroid.svg?logo=github&style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/releases/latest)
-[![License: GPL v3](https://img.shields.io/badge/License-BSD3-blue.svg?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md)
+[![Language](https://img.shields.io/github/languages/top/SportNite/SportNiteAndroid?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid)
+[![License: BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md)
 
+  
 </div>
 
 ## Specification
