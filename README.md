@@ -9,7 +9,11 @@
 ## About
 SportNite Android app written in Kotlin and Jetpack Compose. Connects with GraphQL Server, uses Firebase for Authentication (with Oauth 2)
 
+
 [![Latest Release](https://img.shields.io/github/v/release/SportNite/SportNiteAndroid.svg?logo=github&style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/releases/latest)
+
+[![License: GPL v3](https://img.shields.io/badge/License-BSD3-blue.svg?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md)
+
 
 ## Specification
 - written in Kotlin and Jetpack Compose
