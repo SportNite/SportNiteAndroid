@@ -104,4 +104,4 @@ qodana scan --show-report
 
 
 ## License
-Project is licensed under the BSD 3-clause license. See [LICENSE](LICENSE) for more details.
+Project is licensed under the BSD 3-clause license. See [LICENSE](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md) for more details.
