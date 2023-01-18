@@ -134,6 +134,7 @@ qodana scan --show-report
 | :-------- | :------- | :------- |
 | <img src="screenshots/ss_find_players.jpg" width="250"/> | <img src="screenshots/ss_sport_screen.jpg" width="250"/> | <img src="screenshots/ss_add_offer.jpg" width="250"/> |
 
+## Analiza ryzyka
 ![Frame 17](https://user-images.githubusercontent.com/21008961/213116855-61c12bc0-1b88-42e8-a3ee-e416bd406108.png)
 
 
