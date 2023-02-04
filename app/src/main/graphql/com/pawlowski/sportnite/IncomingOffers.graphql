@@ -4,12 +4,7 @@ query IncomingOffers($offersFilter: [OfferFilterInput!]) {
   }) {
     offerId,
     user {
-      name,
-      userId,
-      firebaseUserId,
-      phone,
-      birthDate,
-      avatar
+      ...mediumUserFragment
     }
     description,
     dateTime,
@@ -17,12 +12,7 @@ query IncomingOffers($offersFilter: [OfferFilterInput!]) {
     responses {
       status,
       user {
-        name,
-        userId,
-        firebaseUserId,
-        phone,
-        birthDate,
-        avatar
+        ...mediumUserFragment
       }
     }
     city

@@ -1,23 +1,7 @@
 query Users($filter: UserFilterInput, $first: Int, $cursor: String) {
   users(where: $filter, first: $first, after: $cursor) {
     nodes {
-      userId,
-      firebaseUserId,
-      avatar,
-      name,
-      birthDate,
-      sex,
-      city,
-      phone,
-      availability,
-      skills {
-        nrtp,
-        sport,
-        level,
-        years,
-        weight,
-        height
-      }
+      ...detailsUserFragment
     },
     pageInfo {
           endCursor,

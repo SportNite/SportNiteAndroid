@@ -1,22 +1,5 @@
 query Me{
   me {
-    userId,
-    firebaseUserId,
-    avatar,
-    name,
-    birthDate,
-    sex,
-    city,
-    availability,
-    bio,
-    skills {
-      skillId,
-      sport,
-      level,
-      years,
-      weight,
-      height,
-      nrtp
-    }
+    ...detailsUserFragment
   }
 }

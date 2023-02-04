@@ -2,7 +2,7 @@ package com.pawlowski.sportnite.utils
 
 
 inline fun <T>Resource<T>.onSuccess(
-    action: (T?) -> Unit
+    action: (T) -> Unit
 ): Resource<T> = apply {
     if(this is Resource.Success) {
         action(this.data)

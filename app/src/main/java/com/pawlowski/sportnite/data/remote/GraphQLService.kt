@@ -100,6 +100,19 @@ class GraphQLService @Inject constructor(
         )
     }
 
+    override suspend fun getInfoAboutMe(): Resource<PlayerDetails> {
+        return executeApolloQuery(
+            request = {
+                apolloClient.query(
+                    MeQuery()
+                ).execute()
+            },
+            mapper = { data ->
+                data.me.detailsUserFragment.toPlayerDetails()
+            }
+        )
+    }
+
     override suspend fun getIncomingMeetings(filters: MeetingsFilter, myUid: String): Resource<List<Meeting>> {
         return executeApolloQuery(
             request = {

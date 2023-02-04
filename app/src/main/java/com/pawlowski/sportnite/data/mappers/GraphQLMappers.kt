@@ -3,10 +3,11 @@ package com.pawlowski.sportnite.data.mappers
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*
+import com.pawlowski.sportnite.fragment.DetailsUserFragment
 import com.pawlowski.sportnite.fragment.MediumUserFragment
 import com.pawlowski.sportnite.fragment.OfferFragment
+import com.pawlowski.sportnite.presentation.mappers.toPlayer
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.UiDate
 import java.time.LocalDate
@@ -110,40 +111,7 @@ fun MyOffersQuery.Node.toGameOffer(): GameOffer {
 }
 
 fun ResponsesQuery.User.toPlayer(): Player {
-    return getPlayerForPreview().copy(
-        uid = this.firebaseUserId,
-        name = this.name,
-    )
-}
-
-fun IncomingOffersQuery.User.toPlayer(): Player {
-    val ageInYears = Period.between(
-        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
-        LocalDate.now()
-    ).years
-    return Player(
-        uid = firebaseUserId,
-        name = name,
-        photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
-        age = ageInYears,
-        phoneNumber = phone?:""
-    )
-}
-
-fun IncomingOffersQuery.User1.toPlayer(): Player {
-    val ageInYears = Period.between(
-        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
-        LocalDate.now()
-    ).years
-    return Player(
-        uid = firebaseUserId,
-        name = name,
-        photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
-        age = ageInYears,
-        phoneNumber = phone?:""
-    )
+    return this.mediumUserFragment.toPlayer()
 }
 
 fun OffersQuery.Data.toGameOfferList(): List<GameOffer>? {
@@ -188,14 +156,16 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
 }
 
 fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
-    val opponent = if (user.firebaseUserId != myUid)
-        user.toPlayer()
+    val opponent = if (user.mediumUserFragment.firebaseUserId != myUid)
+        user.mediumUserFragment.toPlayer()
     else
+    {
         responses
             .first {
                 it.status == ResponseStatus.APPROVED
             }
-            .user.toPlayer()
+            .user.mediumUserFragment.toPlayer()
+    }
 
     return Meeting(
         opponent = opponent,
@@ -214,44 +184,43 @@ fun UsersQuery.Data.toPlayersList(): List<Player>? {
     }
 }
 
-fun UsersQuery.Data.toPlayerDetails(): PlayerDetails? {
+fun DetailsUserFragment.toPlayerDetails(): PlayerDetails {
 
-    return this.users?.nodes?.get(0)?.let {
-        val ageInYears = Period.between(
-            OffsetDateTime.parse(it.birthDate.toString()).toLocalDate(),
-            LocalDate.now()
-        ).years
-        PlayerDetails(
-            playerUid = it.firebaseUserId,
-            playerPhotoUrl = it.avatar,
-            age = ageInYears,
-            playerName = it.name,
-            timeAvailability = it.availability,
-            contact = listOfNotNull(
-                it.phone?:""
-            ),
-            advanceLevels = it.skills.associate { skill ->
-                Pair(skill.sport.toSport(), skill.toAdvanceLevel())
-            }
-        )
+    val ageInYears = Period.between(
+        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
+        LocalDate.now()
+    ).years
+    return PlayerDetails(
+        playerUid = firebaseUserId,
+        playerPhotoUrl = avatar,
+        age = ageInYears,
+        playerName = name,
+        timeAvailability = availability,
+        contact = listOfNotNull(
+            phone?:""
+        ),
+        advanceLevels = skills.associate { skill ->
+            Pair(skill.sport.toSport(), skill.toAdvanceLevel())
+        }
+    )
+}
+
+fun DetailsUserFragment.Skill.toAdvanceLevel(): AdvanceLevel {
+    return if(nrtp != null) {
+        AdvanceLevel.NRTP(nrtp)
+    } else {
+        AdvanceLevel.DefaultLevel(level = level?.toInt()?:-1)
     }
+}
+
+fun UsersQuery.Data.toPlayerDetails(): PlayerDetails? {
+    return this.users?.nodes?.get(0)?.detailsUserFragment?.toPlayerDetails()
 }
 
 
 
 fun UsersQuery.Node.toPlayer(): Player {
-    val ageInYears = Period.between(
-        OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
-        LocalDate.now()
-    ).years
-    return Player(
-        uid = firebaseUserId,
-        name = name,
-        photoUrl = avatar,
-        //advanceLevel = AdvanceLevel.NRTP(6.0), //TODO: Add level filters
-        age = ageInYears,
-        phoneNumber = phone?:""
-    )
+    return this.detailsUserFragment.toPlayerDetails().toPlayer()
 }
 
 fun futureOffersOfferFilterInput(): OfferFilterInput {
@@ -305,22 +274,6 @@ fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
             )
         )
     }?: Optional.absent()
-}
-
-fun MeQuery.Skill.toAdvanceLevel(): AdvanceLevel {
-    return nrtp?.let {
-        AdvanceLevel.NRTP(it)
-    }?:level?.let {
-        AdvanceLevel.DefaultLevel(it.toInt())
-    }?: TODO()
-}
-
-fun UsersQuery.Skill.toAdvanceLevel(): AdvanceLevel {
-    return if(nrtp != null) {
-        AdvanceLevel.NRTP(nrtp)
-    } else {
-        AdvanceLevel.DefaultLevel(level = level?.toInt()?:-1)
-    }
 }
 
 fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {

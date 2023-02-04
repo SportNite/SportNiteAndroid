@@ -14,9 +14,7 @@ query Responses($otherFilters: [OfferFilterInput!], $first: Int, $after: String)
         responseId,
         offerId,
         user {
-          userId,
-          name,
-          firebaseUserId
+          ...mediumUserFragment
         },
         description,
         offer {

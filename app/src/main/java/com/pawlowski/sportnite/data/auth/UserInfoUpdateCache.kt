@@ -1,18 +1,14 @@
 package com.pawlowski.sportnite.data.auth
 
 import android.content.SharedPreferences
-import com.apollographql.apollo3.ApolloClient
-import com.pawlowski.sportnite.MeQuery
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.data.mappers.toAdvanceLevel
-import com.pawlowski.sportnite.data.mappers.toSport
+import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.presentation.mappers.getAdvanceLevelFromParsedString
 import com.pawlowski.sportnite.presentation.mappers.parse
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.sportnite.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class UserInfoUpdateCache @Inject constructor(
-    private val apolloClient: ApolloClient,
+    private val graphQLService: IGraphQLService,
     private val sharedPreferences: SharedPreferences,
     private val ioDispatcher: CoroutineDispatcher
 ){
@@ -144,42 +140,36 @@ class UserInfoUpdateCache @Inject constructor(
     private suspend fun checkValueFromApi(userPhoneNumber: String): Resource<RegistrationProgress>
     {
         return withContext(ioDispatcher) {
-            try {
-                val response = apolloClient.query(MeQuery()).execute()
-                val name = response.data!!.me.name
-                val photoUrl = response.data!!.me.avatar
-                val levels = response.data!!.me.skills.associate {
-                    Pair(
-                        it.sport.toSport(),
-                        it.toAdvanceLevel()
-                    )
-                }
-                val isProfileInfoAdded = name.isNotEmpty() && photoUrl.isNotEmpty()
+            val result = graphQLService.getInfoAboutMe()
+            result.dataOrNull()?.let {
+                val isProfileInfoAdded = it.playerName.isNotEmpty() && it.playerPhotoUrl.isNotEmpty()
+
                 sharedPreferences
                     .edit()
                     .putBoolean(USER_INFO_KEY, isProfileInfoAdded)
-                    .putString(NAME_KEY, name)
-                    .putString(PHOTO_URL_KEY, photoUrl)
+                    .putString(NAME_KEY, it.playerName)
+                    .putString(PHOTO_URL_KEY, it.playerPhotoUrl)
                     .putString(PHONE_NUMBER_KEY, userPhoneNumber)
                     .apply()
-                if(isProfileInfoAdded) {
-                    _cachedUser.value = User(name, photoUrl, userPhoneNumber)
-                }
-                if(levels.isNotEmpty()) {
-                    saveInfoAboutAdvanceLevels(levels)
-                }
-                val result =
-                    if(levels.isNotEmpty())
-                        RegistrationProgress.EVERYTHING_ADDED
-                    else if(isProfileInfoAdded)
-                        RegistrationProgress.PROFILE_INFO_ADDED
-                    else RegistrationProgress.NO_INFO_ADDED
 
-                Resource.Success(result)
-            }
-            catch (e: Exception) {
-                Resource.Error(UiText.NonTranslatable(""))
-            }
+                if(isProfileInfoAdded) {
+                    _cachedUser.value = User(it.playerName, it.playerPhotoUrl, userPhoneNumber)
+                }
+
+                if(it.advanceLevels.isNotEmpty()) {
+                    saveInfoAboutAdvanceLevels(it.advanceLevels)
+                }
+
+                val progress = when {
+                    it.advanceLevels.isNotEmpty() -> RegistrationProgress.EVERYTHING_ADDED
+                    isProfileInfoAdded -> RegistrationProgress.PROFILE_INFO_ADDED
+                    else -> RegistrationProgress.NO_INFO_ADDED
+                }
+
+                Resource.Success(progress)
+
+            }?:Resource.Error(result.messageOrNull()?:UiText.NonTranslatable(""))
+
         }
     }
 

@@ -1,0 +1,21 @@
+fragment detailsUserFragment on User {
+    userId,
+    firebaseUserId,
+    avatar,
+    name,
+    birthDate,
+    sex,
+    city,
+    availability,
+    bio,
+    phone,
+    skills {
+      skillId,
+      sport,
+      level,
+      years,
+      weight,
+      height,
+      nrtp
+    }
+}
