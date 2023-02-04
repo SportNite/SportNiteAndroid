@@ -3,7 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthResponse
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container

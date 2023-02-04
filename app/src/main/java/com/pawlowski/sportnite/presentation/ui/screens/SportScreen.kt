@@ -27,9 +27,9 @@ import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISp
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
-import com.pawlowski.sportnite.utils.UiData
-import com.pawlowski.sportnite.utils.dataOrNull
-import com.pawlowski.sportnite.utils.isLoading
+import com.pawlowski.utils.UiData
+import com.pawlowski.utils.dataOrNull
+import com.pawlowski.utils.isLoading
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable

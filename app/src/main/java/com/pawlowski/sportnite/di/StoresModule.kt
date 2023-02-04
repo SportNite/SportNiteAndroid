@@ -13,7 +13,7 @@ import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

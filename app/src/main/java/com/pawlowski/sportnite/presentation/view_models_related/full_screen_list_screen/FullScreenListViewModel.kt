@@ -13,6 +13,9 @@ import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCa
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
 import com.pawlowski.sportnite.utils.*
+import com.pawlowski.utils.dataOrNull
+import com.pawlowski.utils.onError
+import com.pawlowski.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*

@@ -4,7 +4,7 @@ import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.datetime.dateTimePicker
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache.RegistrationProgress.*
-import com.pawlowski.sportnite.utils.onError
-import com.pawlowski.sportnite.utils.onSuccess
+import com.pawlowski.utils.onError
+import com.pawlowski.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent

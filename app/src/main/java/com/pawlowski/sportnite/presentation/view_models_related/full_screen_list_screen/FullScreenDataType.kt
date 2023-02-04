@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen
 
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.UiText
 
 sealed class FullScreenDataType(val columnsInRow: Int, val name: UiText) {
     object OffersData: FullScreenDataType(1, UiText.NonTranslatable("Oferty na grę"))

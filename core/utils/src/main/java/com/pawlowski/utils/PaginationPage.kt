@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 data class PaginationPage<T>(
     val hasNextPage: Boolean,

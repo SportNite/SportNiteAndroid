@@ -6,8 +6,8 @@ import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiData
 import kotlinx.coroutines.flow.Flow
 
 interface IAppRepository {

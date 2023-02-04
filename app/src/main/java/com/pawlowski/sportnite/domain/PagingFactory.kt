@@ -3,8 +3,8 @@ package com.pawlowski.sportnite.domain
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.pawlowski.sportnite.utils.PaginationPage
-import com.pawlowski.sportnite.utils.Resource
+import com.pawlowski.utils.PaginationPage
+import com.pawlowski.utils.Resource
 
 
 class PagingFactory<T: Any> constructor(

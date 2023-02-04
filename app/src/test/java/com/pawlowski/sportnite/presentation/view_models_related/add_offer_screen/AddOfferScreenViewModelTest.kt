@@ -1,9 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.utils.UiDate
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.UiDate
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

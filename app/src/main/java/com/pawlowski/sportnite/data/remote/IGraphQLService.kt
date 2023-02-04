@@ -3,8 +3,8 @@ package com.pawlowski.sportnite.data.remote
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.SetSkillInput
-import com.pawlowski.sportnite.utils.PaginationPage
-import com.pawlowski.sportnite.utils.Resource
+import com.pawlowski.utils.PaginationPage
+import com.pawlowski.utils.Resource
 
 interface IGraphQLService {
     //Queries

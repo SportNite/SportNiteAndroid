@@ -11,8 +11,8 @@ import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Player
 import com.pawlowski.sportnite.presentation.use_cases.*
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -6,9 +6,9 @@ import com.pawlowski.sportnite.data.mappers.getAvailableLevelsForSport
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
-import com.pawlowski.sportnite.utils.UiText
-import com.pawlowski.sportnite.utils.onError
-import com.pawlowski.sportnite.utils.onSuccess
+import com.pawlowski.utils.UiText
+import com.pawlowski.utils.onError
+import com.pawlowski.utils.onSuccess
 import com.pawlowski.sportnite.utils.skillsSuccessText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

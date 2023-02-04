@@ -1,0 +1,15 @@
+[versions]
+compose-bom = "2023.01.00"
+activity-compose = "1.6.1"
+core-ktx = "1.9.0"
+lifecycle-runtime = "2.5.1"
+coroutines-core = "1.3.9"
+junit = "4.13.2"
+
+[libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx"}
+lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime"}
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-core"}
+junit = { module = "junit:junit", version.ref = "junit"}

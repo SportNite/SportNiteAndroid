@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import org.orbitmvi.orbit.ContainerHost
 
 interface IAccountDetailsScreenViewModel: ContainerHost<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect> {

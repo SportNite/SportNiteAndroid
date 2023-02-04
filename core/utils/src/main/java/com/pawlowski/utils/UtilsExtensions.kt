@@ -1,7 +1,7 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 
-inline fun <T>Resource<T>.onSuccess(
+inline fun <T> Resource<T>.onSuccess(
     action: (T) -> Unit
 ): Resource<T> = apply {
     if(this is Resource.Success) {
@@ -17,7 +17,7 @@ fun <T> Resource<T>.asUnitResource(): Resource<Unit> {
 }
 
 
-inline fun <T>Resource<PaginationPage<T>>.filterIfSuccess(
+inline fun <T> Resource<PaginationPage<T>>.filterIfSuccess(
     predicate: (T) -> Boolean
 ): Resource<PaginationPage<T>> {
     return when(this) {
@@ -38,7 +38,7 @@ inline fun <T>onAnyResourceHasError(vararg resources: Resource<T>, action: () ->
         action()
 }
 
-inline fun <T>Resource<T>.onError(
+inline fun <T> Resource<T>.onError(
     action: (UiText, T?) -> Unit
 ): Resource<T> = apply {
     if(this is Resource.Error) {
@@ -46,21 +46,21 @@ inline fun <T>Resource<T>.onError(
     }
 }
 
-fun <T>Resource<T>.dataOrNull(): T? {
+fun <T> Resource<T>.dataOrNull(): T? {
     return when(this) {
         is Resource.Success -> data
         is Resource.Error -> data
     }
 }
 
-fun <T>Resource<T>.messageOrNull(): UiText? {
+fun <T> Resource<T>.messageOrNull(): UiText? {
     return when(this) {
         is Resource.Success -> null
         is Resource.Error -> message
     }
 }
 
-fun <T>UiData<T>.dataOrNull(): T? {
+fun <T> UiData<T>.dataOrNull(): T? {
     return when(this) {
         is UiData.Success -> data
         is UiData.Error -> cachedData
@@ -68,11 +68,11 @@ fun <T>UiData<T>.dataOrNull(): T? {
     }
 }
 
-fun <T>UiData<T>.isLoading(): Boolean {
+fun <T> UiData<T>.isLoading(): Boolean {
     return this is UiData.Loading
 }
 
-inline fun <T>UiData<T>.onSuccess(
+inline fun <T> UiData<T>.onSuccess(
     action: (UiData.Success<T>) -> Unit
 ): UiData<T> = apply {
     if(this is UiData.Success)
@@ -81,7 +81,7 @@ inline fun <T>UiData<T>.onSuccess(
     }
 }
 
-inline fun <T>UiData<T>.onError(
+inline fun <T> UiData<T>.onError(
     action: (UiData.Error<T>) -> Unit
 ): UiData<T> = apply {
     if(this is UiData.Error)
@@ -90,7 +90,7 @@ inline fun <T>UiData<T>.onError(
     }
 }
 
-inline fun <T>UiData<T>.onLoading(
+inline fun <T> UiData<T>.onLoading(
     action: (UiData.Loading<T>) -> Unit
 ): UiData<T> = apply {
     if(this is UiData.Loading)
@@ -99,7 +99,7 @@ inline fun <T>UiData<T>.onLoading(
     }
 }
 
-inline fun <T>UiData<List<T>>.filteredIfDataExists(
+inline fun <T> UiData<List<T>>.filteredIfDataExists(
     predicate: (T) -> Boolean
 ): UiData<List<T>> {
     return when (this) {

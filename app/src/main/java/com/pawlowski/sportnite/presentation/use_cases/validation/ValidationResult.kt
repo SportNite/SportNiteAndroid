@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.use_cases.validation
 
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.UiText
 
 sealed class ValidationResult {
     object Success: ValidationResult()

@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.domain.models
 
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 
 data class AddGameOfferParams(
     val date: UiDate,

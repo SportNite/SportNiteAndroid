@@ -7,7 +7,7 @@ import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetInfoAboutMeUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetUserSportsUseCase
 import com.pawlowski.sportnite.presentation.use_cases.RefreshMeetingsUseCase
-import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container

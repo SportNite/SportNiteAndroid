@@ -25,8 +25,8 @@ import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersCol
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
-import com.pawlowski.sportnite.utils.dataOrNull
-import com.pawlowski.sportnite.utils.isLoading
+import com.pawlowski.utils.dataOrNull
+import com.pawlowski.utils.isLoading
 
 @Composable
 fun MyMeetingsScreen(

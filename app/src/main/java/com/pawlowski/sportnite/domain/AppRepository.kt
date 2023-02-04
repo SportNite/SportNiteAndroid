@@ -19,6 +19,7 @@ import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.presentation.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.utils.*
+import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.ensureActive
@@ -419,7 +420,7 @@ class AppRepository @Inject constructor(
 
             response?.let {
                 Resource.Success(mapper(it))
-            }?:Resource.Error(defaultRequestError)
+            }?: Resource.Error(defaultRequestError)
         }
     }
 }

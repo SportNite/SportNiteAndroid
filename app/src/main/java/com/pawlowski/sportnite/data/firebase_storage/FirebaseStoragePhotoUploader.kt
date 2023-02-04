@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import com.google.firebase.storage.FirebaseStorage
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
 import java.util.*

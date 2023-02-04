@@ -25,7 +25,7 @@ import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.IPlayerDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.PlayerDetailsViewModel
-import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.utils.dataOrNull
 
 
 @Composable

@@ -9,7 +9,7 @@ import com.pawlowski.sportnite.fragment.OfferFragment
 import com.pawlowski.sportnite.presentation.mappers.toPlayer
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.*
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.Period

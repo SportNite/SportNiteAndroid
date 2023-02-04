@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -9,17 +9,17 @@ import java.time.format.DateTimeFormatter
 class UiDate(val offsetDateTimeDate: OffsetDateTime) {
 
     companion object {
-        fun dateTimeFormatter(): DateTimeFormatter
+        private fun dateTimeFormatter(): DateTimeFormatter
         {
             return DateTimeFormatter.ofPattern("dd.MM.u HH:mm")
         }
 
-        fun timeFormatter(): DateTimeFormatter
+        private fun timeFormatter(): DateTimeFormatter
         {
             return DateTimeFormatter.ofPattern("HH:mm")
         }
 
-        fun dateFormatter(): DateTimeFormatter
+        private fun dateFormatter(): DateTimeFormatter
         {
             return DateTimeFormatter.ofPattern("dd.MM.u")
         }

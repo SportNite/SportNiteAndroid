@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 import android.content.Context
 import androidx.annotation.StringRes

@@ -31,7 +31,7 @@ import com.pawlowski.sportnite.presentation.view_models_related.account_details_
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.IAccountDetailsScreenViewModel
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)

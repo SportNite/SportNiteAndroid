@@ -8,7 +8,10 @@ import com.pawlowski.sportnite.presentation.mappers.parse
 import com.pawlowski.sportnite.presentation.models.AdvanceLevel
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
-import com.pawlowski.sportnite.utils.*
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
+import com.pawlowski.utils.dataOrNull
+import com.pawlowski.utils.messageOrNull
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -168,7 +171,7 @@ class UserInfoUpdateCache @Inject constructor(
 
                 Resource.Success(progress)
 
-            }?:Resource.Error(result.messageOrNull()?:UiText.NonTranslatable(""))
+            }?: Resource.Error(result.messageOrNull()?: UiText.NonTranslatable(""))
 
         }
     }

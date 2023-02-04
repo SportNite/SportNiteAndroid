@@ -13,8 +13,8 @@ import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.utils.Resource
-import com.pawlowski.sportnite.utils.onError
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.onError
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi

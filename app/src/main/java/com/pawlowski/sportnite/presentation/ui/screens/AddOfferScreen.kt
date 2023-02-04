@@ -21,7 +21,7 @@ import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 

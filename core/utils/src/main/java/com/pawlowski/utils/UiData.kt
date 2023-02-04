@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 sealed class UiData<T> {
     class Loading<T>: UiData<T>()

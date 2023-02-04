@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
-import com.pawlowski.sportnite.utils.UiDate
-import com.pawlowski.sportnite.utils.UiText
+import com.pawlowski.utils.UiDate
+import com.pawlowski.utils.UiText
 
 data class AccountDetailsScreenUiState(
     val nameAndSurnameInput: String = "",

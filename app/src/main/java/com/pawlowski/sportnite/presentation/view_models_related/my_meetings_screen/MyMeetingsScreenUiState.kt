@@ -3,7 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_scr
 import com.pawlowski.sportnite.presentation.models.GameOffer
 import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
 import com.pawlowski.sportnite.presentation.models.Meeting
-import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.utils.UiData
 
 data class MyMeetingsScreenUiState(
     val offersToAccept: UiData<List<GameOfferToAccept>>,

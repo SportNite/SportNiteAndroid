@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.utils
+package com.pawlowski.utils
 
 sealed class Resource<T> {
     class Success<T>(val data: T): Resource<T>()

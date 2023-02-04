@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen
 
-import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.utils.UiData
 
 sealed class FullScreenListUiState {
     data class NormalState<T>(

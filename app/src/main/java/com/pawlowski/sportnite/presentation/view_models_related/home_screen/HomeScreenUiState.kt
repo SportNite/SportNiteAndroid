@@ -4,7 +4,7 @@ import com.pawlowski.sportnite.presentation.models.Meeting
 import com.pawlowski.sportnite.presentation.models.Sport
 import com.pawlowski.sportnite.presentation.models.User
 import com.pawlowski.sportnite.presentation.models.WeatherForecastDay
-import com.pawlowski.sportnite.utils.UiData
+import com.pawlowski.utils.UiData
 
 data class HomeScreenUiState(
     val user: User? = null,

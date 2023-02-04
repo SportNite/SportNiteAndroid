@@ -31,8 +31,8 @@ import com.pawlowski.sportnite.presentation.view_models_related.home_screen.Home
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
-import com.pawlowski.sportnite.utils.UiData
-import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.utils.UiData
+import com.pawlowski.utils.dataOrNull
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable

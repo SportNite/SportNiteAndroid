@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
 import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 import org.orbitmvi.orbit.ContainerHost
 
 interface IAddOfferScreenViewModel: ContainerHost<AddOfferScreenUiState, AddOfferScreenSideEffect> {

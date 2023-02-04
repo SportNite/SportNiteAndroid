@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.IMeetingDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.MeetingDetailsViewModel
-import com.pawlowski.sportnite.utils.dataOrNull
+import com.pawlowski.utils.dataOrNull
 
 @Composable
 fun MeetingDetailsScreen(

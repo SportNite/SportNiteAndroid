@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.models
 
-import com.pawlowski.sportnite.utils.UiDate
+import com.pawlowski.utils.UiDate
 
 data class Meeting(
     val opponent: Player,
