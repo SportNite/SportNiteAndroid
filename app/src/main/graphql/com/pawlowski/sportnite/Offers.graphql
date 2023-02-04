@@ -1,3 +1,5 @@
+
+
 query Offers($offerFilterInput: [OfferFilterInput!], $after: String, $first: Int) {
   offers(where: {
     isAvailable: {
@@ -12,21 +14,12 @@ query Offers($offerFilterInput: [OfferFilterInput!], $after: String, $first: Int
    first: $first
      ) {
     nodes {
-      offerId,
-      userId,
-      description,
-      dateTime,
-      sport,
-      isAvailable,
-      city,
-      street,
-      myResponse {
-        responseId
-      },
+      ...offerFragment,
       user {
-        name,
-        userId,
-        firebaseUserId
+         ...mediumUserFragment
+      },
+      myResponse {
+          responseId
       }
     },
      pageInfo {

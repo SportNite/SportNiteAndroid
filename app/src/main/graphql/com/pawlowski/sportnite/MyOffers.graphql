@@ -9,18 +9,9 @@ query MyOffers($filters: [OfferFilterInput!], $after: String, $first: Int) {
   first: $first
  ) {
     nodes {
-      offerId,
-      userId,
-      description,
-      dateTime,
-      sport,
-      isAvailable,
-      city,
-      street,
+      ...offerFragment,
       user {
-        name
-        userId,
-        firebaseUserId
+        ...mediumUserFragment
       }
     },
     pageInfo {

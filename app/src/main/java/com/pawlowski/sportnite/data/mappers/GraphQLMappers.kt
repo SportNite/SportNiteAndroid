@@ -3,6 +3,8 @@ package com.pawlowski.sportnite.data.mappers
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*
+import com.pawlowski.sportnite.fragment.MediumUserFragment
+import com.pawlowski.sportnite.fragment.OfferFragment
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 import com.pawlowski.sportnite.type.*
@@ -63,32 +65,39 @@ fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
     )
 }
 
+fun OfferFragment.toGameOffer(userFragment: MediumUserFragment, myResponseIdIfExists: String? = null): GameOffer {
+    return this.let {
+        GameOffer(
+            city = it.city,
+            placeOrAddress = it.street,
+            additionalNotes = it.description,
+            offerUid = it.offerId.toString(),
+            sport = it.sport.toSport(),
+            date = UiDate(OffsetDateTime.parse(it.dateTime.toString())),
+            owner = userFragment.toPlayer(),
+            myResponseIdIfExists = myResponseIdIfExists
+        )
+    }
+}
+
+fun MediumUserFragment.toPlayer(): Player {
+    val ageInYears = Period.between(
+        OffsetDateTime.parse(this.birthDate.toString()).toLocalDate(),
+        LocalDate.now()
+    ).years
+    return Player(
+        uid = this.firebaseUserId,
+        name = this.name,
+        photoUrl = this.avatar,
+        phoneNumber = this.phone?:"",
+        age = ageInYears
+    )
+}
+
 fun OffersQuery.Node.toGameOffer(): GameOffer {
-    return GameOffer(
-        city = this.city,
-        placeOrAddress = this.street,
-        additionalNotes = this.description,
-        offerUid = this.offerId.toString(),
-        sport = this.sport.toSport(),
-        date = UiDate(OffsetDateTime.parse(this.dateTime.toString())),
-        owner = this.user.toPlayer(),
-        myResponseIdIfExists = this.myResponse?.responseId?.toString()
-    )
+    return this.offerFragment.toGameOffer(this.user.mediumUserFragment, this.myResponse?.responseId?.toString())
 }
 
-fun OffersQuery.User.toPlayer(): Player {
-    return getPlayerForPreview().copy(
-        uid = this.firebaseUserId,
-        name = this.name,
-    )
-}
-
-fun MyOffersQuery.User.toPlayer(): Player {
-    return getPlayerForPreview().copy(
-        uid = this.firebaseUserId,
-        name = this.name,
-    )
-}
 
 fun MyOffersQuery.Data.toGameOfferList(): List<GameOffer>? {
     return this.myOffers?.nodes?.map {
@@ -97,15 +106,7 @@ fun MyOffersQuery.Data.toGameOfferList(): List<GameOffer>? {
 }
 
 fun MyOffersQuery.Node.toGameOffer(): GameOffer {
-    return GameOffer(
-        city = this.city,
-        placeOrAddress = this.street,
-        additionalNotes = this.description,
-        offerUid = this.offerId.toString(),
-        sport = this.sport.toSport(),
-        date = UiDate(OffsetDateTime.parse(this.dateTime.toString())),
-        owner = this.user.toPlayer()
-    )
+    return this.offerFragment.toGameOffer(userFragment = this.user.mediumUserFragment, myResponseIdIfExists = null)
 }
 
 fun ResponsesQuery.User.toPlayer(): Player {
