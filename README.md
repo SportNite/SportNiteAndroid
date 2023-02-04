@@ -1,7 +1,23 @@
 # SportNiteAndroid
+<div>
+<img src="https://cdn.freebiesupply.com/logos/large/2x/kotlin-1-logo-png-transparent.png" height="100"/>
+<img src="https://2.bp.blogspot.com/--asT-h3qn_s/X0aLtRWOesI/AAAAAAAAPkY/iOkd702WAts7_4dIXlzQhyiJWGaL5f9CgCLcBGAsYHQ/s1600/JetpackCompose_logo.png" height="100"/>
+<img src="https://i2.wp.com/programmingwithmosh.com/wp-content/uploads/2019/07/GraphQL_Logo.svg.png?fit=2000%2C2000&ssl=1" height="100"/>
+
+</div>
 
 ## About
 SportNite Android app written in Kotlin and Jetpack Compose. Connects with GraphQL Server, uses Firebase for Authentication (with Oauth 2)
+
+
+<div>
+
+[![Latest Release](https://img.shields.io/github/v/release/SportNite/SportNiteAndroid.svg?logo=github&style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/releases/latest)
+[![Language](https://img.shields.io/github/languages/top/SportNite/SportNiteAndroid?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid)
+[![License: BSD-3](https://img.shields.io/badge/License-BSD3-blue.svg?style=for-the-badge)](https://github.com/SportNite/SportNiteAndroid/blob/master/LICENSE.md)
+
+  
+</div>
 
 ## Specification
 - written in Kotlin and Jetpack Compose
@@ -14,6 +30,7 @@ SportNite Android app written in Kotlin and Jetpack Compose. Connects with Graph
 - Kotlin Coroutines
 - Coroutines Flow
 - Orbit MVI
+- Apollo GraphQL
 - Firebase Auth
 - Firebase Storage
 - Store
@@ -101,6 +118,25 @@ qodana scan --show-report
 ```
 
 <img width="1552" alt="qodana" src="https://user-images.githubusercontent.com/21008961/212775703-4be8b068-4871-4111-9b1f-49f7eaf578b9.png">
+
+
+## Screenshots
+
+| Home Screen | My Meetings Screen | Sign In Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_home.jpg" width="250"/> | <img src="screenshots/ss_my_meetings.jpg" width="250"/> | <img src="screenshots/ss_sign_in.jpg" width="250"/> |
+
+| Choose Sports Screen | Choose Advance Level Screen | Account Details Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_choose_sports.jpg" width="250"/> | <img src="screenshots/ss_choose_level.jpg" width="250"/> | <img src="screenshots/ss_edit_profile.jpg" width="250"/> |
+
+| Find Players Screen | Sport Screen | Add Offer Screen |
+| :-------- | :------- | :------- |
+| <img src="screenshots/ss_find_players.jpg" width="250"/> | <img src="screenshots/ss_sport_screen.jpg" width="250"/> | <img src="screenshots/ss_add_offer.jpg" width="250"/> |
+
+## Analiza ryzyka
+![Frame 17](https://user-images.githubusercontent.com/21008961/213116855-61c12bc0-1b88-42e8-a3ee-e416bd406108.png)
+
 
 
 ## License
