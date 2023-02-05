@@ -47,6 +47,7 @@ App is based on MVI pattern. It consists of 3 layers:
 - Data - responsible for accessing data from api or from local storage (in our project memory or SharedPreferences) 
 
 ## Code organization
+Some infomation can be outdated. App is being refactored to multi modules
 #### `SportNiteAndroid/app/src/main` - package with production code
 ##### `/graphql` - package with graphql schema (.json extension) and mutations and queries (.graphql extensions)
 ##### `/res` - package with app resources like icons and images, translated texts
@@ -134,8 +135,6 @@ qodana scan --show-report
 | :-------- | :------- | :------- |
 | <img src="screenshots/ss_find_players.jpg" width="250"/> | <img src="screenshots/ss_sport_screen.jpg" width="250"/> | <img src="screenshots/ss_add_offer.jpg" width="250"/> |
 
-## Analiza ryzyka
-![Frame 17](https://user-images.githubusercontent.com/21008961/213116855-61c12bc0-1b88-42e8-a3ee-e416bd406108.png)
 
 
 
