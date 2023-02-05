@@ -12,8 +12,6 @@ import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.local.*
-import com.pawlowski.network.GraphQLService
-import com.pawlowski.network.IGraphQLService
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.presentation.models.*
@@ -79,12 +77,6 @@ class AppModule {
     {
         return appContext.contentResolver
     }
-
-    @Singleton
-    @Provides
-    fun graphqlService(graphQLService: GraphQLService): IGraphQLService = graphQLService
-
-
 
 }
 

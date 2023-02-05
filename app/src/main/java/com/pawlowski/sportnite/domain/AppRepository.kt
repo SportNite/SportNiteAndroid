@@ -14,7 +14,7 @@ import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploade
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.network.IGraphQLService
+import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.defaultRequestError

@@ -1,4 +1,4 @@
-package com.pawlowski.network
+package com.pawlowski.network.data
 
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*

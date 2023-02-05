@@ -2,7 +2,7 @@ package com.pawlowski.sportnite.data.auth
 
 import android.content.SharedPreferences
 import com.pawlowski.models.mappers.getSportFromSportId
-import com.pawlowski.network.IGraphQLService
+import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.models.mappers.getAdvanceLevelFromParsedString
 import com.pawlowski.models.mappers.parse
 import com.pawlowski.models.AdvanceLevel

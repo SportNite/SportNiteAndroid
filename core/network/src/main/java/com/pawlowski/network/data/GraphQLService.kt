@@ -1,4 +1,4 @@
-package com.pawlowski.network
+package com.pawlowski.network.data
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
@@ -6,6 +6,7 @@ import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*
+import com.pawlowski.network.*
 import com.pawlowski.network.type.*
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,7 +14,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GraphQLService @Inject constructor(
+internal class GraphQLService @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : IGraphQLService {
