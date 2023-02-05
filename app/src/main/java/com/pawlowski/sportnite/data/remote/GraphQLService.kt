@@ -19,7 +19,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GraphQLService @Inject constructor(
+internal class GraphQLService @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : IGraphQLService {

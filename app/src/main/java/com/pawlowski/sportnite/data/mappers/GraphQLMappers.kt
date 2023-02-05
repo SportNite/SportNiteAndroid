@@ -14,7 +14,7 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.Period
 
-fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
+internal fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
     return if (nameSearch == null && sportFilter == null && level == null)
         Optional.absent()
     else {
@@ -55,7 +55,7 @@ fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
     }
 }
 
-fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
+internal fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
     return CreateOfferInput(
         description = Optional.present(this.additionalNotes),
         dateTime = this.date.offsetDateTimeDate.toString(),
@@ -66,7 +66,7 @@ fun AddGameOfferParams.toCreateOfferInput(): CreateOfferInput {
     )
 }
 
-fun OfferFragment.toGameOffer(userFragment: MediumUserFragment, myResponseIdIfExists: String? = null): GameOffer {
+internal fun OfferFragment.toGameOffer(userFragment: MediumUserFragment, myResponseIdIfExists: String? = null): GameOffer {
     return this.let {
         GameOffer(
             city = it.city,
@@ -81,7 +81,7 @@ fun OfferFragment.toGameOffer(userFragment: MediumUserFragment, myResponseIdIfEx
     }
 }
 
-fun MediumUserFragment.toPlayer(): Player {
+internal fun MediumUserFragment.toPlayer(): Player {
     val ageInYears = Period.between(
         OffsetDateTime.parse(this.birthDate.toString()).toLocalDate(),
         LocalDate.now()
@@ -95,32 +95,32 @@ fun MediumUserFragment.toPlayer(): Player {
     )
 }
 
-fun OffersQuery.Node.toGameOffer(): GameOffer {
+internal fun OffersQuery.Node.toGameOffer(): GameOffer {
     return this.offerFragment.toGameOffer(this.user.mediumUserFragment, this.myResponse?.responseId?.toString())
 }
 
 
-fun MyOffersQuery.Data.toGameOfferList(): List<GameOffer>? {
+internal fun MyOffersQuery.Data.toGameOfferList(): List<GameOffer>? {
     return this.myOffers?.nodes?.map {
         it.toGameOffer()
     }
 }
 
-fun MyOffersQuery.Node.toGameOffer(): GameOffer {
+internal fun MyOffersQuery.Node.toGameOffer(): GameOffer {
     return this.offerFragment.toGameOffer(userFragment = this.user.mediumUserFragment, myResponseIdIfExists = null)
 }
 
-fun ResponsesQuery.User.toPlayer(): Player {
+internal fun ResponsesQuery.User.toPlayer(): Player {
     return this.mediumUserFragment.toPlayer()
 }
 
-fun OffersQuery.Data.toGameOfferList(): List<GameOffer>? {
+internal fun OffersQuery.Data.toGameOfferList(): List<GameOffer>? {
     return this.offers?.nodes?.mapNotNull {
         it?.toGameOffer()
     }
 }
 
-fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
+internal fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
     return GameOfferToAccept(
         offerToAcceptUid = this.responseId.toString(),
         from = this.user.toPlayer(),
@@ -136,7 +136,7 @@ fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
     )
 }
 
-fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
+internal fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
     return this.myOffers?.nodes?.flatMap { node ->
         node.responses.filter {
             it.status != ResponseStatus.APPROVED
@@ -146,7 +146,7 @@ fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
     }
 }
 
-fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
+internal fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
     return UpdateUserInput(
         name = Optional.present(name),
         availability = Optional.present(availability),
@@ -155,7 +155,7 @@ fun UserUpdateInfoParams.toUpdateUserInput(): UpdateUserInput {
     )
 }
 
-fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
+internal fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
     val opponent = if (user.mediumUserFragment.firebaseUserId != myUid)
         user.mediumUserFragment.toPlayer()
     else
@@ -178,13 +178,13 @@ fun IncomingOffersQuery.IncomingOffer.toMeeting(myUid: String): Meeting {
     )
 }
 
-fun UsersQuery.Data.toPlayersList(): List<Player>? {
+internal fun UsersQuery.Data.toPlayersList(): List<Player>? {
     return this.users?.nodes?.mapNotNull {
         it?.toPlayer()
     }
 }
 
-fun DetailsUserFragment.toPlayerDetails(): PlayerDetails {
+internal fun DetailsUserFragment.toPlayerDetails(): PlayerDetails {
 
     val ageInYears = Period.between(
         OffsetDateTime.parse(birthDate.toString()).toLocalDate(),
@@ -205,7 +205,7 @@ fun DetailsUserFragment.toPlayerDetails(): PlayerDetails {
     )
 }
 
-fun DetailsUserFragment.Skill.toAdvanceLevel(): AdvanceLevel {
+internal fun DetailsUserFragment.Skill.toAdvanceLevel(): AdvanceLevel {
     return if(nrtp != null) {
         AdvanceLevel.NRTP(nrtp)
     } else {
@@ -213,17 +213,17 @@ fun DetailsUserFragment.Skill.toAdvanceLevel(): AdvanceLevel {
     }
 }
 
-fun UsersQuery.Data.toPlayerDetails(): PlayerDetails? {
+internal fun UsersQuery.Data.toPlayerDetails(): PlayerDetails? {
     return this.users?.nodes?.get(0)?.detailsUserFragment?.toPlayerDetails()
 }
 
 
 
-fun UsersQuery.Node.toPlayer(): Player {
+internal fun UsersQuery.Node.toPlayer(): Player {
     return this.detailsUserFragment.toPlayerDetails().toPlayer()
 }
 
-fun futureOffersOfferFilterInput(): OfferFilterInput {
+internal fun futureOffersOfferFilterInput(): OfferFilterInput {
     return OfferFilterInput(
         dateTime = Optional.present(
             ComparableDateTimeOperationFilterInput(
@@ -233,7 +233,7 @@ fun futureOffersOfferFilterInput(): OfferFilterInput {
     )
 }
 
-fun historicalOffersOfferFilterInput(): OfferFilterInput {
+internal fun historicalOffersOfferFilterInput(): OfferFilterInput {
     return OfferFilterInput(
         dateTime = Optional.present(
             ComparableDateTimeOperationFilterInput(
@@ -243,7 +243,7 @@ fun historicalOffersOfferFilterInput(): OfferFilterInput {
     )
 }
 
-fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
+internal fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     return this.sportFilter?.let {
         Optional.present(
             listOf(
@@ -260,7 +260,7 @@ fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     }?:Optional.present(listOf(futureOffersOfferFilterInput()))
 }
 
-fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
+internal fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     return sportFilter?.let {
         Optional.present(
             listOf(
@@ -276,7 +276,7 @@ fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
     }?: Optional.absent()
 }
 
-fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
+internal fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
     return map {
         val sport = it.key.toSportType()
         SetSkillInput(
@@ -288,7 +288,7 @@ fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
 }
 
 
-fun Sport.toSportType(): SportType {
+internal fun Sport.toSportType(): SportType {
 
     return try {
         SportType.valueOf(sportId)
@@ -299,6 +299,6 @@ fun Sport.toSportType(): SportType {
     }
 }
 
-fun SportType.toSport(): Sport {
+internal fun SportType.toSport(): Sport {
     return getSportFromSportId(this.name)
 }
