@@ -1,8 +1,8 @@
 package com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.auth.AuthManager
-import com.pawlowski.sportnite.data.auth.AuthResponse
+import com.pawlowski.auth.IAuthManager
+import com.pawlowski.utils.AuthResponse
 import com.pawlowski.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EnterSignInCodeScreenViewModel @Inject constructor(
-    private val authManager: AuthManager,
+    private val authManager: IAuthManager,
 ): IEnterSignInCodeScreenViewModel, ViewModel() {
     override val container: Container<EnterSignInCodeUiState, EnterSignInCodeSideEffect> = container(
         initialState = EnterSignInCodeUiState(phoneNumber = "33333333"),

@@ -3,7 +3,7 @@ package com.pawlowski.sportnite.domain
 
 import com.dropbox.android.external.store4.Store
 import com.pawlowski.models.*
-import com.pawlowski.sportnite.data.auth.IAuthManager
+import com.pawlowski.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache

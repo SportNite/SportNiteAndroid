@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.auth.AuthManager
+import com.pawlowski.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache.RegistrationProgress.*
 import com.pawlowski.utils.onError
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
     private val userInfoUpdateCache: UserInfoUpdateCache,
-    private val authManager: AuthManager
+    private val authManager: IAuthManager
 ):IWaitingForUserInfoViewModel, ViewModel() {
 
     override val container: Container<WaitingForUserInfoUiState, WaitingForUserInfoSideEffect> = container(

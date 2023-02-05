@@ -1,9 +1,10 @@
-package com.pawlowski.sportnite.data.auth
+package com.pawlowski.auth
 
+import android.app.Activity
 import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.pawlowski.sportnite.MainActivity
+import com.pawlowski.utils.AuthResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.TimeUnit
@@ -11,9 +12,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthManager @Inject constructor(
+internal class AuthManager @Inject constructor(
     private val auth: FirebaseAuth,
-    mainActivity: MainActivity
+    mainActivity: Activity
 ): IAuthManager {
     private val tag = this::class.java.simpleName
 

@@ -1,7 +1,8 @@
-package com.pawlowski.sportnite.data.auth
+package com.pawlowski.auth
 
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.pawlowski.utils.AuthResponse
 import kotlinx.coroutines.flow.StateFlow
 
 interface IAuthManager {

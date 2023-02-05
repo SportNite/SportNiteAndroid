@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.auth
+package com.pawlowski.utils
 
 sealed class AuthResponse {
     object NotInitialized : AuthResponse()
