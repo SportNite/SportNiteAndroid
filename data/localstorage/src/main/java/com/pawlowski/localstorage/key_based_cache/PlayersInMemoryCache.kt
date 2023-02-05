@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.local
+package com.pawlowski.localstorage.key_based_cache
 
 import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.Player

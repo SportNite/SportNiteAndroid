@@ -6,15 +6,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
+import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.imageupload.IPhotoUploader
+import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.cache.IUserInfoUpdateCache
-import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
-import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,22 +24,24 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class AppRepository @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager,
-    private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
+    private val photoUploader: IPhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
     private val playersStore: Store<PlayersFilter, List<Player>>,
     private val offersStore: Store<OffersFilter, List<GameOffer>>,
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
-    private val meetingsInMemoryCache: MeetingsInMemoryCache,
-    private val offersInMemoryCache: OffersInMemoryCache,
-    private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache,
+    private val meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
+    @Named("other") private val offersInMemoryCache: OffersIntelligentInMemoryCache,
+    @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
+    private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
@@ -135,8 +137,10 @@ class AppRepository @Inject constructor(
     override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> = flow {
         //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
         emit(UiData.Loading())
-        meetingsInMemoryCache.observeFirstFromAnyKey {
-            it.meetingUid == meetingUid
+        meetingsInMemoryCache.observeData(key = null).map {
+            it.first { meeting ->
+                meeting.meetingUid == meetingUid
+            }
         }.collect {
             emit(UiData.Success(isFresh = true, data = it))
         }
@@ -237,47 +241,38 @@ class AppRepository @Inject constructor(
         return graphQLService.createOffer(gameParams)
             .onSuccess {
                 val paramsAsGameOffer = gameParams.toGameOffer(
-                    offerId = it!!,
+                    offerId = it,
                     playerName = userInfoUpdateCache.cachedUser.value?.userName?:""
                 )
 
-                offersInMemoryCache.addElement(
-                    key = OffersFilter(
-                        myOffers = true,
-                        sportFilter = null
-                    ),
+                myOffersInMemoryCache.upsertElement(
                     element = paramsAsGameOffer
                 )
-                /*offersInMemoryCache.addElement(
-                    key = OffersFilter(
-                        myOffers = true,
-                        sportFilter = gameParams.sport
-                    ),
-                    element = paramsAsGameOffer
-                )*/
+
             }.asUnitResource()
     }
 
     override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
         return graphQLService.sendOfferToAccept(offerUid)
             .onSuccess {
-                offersInMemoryCache.updateElements { _, offer ->
-                    if(offer.offerUid == offerUid)
-                    {
+                offersInMemoryCache.updateElementsIf(
+                    predicate = { offer ->
+                        offer.offerUid == offerUid
+                    },
+                    newValue = { offer ->
                         offer.copy(myResponseIdIfExists = it)
                     }
-                    else
-                        offer
-                }
+                )
+
             }
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
         return graphQLService.acceptOfferToAccept(offerToAcceptUid)
             .onSuccess {
-                offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
+                offersToAcceptMemoryCache.deleteElementsIf { it.offerToAcceptUid == offerToAcceptUid }
                 meetingsStore.fresh(MeetingsFilter(sportFilter = null))
-                //TODO: Add meeting to cache or refresh cache with sportFilter
+                //TODO: Add meeting to cache instead of refreshing?
             }
     }
 
@@ -288,7 +283,7 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
         val uploadedPhotoUri = params.photoUrl?.let {
-            val result = firebaseStoragePhotoUploader.uploadNewImage(
+            val result = photoUploader.uploadNewImage(
                 Uri.parse(it),
                 authManager.getCurrentUserUid()!!
             )
@@ -331,9 +326,7 @@ class AppRepository @Inject constructor(
         return withContext(ioDispatcher) {
             graphQLService.deleteMyOffer(offerId)
                 .onSuccess {
-                    offersInMemoryCache.deleteElement(OffersFilter(sportFilter = null, myOffers = true)) {
-                        it.offerUid == offerId
-                    }
+                    myOffersInMemoryCache.deleteElementsIf { it.offerUid == offerId }
                 }
         }
     }
@@ -342,14 +335,15 @@ class AppRepository @Inject constructor(
         return withContext(ioDispatcher) {
             graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
                 .onSuccess {
-                    offersInMemoryCache.updateElements { _, offer ->
-                        if(offer.myResponseIdIfExists == offerToAcceptUid)
-                        {
+                    offersInMemoryCache.updateElementsIf(
+                        predicate = {offer ->
+                            offer.myResponseIdIfExists == offerToAcceptUid
+                        },
+                        newValue = { offer ->
                             offer.copy(myResponseIdIfExists = null)
                         }
-                        else
-                            offer
-                    }
+                    )
+
                 }
         }
     }

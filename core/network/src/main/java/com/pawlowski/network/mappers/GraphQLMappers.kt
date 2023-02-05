@@ -1,4 +1,4 @@
-package com.pawlowski.network
+package com.pawlowski.network.mappers
 
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
@@ -9,6 +9,7 @@ import com.pawlowski.network.fragment.MediumUserFragment
 import com.pawlowski.network.fragment.OfferFragment
 import com.pawlowski.network.type.*
 import com.pawlowski.models.mappers.toPlayer
+import com.pawlowski.network.*
 
 import com.pawlowski.utils.UiDate
 import java.time.LocalDate

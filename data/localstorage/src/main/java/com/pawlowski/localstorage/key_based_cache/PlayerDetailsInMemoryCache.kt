@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.local
+package com.pawlowski.localstorage.key_based_cache
 
 import com.pawlowski.models.PlayerDetails
 import javax.inject.Inject
