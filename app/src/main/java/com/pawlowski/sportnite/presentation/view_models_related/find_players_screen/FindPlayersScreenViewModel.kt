@@ -3,7 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.find_players_sc
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedPlayersUseCase

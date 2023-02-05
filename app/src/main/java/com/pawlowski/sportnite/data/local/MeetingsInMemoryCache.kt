@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.data.local
 
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
+import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.Meeting
 import javax.inject.Inject
 import javax.inject.Singleton

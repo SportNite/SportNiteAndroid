@@ -3,9 +3,9 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*

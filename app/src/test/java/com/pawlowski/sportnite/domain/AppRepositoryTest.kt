@@ -10,9 +10,9 @@ import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.onError

@@ -5,9 +5,9 @@ import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
+import com.pawlowski.models.params_models.*
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.*
 import com.pawlowski.utils.PaginationPage
@@ -220,11 +220,11 @@ class GraphQLService @Inject constructor(
         }
     }
 
-    override suspend fun updateAdvanceLevelInfo(setSkillInput: SetSkillInput): Resource<Unit> {
+    override suspend fun updateAdvanceLevelInfo(level: Pair<Sport, AdvanceLevel>): Resource<Unit> {
         return withContext(ioDispatcher) {
             executeApolloMutation(
                 request = {
-                    apolloClient.mutation(SetSkillMutation(setSkillInput)).execute()
+                    apolloClient.mutation(SetSkillMutation(level.toSetSkillInput())).execute()
                 }
             ).asUnitResource()
         }

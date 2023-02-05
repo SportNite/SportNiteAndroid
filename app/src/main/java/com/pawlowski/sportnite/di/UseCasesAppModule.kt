@@ -3,9 +3,9 @@ package com.pawlowski.sportnite.di
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.fresh
 import com.pawlowski.sportnite.domain.IAppRepository
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Meeting

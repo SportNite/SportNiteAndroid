@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.domain.models
+package com.pawlowski.models.params_models
 
 import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiDate

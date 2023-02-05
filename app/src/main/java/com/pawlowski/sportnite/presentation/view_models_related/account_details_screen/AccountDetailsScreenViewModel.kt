@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.domain.models.UserUpdateInfoParams
+import com.pawlowski.models.params_models.UserUpdateInfoParams
 import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
 import com.pawlowski.sportnite.utils.*
 import com.pawlowski.utils.UiDate
@@ -69,12 +69,14 @@ class AccountDetailsScreenViewModel @Inject constructor(
             return@intent
         }
 
-        val result = updateUserInfoUseCase(UserUpdateInfoParams(
+        val result = updateUserInfoUseCase(
+            UserUpdateInfoParams(
             name = currentState.nameAndSurnameInput.trim(),
             birthDate = currentState.dateOfBirthInput,
             availability = currentState.timeAvailabilityInput.trim(),
             photoUrl = currentState.photo
-        ))
+        )
+        )
 
 
         result.onSuccess {

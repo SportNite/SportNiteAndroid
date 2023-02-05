@@ -2,8 +2,8 @@ package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
+import com.pawlowski.models.params_models.*
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.fragment.DetailsUserFragment
 import com.pawlowski.sportnite.fragment.MediumUserFragment
 import com.pawlowski.sportnite.fragment.OfferFragment
@@ -29,7 +29,7 @@ internal fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
                 ),
             )
         }
-        val sportFilter = sportFilter?.let {
+        val sportFilter = sportFilter?.let { filter ->
             UserFilterInput(
                 skills = Optional.present(
                     value = ListFilterInputTypeOfSkillFilterInput(
@@ -37,7 +37,7 @@ internal fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
                             SkillFilterInput(
                                 sport = Optional.present(
                                     SportTypeOperationFilterInput(
-                                        eq = Optional.present(sportFilter.toSportType())
+                                        eq = Optional.present(filter.toSportType())
                                     )
                                 ),
                                 and = Optional.presentIfNotNull(level?.let {
@@ -261,13 +261,13 @@ internal fun OffersFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?
 }
 
 internal fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput>?> {
-    return sportFilter?.let {
+    return sportFilter?.let { filter ->
         Optional.present(
             listOf(
                 OfferFilterInput(
                     sport = Optional.present(
                         SportTypeOperationFilterInput(
-                            eq = Optional.present(sportFilter.toSportType())
+                            eq = Optional.present(filter.toSportType())
                         )
                     )
                 )
@@ -276,15 +276,16 @@ internal fun MeetingsFilter.toOfferFilterInput(): Optional<List<OfferFilterInput
     }?: Optional.absent()
 }
 
-internal fun Map<Sport, AdvanceLevel>.toSetSkillInput(): List<SetSkillInput> {
-    return map {
-        val sport = it.key.toSportType()
+internal fun Pair<Sport, AdvanceLevel>.toSetSkillInput(): SetSkillInput {
+    val sport = first.toSportType()
+    return second.let {
         SetSkillInput(
             sport = sport,
-            nrtp = if(it.value is AdvanceLevel.NRTP) Optional.present((it.value as AdvanceLevel.NRTP).nrtpLevel) else Optional.absent(),
-            level = if(it.value is AdvanceLevel.DefaultLevel) Optional.present((it.value as AdvanceLevel.DefaultLevel).level.toDouble()) else Optional.absent()
+            nrtp = if(it is AdvanceLevel.NRTP) Optional.present(it.nrtpLevel) else Optional.absent(),
+            level = if(it is AdvanceLevel.DefaultLevel) Optional.present(it.level.toDouble()) else Optional.absent()
         )
     }
+
 }
 
 

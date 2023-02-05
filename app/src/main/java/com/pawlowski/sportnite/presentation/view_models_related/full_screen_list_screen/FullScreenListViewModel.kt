@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.domain.models.OffersFilter
+import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
@@ -75,10 +75,12 @@ class FullScreenListViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedOffers = dataTypeFlow.flatMapLatest { type ->
         if(type is FullScreenDataType.OffersData)
-            getPagedOffersUseCase(OffersFilter(
+            getPagedOffersUseCase(
+                OffersFilter(
                 sportFilter = sportFilter,
                 myOffers = false
-            )).cachedIn(viewModelScope)
+            )
+            ).cachedIn(viewModelScope)
         else
             flowOf()
     }

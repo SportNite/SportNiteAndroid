@@ -10,9 +10,9 @@ import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.local.*
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.dataOrNull
 import dagger.Module

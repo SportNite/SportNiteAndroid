@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.mappers
 
 import com.pawlowski.models.*
-import com.pawlowski.sportnite.domain.models.AddGameOfferParams
+import com.pawlowski.models.params_models.AddGameOfferParams
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 
 fun GameOfferToAccept.asGameOffer(): GameOffer {
