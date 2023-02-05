@@ -5,7 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-    id "com.apollographql.apollo3"
+    //id "com.apollographql.apollo3"
 }
 
 android {
@@ -53,10 +53,10 @@ android {
     }
 }
 
-apollo {
-    generateKotlinModels.set(true)
-    packageName.set("com.pawlowski.sportnite")
-}
+//apollo {
+//    generateKotlinModels.set(true)
+//    packageName.set("com.pawlowski.sportnite")
+//}
 
 dependencies {
 
@@ -186,4 +186,7 @@ dependencies {
 
     //Modules
     implementation project(":core:utils")
+    implementation project(":core:models")
+    implementation project(":core:network")
+    implementation project(":core:auth")
 }

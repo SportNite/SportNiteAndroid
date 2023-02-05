@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.Sport
 
 @Composable
 fun SportInputField(

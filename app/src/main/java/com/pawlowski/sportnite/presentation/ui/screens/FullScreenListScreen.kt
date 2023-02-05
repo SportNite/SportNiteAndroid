@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.pawlowski.sportnite.data.mappers.availableSports
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.mappers.availableSports
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenDataType
 import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListSideEffect

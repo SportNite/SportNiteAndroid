@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
 
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 
 data class FindPlayersScreenUiState(
     val searchInput: String = "",

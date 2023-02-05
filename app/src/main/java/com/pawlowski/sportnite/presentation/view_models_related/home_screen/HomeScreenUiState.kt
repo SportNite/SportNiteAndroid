@@ -1,9 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.home_screen
 
-import com.pawlowski.sportnite.presentation.models.Meeting
-import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.models.User
-import com.pawlowski.sportnite.presentation.models.WeatherForecastDay
+import com.pawlowski.models.Meeting
+import com.pawlowski.models.Sport
+import com.pawlowski.models.User
+import com.pawlowski.models.WeatherForecastDay
 import com.pawlowski.utils.UiData
 
 data class HomeScreenUiState(

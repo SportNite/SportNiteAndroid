@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen
 
 import androidx.paging.PagingData
-import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.models.GameOffer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.orbitmvi.orbit.ContainerHost

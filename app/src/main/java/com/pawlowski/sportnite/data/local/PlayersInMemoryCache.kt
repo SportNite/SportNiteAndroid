@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.data.local
 
-import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.presentation.models.Player
+import com.pawlowski.models.params_models.PlayersFilter
+import com.pawlowski.models.Player
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -16,3 +16,6 @@ dependencyResolutionManagement {
 rootProject.name = "SportNite"
 include ':app'
 include ':core:utils'
+include ':core:models'
+include ':core:network'
+include ':core:auth'

@@ -5,17 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.mappers.getSportFromSportId
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
-import com.pawlowski.sportnite.utils.*
-import com.pawlowski.utils.dataOrNull
-import com.pawlowski.utils.onError
-import com.pawlowski.utils.onSuccess
+import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -51,7 +48,9 @@ class FullScreenListViewModel @Inject constructor(
                     add(offer.copy(myResponseIdIfExists = null))
                 }
             }
-            postSideEffect(FullScreenListSideEffect.ShowToastMessage(offerToAcceptDeletionSuccessText))
+            postSideEffect(FullScreenListSideEffect.ShowToastMessage(
+                offerToAcceptDeletionSuccessText
+            ))
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
         }
@@ -75,10 +74,12 @@ class FullScreenListViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedOffers = dataTypeFlow.flatMapLatest { type ->
         if(type is FullScreenDataType.OffersData)
-            getPagedOffersUseCase(OffersFilter(
+            getPagedOffersUseCase(
+                OffersFilter(
                 sportFilter = sportFilter,
                 myOffers = false
-            )).cachedIn(viewModelScope)
+            )
+            ).cachedIn(viewModelScope)
         else
             flowOf()
     }

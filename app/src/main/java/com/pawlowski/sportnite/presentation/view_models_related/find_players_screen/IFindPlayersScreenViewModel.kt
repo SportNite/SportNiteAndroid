@@ -1,9 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
 
 import androidx.paging.PagingData
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Player
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Player
+import com.pawlowski.models.Sport
 import kotlinx.coroutines.flow.Flow
 import org.orbitmvi.orbit.ContainerHost
 

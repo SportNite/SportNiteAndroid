@@ -4,14 +4,14 @@ import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
+import com.pawlowski.auth.IAuthManager
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.local.*
-import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
+import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.dataOrNull
 import dagger.Module
@@ -130,7 +130,7 @@ class StoresModule {
     fun meetingStore(
         graphQLService: IGraphQLService,
         meetingsInMemoryCache: MeetingsInMemoryCache,
-        authManager: AuthManager
+        authManager: IAuthManager
     ): Store<MeetingsFilter, List<Meeting>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
             val userUid = authManager.getCurrentUserUid()!!

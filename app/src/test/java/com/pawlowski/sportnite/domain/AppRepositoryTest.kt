@@ -2,16 +2,17 @@
 package com.pawlowski.sportnite.domain
 
 import com.dropbox.android.external.store4.Store
-import com.pawlowski.sportnite.data.auth.IAuthManager
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
+import com.pawlowski.auth.IAuthManager
+import com.pawlowski.models.*
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.params_models.PlayersFilter
+import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.domain.models.PlayersFilter
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.onError
@@ -29,7 +30,7 @@ internal class AppRepositoryTest {
 
 
     @RelaxedMockK
-    private lateinit var userInfoUpdateCacheMock: UserInfoUpdateCache
+    private lateinit var userInfoUpdateCacheMock: IUserInfoUpdateCache
     @RelaxedMockK
     private lateinit var authManager: IAuthManager
     @RelaxedMockK

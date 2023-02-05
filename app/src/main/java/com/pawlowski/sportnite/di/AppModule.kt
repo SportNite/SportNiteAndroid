@@ -1,5 +1,6 @@
 package com.pawlowski.sportnite.di
 
+import android.app.Activity
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
@@ -8,13 +9,9 @@ import com.apollographql.apollo3.ApolloClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
-import com.pawlowski.sportnite.data.auth.IAuthManager
+
 import com.pawlowski.sportnite.data.local.*
-import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.data.remote.GraphQLService
-import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.domain.AppRepository
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.presentation.models.*
@@ -42,15 +39,11 @@ class AppModule {
     fun firebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
-    fun mainActivity(): MainActivity
+    fun mainActivity(): Activity
     {
         //It's needed because Firebase Auth with phone number needs it...
         return MainActivity.getInstance()!!
     }
-
-    @Singleton
-    @Provides
-    fun authManager(authManager: AuthManager): IAuthManager = authManager
 
     @Singleton
     @Provides
@@ -80,12 +73,6 @@ class AppModule {
     {
         return appContext.contentResolver
     }
-
-    @Singleton
-    @Provides
-    fun graphqlService(graphQLService: GraphQLService): IGraphQLService = graphQLService
-
-
 
 }
 

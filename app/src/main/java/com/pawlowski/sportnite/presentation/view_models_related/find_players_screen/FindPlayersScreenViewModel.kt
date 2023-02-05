@@ -3,9 +3,9 @@ package com.pawlowski.sportnite.presentation.view_models_related.find_players_sc
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.params_models.PlayersFilter
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedPlayersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

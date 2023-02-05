@@ -1,14 +1,11 @@
 package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.domain.models.MeetingsFilter
-import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.models.params_models.MeetingsFilter
+import com.pawlowski.models.params_models.OffersFilter
+import com.pawlowski.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
-import com.pawlowski.sportnite.utils.*
-import com.pawlowski.utils.UiData
-import com.pawlowski.utils.onError
-import com.pawlowski.utils.onSuccess
+import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.Container
@@ -90,7 +87,9 @@ class MyMeetingsScreenViewModel @Inject constructor(
     override fun acceptOfferToAccept(offerToAcceptUid: String) = intent {
         val response = acceptOfferToAcceptUseCase(offerToAcceptUid)
         response.onSuccess {
-            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(offerToAcceptAcceptSuccessText))
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(
+                offerToAcceptAcceptSuccessText
+            ))
         }.onError { message, _ ->
             postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
 

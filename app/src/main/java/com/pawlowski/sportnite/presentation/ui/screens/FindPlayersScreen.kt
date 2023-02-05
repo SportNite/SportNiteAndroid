@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.data.mappers.availableSports
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.mappers.availableSports
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.PlayerCard
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog

@@ -2,9 +2,9 @@ package com.pawlowski.sportnite.presentation.view_models_related.choose_sports_s
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
-import com.pawlowski.sportnite.data.mappers.availableSports
-import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.utils.selectMinimumOneSport
+import com.pawlowski.models.mappers.availableSports
+import com.pawlowski.models.Sport
+import com.pawlowski.utils.selectMinimumOneSport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent

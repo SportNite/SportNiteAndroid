@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 
-import com.pawlowski.sportnite.presentation.models.*
+import com.pawlowski.models.*
 import com.pawlowski.utils.UiData
 
 data class SportScreenUiState(

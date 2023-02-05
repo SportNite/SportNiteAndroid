@@ -12,8 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.ui.utils.getGameOfferForPreview
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.mappers.getGameOfferForPreview
 
 @Composable
 fun GameOfferCard(

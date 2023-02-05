@@ -2,8 +2,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.account_details
 
 import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
 import com.pawlowski.sportnite.utils.*
-import com.pawlowski.utils.Resource
-import com.pawlowski.utils.UiDate
+import com.pawlowski.utils.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

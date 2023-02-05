@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.IPlayerDetailsViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.player_details.PlayerDetailsViewModel
 import com.pawlowski.utils.dataOrNull

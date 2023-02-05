@@ -4,25 +4,21 @@ import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Operation
 import com.dropbox.android.external.store4.*
-import com.pawlowski.sportnite.data.auth.IAuthManager
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
+import com.pawlowski.auth.IAuthManager
+import com.pawlowski.models.*
+import com.pawlowski.models.mappers.toGameOffer
+import com.pawlowski.models.params_models.*
+import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.mappers.toSetSkillInput
-import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.domain.models.*
-import com.pawlowski.sportnite.presentation.mappers.toGameOffer
-import com.pawlowski.sportnite.presentation.models.*
-import com.pawlowski.sportnite.utils.*
+import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -32,7 +28,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AppRepository @Inject constructor(
-    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager,
     private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
@@ -313,9 +309,9 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit> {
         return withContext(ioDispatcher) {
-            val isAllSuccess = levels.toSetSkillInput().map {
+            val isAllSuccess = levels.map {
                 async {
-                    graphQLService.updateAdvanceLevelInfo(it)
+                    graphQLService.updateAdvanceLevelInfo(it.toPair())
                 }
             }.all {
                 it.await() is Resource.Success
@@ -405,24 +401,6 @@ class AppRepository @Inject constructor(
         }
     }
 
-    private suspend fun <T : Operation.Data, D> executeApolloQuery(
-        request: suspend () -> ApolloResponse<T>,
-        mapper: (T) -> D
-    ): Resource<D> {
-        return withContext(ioDispatcher) {
-            val response = try {
-                request().dataAssertNoErrors
-            } catch (e: Exception) {
-                ensureActive()
-                e.printStackTrace()
-                null
-            }
-
-            response?.let {
-                Resource.Success(mapper(it))
-            }?: Resource.Error(defaultRequestError)
-        }
-    }
 }
 
 

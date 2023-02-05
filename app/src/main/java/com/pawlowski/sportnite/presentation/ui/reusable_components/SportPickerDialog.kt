@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.pawlowski.sportnite.data.mappers.availableSports
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.mappers.availableSports
+import com.pawlowski.models.Sport
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
