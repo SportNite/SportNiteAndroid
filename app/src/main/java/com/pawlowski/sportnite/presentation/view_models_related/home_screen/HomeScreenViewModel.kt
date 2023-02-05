@@ -25,7 +25,7 @@ class HomeScreenViewModel @Inject constructor(
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase
 ): IHomeScreenViewModel, ViewModel() {
     override val container: Container<HomeScreenUiState, HomeScreenSideEffect> = container(initialState = HomeScreenUiState(
-        upcomingMeetings = UiData.Success(true, getMeetingsListForPreview()),
+        upcomingMeetings = UiData.Loading(),
         user = null
     ),
     onCreate = {

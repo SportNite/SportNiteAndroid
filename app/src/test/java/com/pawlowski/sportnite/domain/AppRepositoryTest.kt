@@ -3,16 +3,16 @@ package com.pawlowski.sportnite.domain
 
 import com.dropbox.android.external.store4.Store
 import com.pawlowski.auth.IAuthManager
+import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
-import com.pawlowski.localstorage.key_based_cache.MeetingsInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.onError
@@ -48,7 +48,7 @@ internal class AppRepositoryTest {
     @RelaxedMockK
     private lateinit var meetingsStore: Store<MeetingsFilter, List<Meeting>>
     @RelaxedMockK
-    private lateinit var meetingsInMemoryCache: MeetingsInMemoryCache
+    private lateinit var meetingsInMemoryCache: MeetingsIntelligentInMemoryCache
     @RelaxedMockK
     private lateinit var offersInMemoryCache: OffersInMemoryCache
     @RelaxedMockK

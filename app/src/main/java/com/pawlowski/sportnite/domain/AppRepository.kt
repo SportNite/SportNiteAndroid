@@ -6,15 +6,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
+import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
 import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
-import com.pawlowski.localstorage.key_based_cache.MeetingsInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,7 +37,7 @@ class AppRepository @Inject constructor(
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
-    private val meetingsInMemoryCache: MeetingsInMemoryCache,
+    private val meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
     private val offersInMemoryCache: OffersInMemoryCache,
     private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache,
     private val graphQLService: IGraphQLService,
@@ -135,8 +135,10 @@ class AppRepository @Inject constructor(
     override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> = flow {
         //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
         emit(UiData.Loading())
-        meetingsInMemoryCache.observeFirstFromAnyKey {
-            it.meetingUid == meetingUid
+        meetingsInMemoryCache.observeData(key = null).map {
+            it.first { meeting ->
+                meeting.meetingUid == meetingUid
+            }
         }.collect {
             emit(UiData.Success(isFresh = true, data = it))
         }

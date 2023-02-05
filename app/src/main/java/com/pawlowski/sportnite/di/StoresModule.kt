@@ -5,6 +5,7 @@ import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
 import com.pawlowski.auth.IAuthManager
+import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.localstorage.key_based_cache.*
 import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
@@ -130,7 +131,7 @@ class StoresModule {
     @Provides
     fun meetingStore(
         graphQLService: IGraphQLService,
-        meetingsInMemoryCache: MeetingsInMemoryCache,
+        meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
         authManager: IAuthManager
     ): Store<MeetingsFilter, List<Meeting>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
@@ -142,16 +143,13 @@ class StoresModule {
                     it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
                 })
             },
-            writer = { key: MeetingsFilter, input: List<Meeting> ->
-                meetingsInMemoryCache.addManyElements(key, input)
-                {
-                    it.meetingUid
-                }
+            writer = { _: MeetingsFilter, input: List<Meeting> ->
+                meetingsInMemoryCache.upsertManyElements(input)
             },
             delete = { key: MeetingsFilter ->
                 meetingsInMemoryCache.deleteAllElementsWithKey(key)
             },
-            deleteAll = { meetingsInMemoryCache.deleteAllData() }
+            deleteAll = { meetingsInMemoryCache.clearAll() }
         )).build()
     }
 }

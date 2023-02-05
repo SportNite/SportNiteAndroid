@@ -34,13 +34,7 @@ open class IntelligentMemoryCache<V, K>(
         }
     }
 
-    override fun observeElements(key: K): Flow<List<V>> {
-        return _elementsFlow.map { elementsList ->
-            elementsList.filter {
-                idExtractor.doesElementBelongToKey(it, key)
-            }
-        }
-    }
+
 
     override fun deleteElement(element: V) {
         _elementsFlow.update { lastValue ->
@@ -51,6 +45,30 @@ open class IntelligentMemoryCache<V, K>(
                 }
             }
         }
+    }
+
+    override fun <T : Comparable<T>> observeData(key: K?, sortBy: ((V) -> T?)): Flow<List<V>> {
+        return _elementsFlow.map { elementsList ->
+            elementsList.filter {
+                key?.let { nonNullKey ->
+                    idExtractor.doesElementBelongToKey(it, nonNullKey)
+                }?:true
+            }.sortedBy(sortBy)
+        }
+    }
+
+    override fun deleteAllElementsWithKey(key: K) {
+        _elementsFlow.update { lastValue ->
+            lastValue.toMutableList().apply {
+                removeIf {
+                    idExtractor.doesElementBelongToKey(it, key)
+                }
+            }
+        }
+    }
+
+    override fun observeData(key: K?): Flow<List<V>> {
+        return observeData(key = key) { null }
     }
 
     override fun clearAll() {

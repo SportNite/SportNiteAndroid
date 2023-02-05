@@ -4,8 +4,11 @@ import com.pawlowski.localstorage.intelligent_cache.base.ElementIdAndKeyExtracto
 import com.pawlowski.localstorage.intelligent_cache.base.IntelligentMemoryCache
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.params_models.MeetingsFilter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MeetingsIntelligentInMemoryCache: IntelligentMemoryCache<Meeting, MeetingsFilter>(
+@Singleton
+class MeetingsIntelligentInMemoryCache @Inject constructor(): IntelligentMemoryCache<Meeting, MeetingsFilter>(
     idExtractor = object : ElementIdAndKeyExtractor<Meeting, MeetingsFilter>() {
         override fun extractId(element: Meeting): Any {
             return element.meetingUid
