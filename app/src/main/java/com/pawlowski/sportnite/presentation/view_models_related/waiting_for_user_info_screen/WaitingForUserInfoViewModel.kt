@@ -2,8 +2,8 @@ package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_use
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.auth.IAuthManager
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache.RegistrationProgress.*
+import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.cache.RegistrationProgress
 import com.pawlowski.utils.onError
 import com.pawlowski.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
-    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager
 ):IWaitingForUserInfoViewModel, ViewModel() {
 
@@ -37,19 +37,19 @@ class WaitingForUserInfoViewModel @Inject constructor(
         val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
         info.onSuccess {
             when (it) {
-                EVERYTHING_ADDED -> {
+                RegistrationProgress.EVERYTHING_ADDED -> {
                     postSideEffect(WaitingForUserInfoSideEffect.NavigateToHomeScreen)
                     reduce {
                         state.copy(isLoading = false, message = "Please wait...")
                     }
                 }
-                NO_INFO_ADDED -> {
+                RegistrationProgress.NO_INFO_ADDED -> {
                     postSideEffect(WaitingForUserInfoSideEffect.NavigateToAccountDetailsScreen)
                     reduce {
                         state.copy(isLoading = false, message = "Please wait...")
                     }
                 }
-                PROFILE_INFO_ADDED -> {
+                RegistrationProgress.PROFILE_INFO_ADDED -> {
                     postSideEffect(WaitingForUserInfoSideEffect.NavigateToChooseSportsScreen)
                     reduce {
                         state.copy(isLoading = false, message = "Please wait...")

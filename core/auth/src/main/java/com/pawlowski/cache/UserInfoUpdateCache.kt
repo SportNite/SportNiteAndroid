@@ -1,13 +1,13 @@
-package com.pawlowski.sportnite.data.auth
+package com.pawlowski.cache
 
 import android.content.SharedPreferences
-import com.pawlowski.models.mappers.getSportFromSportId
-import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.models.mappers.getAdvanceLevelFromParsedString
-import com.pawlowski.models.mappers.parse
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
 import com.pawlowski.models.User
+import com.pawlowski.models.mappers.getAdvanceLevelFromParsedString
+import com.pawlowski.models.mappers.getSportFromSportId
+import com.pawlowski.models.mappers.parse
+import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText
 import com.pawlowski.utils.dataOrNull
@@ -19,12 +19,13 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
-class UserInfoUpdateCache @Inject constructor(
+internal class UserInfoUpdateCache @Inject constructor(
     private val graphQLService: IGraphQLService,
     private val sharedPreferences: SharedPreferences,
     private val ioDispatcher: CoroutineDispatcher
-){
+) : IUserInfoUpdateCache {
     private companion object {
         const val USER_INFO_KEY = "userInfo"
         const val NAME_KEY = "name"
@@ -38,16 +39,17 @@ class UserInfoUpdateCache @Inject constructor(
         MutableStateFlow(getCachedUserFromPreferences())
     }
 
-    val cachedUser get() = _cachedUser.asStateFlow()
+    override val cachedUser get() = _cachedUser.asStateFlow()
 
     private val _cachedLevels: MutableStateFlow<Map<Sport, AdvanceLevel>?> by lazy {
         MutableStateFlow(getCachedLevelsFromPreferences())
     }
-    val cachedLevels get() = _cachedLevels.asStateFlow()
+    override val cachedLevels get() = _cachedLevels.asStateFlow()
 
-    suspend fun didUserAddInfo(userPhoneNumber: String): Resource<RegistrationProgress> {
+    override suspend fun didUserAddInfo(userPhoneNumber: String): Resource<RegistrationProgress> {
         return if(sharedPreferences.contains(USER_INFO_KEY) && sharedPreferences.contains(
-                LEVELS_INFO_KEY)) {
+                LEVELS_INFO_KEY
+            )) {
             val cachedUserValue = _cachedUser.value
             val cachedLevelsValue = _cachedLevels.value
             val result = if(cachedLevelsValue != null)
@@ -87,7 +89,7 @@ class UserInfoUpdateCache @Inject constructor(
         }
     }
 
-    fun saveInfoAboutAdvanceLevels(levels: Map<Sport, AdvanceLevel>) {
+    override fun saveInfoAboutAdvanceLevels(levels: Map<Sport, AdvanceLevel>) {
         sharedPreferences.edit()
             .putStringSet(SPORT_IDS_KEY, levels.keys.map { it.sportId }.toSet())
             .apply {
@@ -115,7 +117,7 @@ class UserInfoUpdateCache @Inject constructor(
         }
     }
 
-    fun markUserInfoAsSaved(user: User) {
+    override fun markUserInfoAsSaved(user: User) {
         sharedPreferences
             .edit()
             .putBoolean(USER_INFO_KEY, true)
@@ -126,7 +128,7 @@ class UserInfoUpdateCache @Inject constructor(
         _cachedUser.value = user
     }
 
-    fun deleteUserInfoCache() {
+    override fun deleteUserInfoCache() {
         _cachedUser.value = null
         _cachedLevels.value = null
         sharedPreferences
@@ -176,9 +178,4 @@ class UserInfoUpdateCache @Inject constructor(
         }
     }
 
-    enum class RegistrationProgress {
-        NO_INFO_ADDED,
-        PROFILE_INFO_ADDED,
-        EVERYTHING_ADDED
-    }
 }

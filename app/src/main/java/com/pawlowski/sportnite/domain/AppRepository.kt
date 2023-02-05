@@ -4,20 +4,18 @@ import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-
 import com.dropbox.android.external.store4.*
-import com.pawlowski.models.*
-import com.pawlowski.models.params_models.*
 import com.pawlowski.auth.IAuthManager
-import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
+import com.pawlowski.models.*
+import com.pawlowski.models.mappers.toGameOffer
+import com.pawlowski.models.params_models.*
+import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.SportObject
-import com.pawlowski.utils.defaultRequestError
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -30,7 +28,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AppRepository @Inject constructor(
-    private val userInfoUpdateCache: UserInfoUpdateCache,
+    private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager,
     private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
