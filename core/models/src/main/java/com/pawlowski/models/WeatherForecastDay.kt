@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.models
+package com.pawlowski.models
 
 import com.pawlowski.utils.UiDate
 

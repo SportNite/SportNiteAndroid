@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.dropbox.android.external.store4.*
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.data.auth.IAuthManager
 import com.pawlowski.sportnite.data.auth.UserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader

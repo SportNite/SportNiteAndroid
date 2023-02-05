@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.models
+package com.pawlowski.models
 
 data class GameOfferToAccept(
     val offer: GameOffer,

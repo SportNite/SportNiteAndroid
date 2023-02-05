@@ -3,8 +3,8 @@ package com.pawlowski.sportnite.presentation.view_models_related.choose_advance_
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
 import com.pawlowski.sportnite.data.mappers.getAvailableLevelsForSport
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
 import com.pawlowski.utils.UiText
 import com.pawlowski.utils.onError

@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.domain.models
 
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 
 data class PlayersFilter(
     val sportFilter: Sport? = null,

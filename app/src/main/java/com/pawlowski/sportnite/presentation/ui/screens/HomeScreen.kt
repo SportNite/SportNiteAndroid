@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.models.User
+import com.pawlowski.models.Sport
+import com.pawlowski.models.User
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard

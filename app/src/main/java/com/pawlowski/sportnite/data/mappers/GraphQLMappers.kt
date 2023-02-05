@@ -1,13 +1,13 @@
 package com.pawlowski.sportnite.data.mappers
 
 import com.apollographql.apollo3.api.Optional
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.domain.models.*
 import com.pawlowski.sportnite.fragment.DetailsUserFragment
 import com.pawlowski.sportnite.fragment.MediumUserFragment
 import com.pawlowski.sportnite.fragment.OfferFragment
 import com.pawlowski.sportnite.presentation.mappers.toPlayer
-import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.utils.UiDate
 import java.time.LocalDate

@@ -4,10 +4,10 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.mappers.*
 import com.pawlowski.sportnite.domain.models.*
-import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.sportnite.type.*
 import com.pawlowski.sportnite.utils.*
 import com.pawlowski.utils.PaginationPage
@@ -19,7 +19,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class GraphQLService @Inject constructor(
+class GraphQLService @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : IGraphQLService {

@@ -7,8 +7,8 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.pawlowski.sportnite.data.mappers.getSportFromSportId
 import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase

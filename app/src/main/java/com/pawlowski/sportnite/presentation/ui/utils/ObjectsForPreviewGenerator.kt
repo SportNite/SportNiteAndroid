@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.presentation.ui.utils
 
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.*
 import com.pawlowski.utils.UiDate
 import com.pawlowski.utils.UiText
 import java.time.OffsetDateTime

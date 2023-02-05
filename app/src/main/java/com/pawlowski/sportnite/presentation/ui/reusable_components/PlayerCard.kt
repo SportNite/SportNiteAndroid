@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.presentation.models.Player
+import com.pawlowski.models.Player
 import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 
 @Composable

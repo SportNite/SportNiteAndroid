@@ -5,9 +5,9 @@ import com.pawlowski.sportnite.data.mappers.getSportFromSportId
 import com.pawlowski.sportnite.data.remote.IGraphQLService
 import com.pawlowski.sportnite.presentation.mappers.getAdvanceLevelFromParsedString
 import com.pawlowski.sportnite.presentation.mappers.parse
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
-import com.pawlowski.sportnite.presentation.models.User
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
+import com.pawlowski.models.User
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText
 import com.pawlowski.utils.dataOrNull

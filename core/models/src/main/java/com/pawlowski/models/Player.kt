@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.models
+package com.pawlowski.models
 
 data class Player(
     val uid: String,

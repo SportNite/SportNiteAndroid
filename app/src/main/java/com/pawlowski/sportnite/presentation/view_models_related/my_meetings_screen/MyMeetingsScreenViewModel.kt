@@ -3,7 +3,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_scr
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.sportnite.utils.*
 import com.pawlowski.utils.UiData

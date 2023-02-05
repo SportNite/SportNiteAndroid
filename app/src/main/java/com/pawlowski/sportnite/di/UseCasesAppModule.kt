@@ -6,10 +6,10 @@ import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.domain.models.MeetingsFilter
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.GameOfferToAccept
-import com.pawlowski.sportnite.presentation.models.Meeting
-import com.pawlowski.sportnite.presentation.models.Player
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.GameOfferToAccept
+import com.pawlowski.models.Meeting
+import com.pawlowski.models.Player
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText

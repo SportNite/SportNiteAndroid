@@ -1,8 +1,8 @@
 package com.pawlowski.sportnite.data.mappers
 
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiText
 
 fun getSportFromSportId(sportId: String): Sport {

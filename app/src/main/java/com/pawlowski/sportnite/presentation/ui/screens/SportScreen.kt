@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.presentation.mappers.asGameOffer
-import com.pawlowski.sportnite.presentation.models.GameOffer
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.GameOffer
+import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
@@ -197,13 +197,11 @@ fun SportScreen(
                     offers = offersValueState.value.take(5),
                     headerText = "Oferty na grę",
                     headersPadding = PaddingValues(horizontal = 10.dp),
-                    onOfferTextButtonClick = {
-                        if(it.myResponseIdIfExists != null) {
-                            viewModel.deleteMyOfferToAccept(it.myResponseIdIfExists)
-                        }
-                        else
-                        {
-                            viewModel.sendGameOfferToAccept(it)
+                    onOfferTextButtonClick = { offer ->
+                        offer.myResponseIdIfExists?.let { myResponse ->
+                            viewModel.deleteMyOfferToAccept(myResponse)
+                        }?:run {
+                            viewModel.sendGameOfferToAccept(offer)
                         }
                     },
                     onSeeMoreClick = {

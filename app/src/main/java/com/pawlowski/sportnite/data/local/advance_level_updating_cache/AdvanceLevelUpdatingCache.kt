@@ -1,7 +1,7 @@
 package com.pawlowski.sportnite.data.local.advance_level_updating_cache
 
-import com.pawlowski.sportnite.presentation.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

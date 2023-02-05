@@ -1,6 +1,7 @@
 package com.pawlowski.sportnite.domain
 
 import androidx.paging.PagingData
+import com.pawlowski.models.*
 import com.pawlowski.sportnite.domain.models.AddGameOfferParams
 import com.pawlowski.sportnite.domain.models.OffersFilter
 import com.pawlowski.sportnite.domain.models.PlayersFilter

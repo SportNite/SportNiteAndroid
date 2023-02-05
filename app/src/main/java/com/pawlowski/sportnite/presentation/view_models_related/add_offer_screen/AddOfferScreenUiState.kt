@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiDate
 
 data class AddOfferScreenUiState(

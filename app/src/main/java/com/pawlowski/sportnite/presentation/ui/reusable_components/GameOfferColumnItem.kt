@@ -13,7 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pawlowski.sportnite.presentation.models.GameOffer
+import com.pawlowski.models.GameOffer
 
 fun LazyListScope.gameOffersColumnItem(
     offers: List<GameOffer>,

@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.presentation.models.Sport
+import com.pawlowski.models.Sport
 
 @Composable
 fun SportCard(
