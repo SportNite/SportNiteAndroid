@@ -1,17 +1,14 @@
-package com.pawlowski.sportnite.data.local
+package com.pawlowski.localstorage.key_based_cache
 
 import kotlinx.coroutines.flow.*
 
-abstract class InMemoryDataCache<T, K> {
+abstract class InMemoryDataCache<T, K> : IInMemoryDataCache<T, K> {
     private val data by lazy {
         MutableStateFlow(mapOf<K, List<T>>())
     }
 
-//    fun getData(key: K): List<T> {
-//        return data.value[key]?: listOf()
-//    }
 
-    fun addElement(key: K, element: T) {
+    override fun addElement(key: K, element: T) {
         data.update {
             it.toMutableMap().apply {
                 get(key)?.let { currentList ->
@@ -27,7 +24,7 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun <V>addManyElements(key: K, elements: List<T>, elementsEqualityChecker: (T) -> V) {
+    override fun <V>addManyElements(key: K, elements: List<T>, elementsEqualityChecker: (T) -> V) {
         data.update { lastStateValue ->
             lastStateValue.toMutableMap().let { map ->
                 map[key] = map[key]?.toMutableList()?.apply {
@@ -40,30 +37,30 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun observeData(key: K): Flow<List<T>> {
+    override fun observeData(key: K): Flow<List<T>> {
         return data.map { map ->
            map[key] ?: listOf()
         }
     }
 
-    fun <V: Comparable<V>>observeData(key: K, sortBy: ((T) -> V)): Flow<List<T>> {
+    override fun <V: Comparable<V>>observeData(key: K, sortBy: ((T) -> V)): Flow<List<T>> {
         return data.map { map ->
             val result = map[key] ?: listOf()
             result.sortedBy { sortBy(it) }
         }
     }
 
-    fun observeFirstFromAnyKey(predicate: (T) -> Boolean): Flow<T> {
+    override fun observeFirstFromAnyKey(predicate: (T) -> Boolean): Flow<T> {
         return data.map { map ->
             map.flatMap { it.value }.first { predicate(it) }
         }
     }
 
-    fun deleteAllData() {
+    override fun deleteAllData() {
         data.value = mapOf()
     }
 
-    fun deleteElement(key: K, element: T) {
+    override fun deleteElement(key: K, element: T) {
         data.update {
             it.toMutableMap().apply {
                 val currentList = get(key)
@@ -76,7 +73,7 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun deleteElement(key: K, predicate: (T) -> Boolean) {
+    override fun deleteElement(key: K, predicate: (T) -> Boolean) {
         data.update {
             it.toMutableMap().apply {
                 val currentList = get(key)
@@ -89,7 +86,7 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun deleteElementFromAllKeys(predicate: (T) -> Boolean) {
+    override fun deleteElementFromAllKeys(predicate: (T) -> Boolean) {
         data.update { lastMapState ->
             lastMapState.toMutableMap().map {
                 Pair(
@@ -103,7 +100,7 @@ abstract class InMemoryDataCache<T, K> {
     }
 
 
-    fun deleteAllElementsWithKey(key: K) {
+    override fun deleteAllElementsWithKey(key: K) {
         data.update {
             it.toMutableMap().apply {
                 remove(key)
@@ -111,7 +108,7 @@ abstract class InMemoryDataCache<T, K> {
         }
     }
 
-    fun updateElements(elementAfterUpdate: (K, T) -> T) {
+    override fun updateElements(elementAfterUpdate: (K, T) -> T) {
         data.update { prevMap ->
             prevMap.map {
                 Pair(it.key,it.value.map { item ->

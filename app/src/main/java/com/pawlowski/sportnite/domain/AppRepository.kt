@@ -12,9 +12,9 @@ import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
-import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersInMemoryCache
-import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
+import com.pawlowski.localstorage.key_based_cache.MeetingsInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
+import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -237,7 +237,7 @@ class AppRepository @Inject constructor(
         return graphQLService.createOffer(gameParams)
             .onSuccess {
                 val paramsAsGameOffer = gameParams.toGameOffer(
-                    offerId = it!!,
+                    offerId = it,
                     playerName = userInfoUpdateCache.cachedUser.value?.userName?:""
                 )
 
