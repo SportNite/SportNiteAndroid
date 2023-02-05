@@ -4,8 +4,7 @@ import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Operation
+
 import com.dropbox.android.external.store4.*
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*
@@ -15,14 +14,13 @@ import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploade
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.presentation.mappers.toGameOffer
+import com.pawlowski.network.IGraphQLService
+import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.sportnite.presentation.models.SportObject
-import com.pawlowski.sportnite.utils.defaultRequestError
+import com.pawlowski.utils.defaultRequestError
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -405,24 +403,6 @@ class AppRepository @Inject constructor(
         }
     }
 
-    private suspend fun <T : Operation.Data, D> executeApolloQuery(
-        request: suspend () -> ApolloResponse<T>,
-        mapper: (T) -> D
-    ): Resource<D> {
-        return withContext(ioDispatcher) {
-            val response = try {
-                request().dataAssertNoErrors
-            } catch (e: Exception) {
-                ensureActive()
-                e.printStackTrace()
-                null
-            }
-
-            response?.let {
-                Resource.Success(mapper(it))
-            }?: Resource.Error(defaultRequestError)
-        }
-    }
 }
 
 

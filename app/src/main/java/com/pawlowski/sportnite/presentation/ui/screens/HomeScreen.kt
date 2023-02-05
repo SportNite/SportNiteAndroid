@@ -23,6 +23,8 @@ import coil.compose.AsyncImage
 import com.pawlowski.sportnite.R
 import com.pawlowski.models.Sport
 import com.pawlowski.models.User
+import com.pawlowski.models.mappers.getMeetingsListForPreview
+import com.pawlowski.models.mappers.getUserForPreview
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
 import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard

@@ -1,15 +1,11 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.mappers.getSportFromSportId
+import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.models.params_models.AddGameOfferParams
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.AddGameOfferUseCase
-import com.pawlowski.sportnite.utils.*
-import com.pawlowski.utils.UiDate
-import com.pawlowski.utils.UiText
-import com.pawlowski.utils.onError
-import com.pawlowski.utils.onSuccess
+import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent

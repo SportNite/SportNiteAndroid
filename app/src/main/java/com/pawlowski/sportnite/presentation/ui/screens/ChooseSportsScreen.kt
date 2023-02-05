@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pawlowski.sportnite.data.mappers.availableSports
+import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenSideEffect

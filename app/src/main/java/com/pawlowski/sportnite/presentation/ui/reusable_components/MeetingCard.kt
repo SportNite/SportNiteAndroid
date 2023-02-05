@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pawlowski.models.Meeting
-import com.pawlowski.sportnite.presentation.ui.utils.getMeetingForPreview
+import com.pawlowski.models.mappers.getMeetingForPreview
 
 @Composable
 fun MeetingCard(

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.remote
+package com.pawlowski.network
 
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*

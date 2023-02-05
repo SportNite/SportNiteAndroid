@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.data.mappers.availableSports
+import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportInputField
 import com.pawlowski.sportnite.presentation.ui.reusable_components.SportPickerDialog

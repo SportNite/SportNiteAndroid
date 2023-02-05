@@ -2,14 +2,14 @@ package com.pawlowski.sportnite.presentation.view_models_related.choose_advance_
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
-import com.pawlowski.sportnite.data.mappers.getAvailableLevelsForSport
+import com.pawlowski.models.mappers.getAvailableLevelsForSport
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
 import com.pawlowski.utils.UiText
 import com.pawlowski.utils.onError
 import com.pawlowski.utils.onSuccess
-import com.pawlowski.sportnite.utils.skillsSuccessText
+import com.pawlowski.utils.skillsSuccessText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest

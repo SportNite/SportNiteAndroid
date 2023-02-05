@@ -1,7 +1,7 @@
-package com.pawlowski.sportnite.data.mappers
+package com.pawlowski.models.mappers
 
-import com.pawlowski.sportnite.R
 import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.R
 import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiText
 

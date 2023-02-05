@@ -1,6 +1,6 @@
-package com.pawlowski.sportnite.data.mappers
+package com.pawlowski.models.mappers
 
-import com.pawlowski.sportnite.presentation.mappers.asGameOffer
+import com.pawlowski.models.mappers.asGameOffer
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept
 

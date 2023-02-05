@@ -9,7 +9,7 @@ import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploade
 import com.pawlowski.sportnite.data.local.MeetingsInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersInMemoryCache
 import com.pawlowski.sportnite.data.local.OffersToAcceptMemoryCache
-import com.pawlowski.sportnite.data.remote.IGraphQLService
+import com.pawlowski.network.IGraphQLService
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.params_models.PlayersFilter

@@ -1,7 +1,6 @@
-package com.pawlowski.sportnite.presentation.ui.utils
+package com.pawlowski.models.mappers
 
 import com.pawlowski.models.*
-import com.pawlowski.sportnite.R
 import com.pawlowski.utils.UiDate
 import com.pawlowski.utils.UiText
 import java.time.OffsetDateTime

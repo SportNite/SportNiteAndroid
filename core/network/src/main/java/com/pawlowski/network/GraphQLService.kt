@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.remote
+package com.pawlowski.network
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
@@ -6,14 +6,8 @@ import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*
-import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.type.*
-import com.pawlowski.sportnite.utils.*
-import com.pawlowski.utils.PaginationPage
-import com.pawlowski.utils.Resource
-import com.pawlowski.utils.UiText
-import com.pawlowski.utils.asUnitResource
+import com.pawlowski.network.type.*
+import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -23,6 +17,7 @@ class GraphQLService @Inject constructor(
     private val apolloClient: ApolloClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : IGraphQLService {
+
     override suspend fun getOffers(
         filters: OffersFilter,
         cursor: String?,
@@ -148,7 +143,9 @@ class GraphQLService @Inject constructor(
                         first = Optional.present(50),
                         otherFilters = filters.sportFilter?.let {
                             Optional.present(listOf(
-                                OfferFilterInput(sport = Optional.present(SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))))
+                                OfferFilterInput(sport = Optional.present(
+                                    SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))
+                                ))
                             ))
                         }?:Optional.absent()
                     )

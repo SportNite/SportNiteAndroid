@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
-import com.pawlowski.sportnite.data.mappers.getSportFromSportId
+import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.utils.UiDate
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

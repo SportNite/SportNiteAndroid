@@ -1,18 +1,20 @@
-package com.pawlowski.sportnite.data.mappers
+package com.pawlowski.network
 
 import com.apollographql.apollo3.api.Optional
 import com.pawlowski.models.*
+import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.models.params_models.*
-import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.fragment.DetailsUserFragment
-import com.pawlowski.sportnite.fragment.MediumUserFragment
-import com.pawlowski.sportnite.fragment.OfferFragment
-import com.pawlowski.sportnite.presentation.mappers.toPlayer
-import com.pawlowski.sportnite.type.*
+import com.pawlowski.network.fragment.DetailsUserFragment
+import com.pawlowski.network.fragment.MediumUserFragment
+import com.pawlowski.network.fragment.OfferFragment
+import com.pawlowski.network.type.*
+import com.pawlowski.models.mappers.toPlayer
+
 import com.pawlowski.utils.UiDate
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.Period
+
 
 internal fun PlayersFilter.toUserFilterInput(): Optional<UserFilterInput> {
     return if (nameSearch == null && sportFilter == null && level == null)

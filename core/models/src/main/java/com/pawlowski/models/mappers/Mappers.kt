@@ -1,8 +1,7 @@
-package com.pawlowski.sportnite.presentation.mappers
+package com.pawlowski.models.mappers
 
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.AddGameOfferParams
-import com.pawlowski.sportnite.presentation.ui.utils.getPlayerForPreview
 
 fun GameOfferToAccept.asGameOffer(): GameOffer {
     return this.offer.copy(owner = this.from, offerUid = this.offerToAcceptUid)

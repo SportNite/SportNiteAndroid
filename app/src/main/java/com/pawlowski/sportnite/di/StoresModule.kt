@@ -8,8 +8,7 @@ import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.AuthManager
 import com.pawlowski.sportnite.data.local.*
-import com.pawlowski.sportnite.data.mappers.*
-import com.pawlowski.sportnite.data.remote.IGraphQLService
+import com.pawlowski.network.IGraphQLService
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.params_models.PlayersFilter

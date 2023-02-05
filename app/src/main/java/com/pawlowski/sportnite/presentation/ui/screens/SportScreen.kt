@@ -17,12 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pawlowski.sportnite.presentation.mappers.asGameOffer
+import com.pawlowski.models.mappers.asGameOffer
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.ui.reusable_components.*
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.ui.utils.getSportForPreview
+import com.pawlowski.models.mappers.getSportForPreview
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISportScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState

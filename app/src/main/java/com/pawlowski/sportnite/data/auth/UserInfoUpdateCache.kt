@@ -1,10 +1,10 @@
 package com.pawlowski.sportnite.data.auth
 
 import android.content.SharedPreferences
-import com.pawlowski.sportnite.data.mappers.getSportFromSportId
-import com.pawlowski.sportnite.data.remote.IGraphQLService
-import com.pawlowski.sportnite.presentation.mappers.getAdvanceLevelFromParsedString
-import com.pawlowski.sportnite.presentation.mappers.parse
+import com.pawlowski.models.mappers.getSportFromSportId
+import com.pawlowski.network.IGraphQLService
+import com.pawlowski.models.mappers.getAdvanceLevelFromParsedString
+import com.pawlowski.models.mappers.parse
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
 import com.pawlowski.models.User
