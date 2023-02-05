@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Cache of data where key can be calculated from the value
  */
-internal interface IIntelligentMemoryCache<V, K> {
+interface IIntelligentMemoryCache<V, K> {
     fun upsertElement(element: V)
     fun upsertManyElements(elements: List<V>)
 

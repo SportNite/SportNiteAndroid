@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.firebase_storage
+package com.pawlowski.imageupload
 
 import android.content.ContentResolver
 import android.graphics.Bitmap
@@ -14,11 +14,13 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 import javax.inject.Inject
 
-class FirebaseStoragePhotoUploader @Inject constructor(
+
+
+internal class FirebaseStoragePhotoUploader @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
     private val contentResolver: ContentResolver,
-) {
-    suspend fun uploadNewImage(uri: Uri, userUid: String): Resource<String>
+) : IPhotoUploader {
+    override suspend fun uploadNewImage(uri: Uri, userUid: String): Resource<String>
     {
         return try {
             val reducedImage = reduceImageSize(uri)

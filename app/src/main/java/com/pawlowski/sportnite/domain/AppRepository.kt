@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.imageupload.IPhotoUploader
 import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
 import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
@@ -14,7 +15,6 @@ import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
-import com.pawlowski.sportnite.data.firebase_storage.FirebaseStoragePhotoUploader
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,7 +31,7 @@ import javax.inject.Singleton
 class AppRepository @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager,
-    private val firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader,
+    private val photoUploader: IPhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
     private val playersStore: Store<PlayersFilter, List<Player>>,
     private val offersStore: Store<OffersFilter, List<GameOffer>>,
@@ -283,7 +283,7 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
         val uploadedPhotoUri = params.photoUrl?.let {
-            val result = firebaseStoragePhotoUploader.uploadNewImage(
+            val result = photoUploader.uploadNewImage(
                 Uri.parse(it),
                 authManager.getCurrentUserUid()!!
             )
