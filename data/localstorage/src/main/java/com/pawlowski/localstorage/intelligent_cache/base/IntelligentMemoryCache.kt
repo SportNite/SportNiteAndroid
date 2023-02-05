@@ -71,6 +71,31 @@ open class IntelligentMemoryCache<V, K>(
         return observeData(key = key) { null }
     }
 
+    override fun updateElementsIf(predicate: (V) -> Boolean, newValue: (V) -> V) {
+        _elementsFlow.update { lastValue ->
+            lastValue.toMutableList().apply {
+                replaceAll {
+                    if(predicate(it)) {
+                        newValue(it)
+                    }
+                    else
+                        it
+                }
+            }
+        }
+    }
+
+    override fun deleteElementsIf(predicate: (V) -> Boolean) {
+        _elementsFlow.update { lastValue ->
+            lastValue.toMutableList().apply {
+                removeIf {
+                    predicate(it)
+                }
+            }
+        }
+    }
+
+
     override fun clearAll() {
         _elementsFlow.value = listOf()
     }

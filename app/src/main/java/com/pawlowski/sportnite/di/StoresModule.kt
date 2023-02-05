@@ -6,6 +6,8 @@ import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.localstorage.key_based_cache.*
 import com.pawlowski.models.*
 import com.pawlowski.sportnite.*
@@ -22,6 +24,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
 import java.time.ZoneOffset
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -54,24 +57,50 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun offersStore(graphQLService: IGraphQLService, offersInMemoryCache: OffersInMemoryCache): Store<OffersFilter, List<GameOffer>> {
+    fun offersStore(graphQLService: IGraphQLService, @Named("other") offersInMemoryCache: OffersIntelligentInMemoryCache, @Named("my") myOffersInMemoryCache: OffersIntelligentInMemoryCache): Store<OffersFilter, List<GameOffer>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
             graphQLService.getOffers(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
         }, sourceOfTruth = SourceOfTruth.of(
             reader = { key: OffersFilter ->
-                offersInMemoryCache.observeData(key, sortBy = {
+                val cache = when(key.myOffers) {
+                    true -> {
+                        myOffersInMemoryCache
+                    }
+                    false -> {
+                        offersInMemoryCache
+                    }
+                }
+                cache.observeData(key, sortBy = {
                     it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
                 })
+
             },
             writer = { key: OffersFilter, input: List<GameOffer> ->
-                offersInMemoryCache.addManyElements(key, input) {
-                    it.offerUid
+                val cache = when(key.myOffers) {
+                    true -> {
+                        myOffersInMemoryCache
+                    }
+                    false -> {
+                        offersInMemoryCache
+                    }
                 }
+                cache.upsertManyElements(input)
             },
             delete = { key: OffersFilter ->
-                offersInMemoryCache.deleteAllElementsWithKey(key)
+                val cache = when(key.myOffers) {
+                    true -> {
+                        myOffersInMemoryCache
+                    }
+                    false -> {
+                        offersInMemoryCache
+                    }
+                }
+                cache.deleteAllElementsWithKey(key)
             },
-            deleteAll = { offersInMemoryCache.deleteAllData() }
+            deleteAll = {
+                myOffersInMemoryCache.clearAll()
+                offersInMemoryCache.clearAll()
+            }
         )).build()
     }
 
@@ -79,7 +108,7 @@ class StoresModule {
     @Provides
     fun offersToAcceptStore(
         graphQLService: IGraphQLService,
-        offersToAcceptMemoryCache: OffersToAcceptMemoryCache
+        offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache
     ): Store<OffersFilter, List<GameOfferToAccept>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
             graphQLService.getOffersToAccept(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
@@ -89,15 +118,13 @@ class StoresModule {
                     it.offer.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
                 })
             },
-            writer = { key: OffersFilter, input: List<GameOfferToAccept> ->
-                offersToAcceptMemoryCache.addManyElements(key, input) {
-                    it.offerToAcceptUid
-                }
+            writer = { _: OffersFilter, input: List<GameOfferToAccept> ->
+                offersToAcceptMemoryCache.upsertManyElements(input)
             },
             delete = { key: OffersFilter ->
                 offersToAcceptMemoryCache.deleteAllElementsWithKey(key)
             },
-            deleteAll = { offersToAcceptMemoryCache.deleteAllData() }
+            deleteAll = { offersToAcceptMemoryCache.clearAll() }
         )).build()
     }
 

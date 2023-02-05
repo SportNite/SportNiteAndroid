@@ -15,7 +15,6 @@ class OffersIntelligentInMemoryCache: IntelligentMemoryCache<GameOffer, OffersFi
             val sportIsSame = key.sportFilter?.let {
                 it.sportId == element.sport.sportId
             }?:true
-            //TODO: Be careful on myOffers
             return sportIsSame
         }
     }

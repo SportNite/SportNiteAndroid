@@ -8,8 +8,8 @@ import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.OffersToAcceptMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
+import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -38,8 +39,9 @@ class AppRepository @Inject constructor(
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
     private val meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
-    private val offersInMemoryCache: OffersInMemoryCache,
-    private val offersToAcceptMemoryCache: OffersToAcceptMemoryCache,
+    @Named("other") private val offersInMemoryCache: OffersIntelligentInMemoryCache,
+    @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
+    private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
@@ -243,43 +245,34 @@ class AppRepository @Inject constructor(
                     playerName = userInfoUpdateCache.cachedUser.value?.userName?:""
                 )
 
-                offersInMemoryCache.addElement(
-                    key = OffersFilter(
-                        myOffers = true,
-                        sportFilter = null
-                    ),
+                myOffersInMemoryCache.upsertElement(
                     element = paramsAsGameOffer
                 )
-                /*offersInMemoryCache.addElement(
-                    key = OffersFilter(
-                        myOffers = true,
-                        sportFilter = gameParams.sport
-                    ),
-                    element = paramsAsGameOffer
-                )*/
+
             }.asUnitResource()
     }
 
     override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
         return graphQLService.sendOfferToAccept(offerUid)
             .onSuccess {
-                offersInMemoryCache.updateElements { _, offer ->
-                    if(offer.offerUid == offerUid)
-                    {
+                offersInMemoryCache.updateElementsIf(
+                    predicate = { offer ->
+                        offer.offerUid == offerUid
+                    },
+                    newValue = { offer ->
                         offer.copy(myResponseIdIfExists = it)
                     }
-                    else
-                        offer
-                }
+                )
+
             }
     }
 
     override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
         return graphQLService.acceptOfferToAccept(offerToAcceptUid)
             .onSuccess {
-                offersToAcceptMemoryCache.deleteElementFromAllKeys { it.offerToAcceptUid == offerToAcceptUid }
+                offersToAcceptMemoryCache.deleteElementsIf { it.offerToAcceptUid == offerToAcceptUid }
                 meetingsStore.fresh(MeetingsFilter(sportFilter = null))
-                //TODO: Add meeting to cache or refresh cache with sportFilter
+                //TODO: Add meeting to cache instead of refreshing?
             }
     }
 
@@ -333,9 +326,7 @@ class AppRepository @Inject constructor(
         return withContext(ioDispatcher) {
             graphQLService.deleteMyOffer(offerId)
                 .onSuccess {
-                    offersInMemoryCache.deleteElement(OffersFilter(sportFilter = null, myOffers = true)) {
-                        it.offerUid == offerId
-                    }
+                    myOffersInMemoryCache.deleteElementsIf { it.offerUid == offerId }
                 }
         }
     }
@@ -344,14 +335,15 @@ class AppRepository @Inject constructor(
         return withContext(ioDispatcher) {
             graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
                 .onSuccess {
-                    offersInMemoryCache.updateElements { _, offer ->
-                        if(offer.myResponseIdIfExists == offerToAcceptUid)
-                        {
+                    offersInMemoryCache.updateElementsIf(
+                        predicate = {offer ->
+                            offer.myResponseIdIfExists == offerToAcceptUid
+                        },
+                        newValue = { offer ->
                             offer.copy(myResponseIdIfExists = null)
                         }
-                        else
-                            offer
-                    }
+                    )
+
                 }
         }
     }
