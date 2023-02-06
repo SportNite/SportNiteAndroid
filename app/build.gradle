@@ -90,6 +90,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
+    //Hilt with WorkManager
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+
     //Hilt for Jetpack Compose navigation
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
@@ -186,5 +190,5 @@ dependencies {
     implementation project(":core:auth")
     implementation project(":core:imageupload")
     implementation project(":data:localstorage")
-
+    implementation project(":service:notificationservice")
 }

@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.work.WorkManager
 import com.apollographql.apollo3.ApolloClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -74,7 +75,11 @@ class AppModule {
         return appContext.contentResolver
     }
 
-
+    @Singleton
+    @Provides
+    fun workManager(appContext: Context): WorkManager {
+        return WorkManager.getInstance(appContext)
+    }
 }
 
 

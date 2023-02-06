@@ -46,6 +46,8 @@ inline fun <T> Resource<T>.onError(
     }
 }
 
+
+
 fun <T> Resource<T>.dataOrNull(): T? {
     return when(this) {
         is Resource.Success -> data

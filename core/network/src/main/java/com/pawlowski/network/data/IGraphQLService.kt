@@ -23,4 +23,5 @@ interface IGraphQLService {
     suspend fun updateAdvanceLevelInfo(level: Pair<Sport, AdvanceLevel>): Resource<Unit>
     suspend fun deleteMyOffer(offerId: String): Resource<Unit>
     suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit>
+    suspend fun sendNotificationToken(token: String, deviceId: String): Resource<Unit>
 }
