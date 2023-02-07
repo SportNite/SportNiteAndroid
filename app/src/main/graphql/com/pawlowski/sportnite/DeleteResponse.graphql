@@ -1,5 +1,0 @@
-mutation DeleteResponse($offerId: UUID!) {
-  deleteResponse(id: $offerId) {
-    responseId
-  }
-}

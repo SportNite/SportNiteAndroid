@@ -1,5 +1,0 @@
-mutation SetSkill($skillInput: SetSkillInput!) {
-  setSkill(input: $skillInput) {
-    skillId
-  }
-}

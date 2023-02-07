@@ -1,5 +1,0 @@
-mutation CreateOffer($offerInput: CreateOfferInput!) {
-  createOffer(input: $offerInput) {
-    offerId
-  }
-}

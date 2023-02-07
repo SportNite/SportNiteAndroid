@@ -1,8 +1,0 @@
-fragment mediumUserFragment on User {
-    name,
-    userId,
-    firebaseUserId,
-    phone,
-    birthDate,
-    avatar
-}
