@@ -15,6 +15,7 @@ import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +44,7 @@ class AppRepository @Inject constructor(
     @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
     private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
+    private val notificationTokenSynchronizer: INotificationTokenSynchronizer
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
         return meetingsStore.stream(
@@ -279,6 +281,7 @@ class AppRepository @Inject constructor(
     override fun signOut() {
         authManager.signOut()
         userInfoUpdateCache.deleteUserInfoCache()
+        notificationTokenSynchronizer.deleteCurrentToken()
     }
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {

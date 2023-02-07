@@ -3,11 +3,9 @@ package com.pawlowski.notificationservice
 import android.app.NotificationManager
 import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.pawlowski.notificationservice.worker.NotificationTokenUpdateWorker
+import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -15,8 +13,8 @@ import javax.inject.Inject
 class NotificationsService @Inject constructor() : FirebaseMessagingService() {
 
 
-    @Inject
-    lateinit var workManager: WorkManager
+    @Inject lateinit var notificationTokenWorkStarter: INotificationTokenSynchronizationWorkStarter
+
     /**
      * Called when message is received and app is in the foreground or app is in the background and user clicks it.
      *
@@ -45,21 +43,10 @@ class NotificationsService @Inject constructor() : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-
-        workManager.enqueue(
-            OneTimeWorkRequest
-                .from(NotificationTokenUpdateWorker::class.java)
-        )
+        //Start worker which will update token if user is authenticated
+        notificationTokenWorkStarter.startWorker()
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
-     */
     private fun sendNotification(messageBody: String) {
         val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
         //TODO: Send notification

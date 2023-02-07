@@ -1,0 +1,5 @@
+mutation DeleteSkill($sportType: SportType!) {
+  deleteSkill(sportType: $sportType) {
+    skillId
+  }
+}

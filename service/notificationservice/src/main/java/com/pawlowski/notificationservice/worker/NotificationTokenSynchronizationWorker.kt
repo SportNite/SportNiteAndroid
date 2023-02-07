@@ -4,26 +4,29 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.google.firebase.messaging.FirebaseMessaging
-import com.pawlowski.notificationservice.INotificationTokenSynchronizer
+import com.pawlowski.auth.ILightAuthManager
+import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
 import com.pawlowski.utils.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Updates token if user is authenticated and token isn't already updated
+ */
 @HiltWorker
-class NotificationTokenUpdateWorker @AssistedInject constructor(
+internal class NotificationTokenSynchronizationWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val firebaseMessaging: FirebaseMessaging,
-    private val notificationTokenHandler: INotificationTokenSynchronizer
+    private val notificationTokenHandler: INotificationTokenSynchronizer,
+    private val authManager: ILightAuthManager,
 ): CoroutineWorker(appContext, workerParams) {
 
     companion object {
@@ -38,11 +41,15 @@ class NotificationTokenUpdateWorker @AssistedInject constructor(
     }
 
     override suspend fun doWork(): Result {
-        val token = firebaseMessaging.token.await()
-        return when(notificationTokenHandler.synchronizeWithServer(token)) {
-            is Resource.Success -> Result.success()
-            is Resource.Error -> Result.retry()
+        return if(authManager.isUserAuthenticated()) {
+            val token = firebaseMessaging.token.await()
+            when(notificationTokenHandler.synchronizeWithServer(token)) {
+                is Resource.Success -> Result.success()
+                is Resource.Error -> Result.retry()
+            }
         }
+        else
+            Result.failure()
     }
 
     private fun createNotification() : Notification {
@@ -58,8 +65,6 @@ class NotificationTokenUpdateWorker @AssistedInject constructor(
     }
 
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         val name = "Synchronization"
         val descriptionText = "Displayed when data is being synchronized with server"
         val importance = NotificationManager.IMPORTANCE_LOW

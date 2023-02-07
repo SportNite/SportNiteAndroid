@@ -1,0 +1,5 @@
+mutation UpdateNotificationToken($input: SetDeviceInput!) {
+  setDevice(input: $input) {
+    userId
+  }
+}

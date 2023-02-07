@@ -1,0 +1,10 @@
+fragment offerFragment on Offer {
+  offerId,
+      userId,
+      description,
+      dateTime,
+      sport,
+      isAvailable,
+      city,
+      street
+}

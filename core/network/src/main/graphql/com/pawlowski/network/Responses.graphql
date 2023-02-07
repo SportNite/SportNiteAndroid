@@ -1,0 +1,35 @@
+query Responses($otherFilters: [OfferFilterInput!], $first: Int, $after: String) {
+  myOffers(where: {
+    and: $otherFilters
+  },
+  first: $first,
+  after: $after,
+  order: {
+          dateTime: ASC
+        }
+  ) {
+    nodes {
+      responses {
+        status,
+        responseId,
+        offerId,
+        user {
+          ...mediumUserFragment
+        },
+        description,
+        offer {
+          description,
+          dateTime,
+          sport,
+          isAvailable,
+          city,
+          street
+        }
+      }
+    },
+    pageInfo {
+       endCursor,
+       hasNextPage,
+    }
+  }
+}

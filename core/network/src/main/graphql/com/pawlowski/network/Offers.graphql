@@ -1,0 +1,30 @@
+
+
+query Offers($offerFilterInput: [OfferFilterInput!], $after: String, $first: Int) {
+  offers(where: {
+    isAvailable: {
+      eq: true
+    },
+    and: $offerFilterInput
+  },
+     order: {
+       dateTime: ASC
+     },
+   after: $after,
+   first: $first
+     ) {
+    nodes {
+      ...offerFragment,
+      user {
+         ...mediumUserFragment
+      },
+      myResponse {
+          responseId
+      }
+    },
+     pageInfo {
+       endCursor,
+       hasNextPage,
+     }
+  }
+}

@@ -1,10 +1,12 @@
 package com.pawlowski.notificationservice.di
 
 import com.google.firebase.messaging.FirebaseMessaging
-import com.pawlowski.notificationservice.INotificationTokenSynchronizer
-import com.pawlowski.notificationservice.NotificationTokenSynchronizer
+import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
+import com.pawlowski.notificationservice.synchronization.NotificationTokenSynchronizer
 import com.pawlowski.notificationservice.preferences.DeviceIdAndTokenPreferences
 import com.pawlowski.notificationservice.preferences.IDeviceIdAndTokenPreferences
+import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
+import com.pawlowski.notificationservice.worker.NotificationTokenSynchronizationWorkStarter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +27,8 @@ object NotificationServiceModule {
     @Singleton
     @Provides
     fun firebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
+
+    @Singleton
+    @Provides
+    internal fun notificationTokenSynchronizationWorkStarter(ntsWorkStarter: NotificationTokenSynchronizationWorkStarter): INotificationTokenSynchronizationWorkStarter = ntsWorkStarter
 }

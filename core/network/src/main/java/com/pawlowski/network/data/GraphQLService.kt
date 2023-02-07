@@ -254,7 +254,14 @@ internal class GraphQLService @Inject constructor(
     }
 
     override suspend fun sendNotificationToken(token: String, deviceId: String): Resource<Unit> {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher) {
+            executeApolloMutation(
+                request = {
+                    apolloClient.mutation(UpdateNotificationTokenMutation(SetDeviceInput(deviceId = deviceId, token = token))).execute()
+                }
+            ).asUnitResource()
+        }
+
     }
 
 

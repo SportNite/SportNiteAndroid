@@ -1,0 +1,21 @@
+query IncomingOffers($offersFilter: [OfferFilterInput!]) {
+  incomingOffers(where: {
+    and: $offersFilter
+  }) {
+    offerId,
+    user {
+      ...mediumUserFragment
+    }
+    description,
+    dateTime,
+    sport,
+    responses {
+      status,
+      user {
+        ...mediumUserFragment
+      }
+    }
+    city
+    street
+  }
+}

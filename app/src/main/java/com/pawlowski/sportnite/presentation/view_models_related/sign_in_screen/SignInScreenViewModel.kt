@@ -74,6 +74,5 @@ class SignInScreenViewModel @Inject constructor(
         }
     }
 
-    init {
-    }
+
 }

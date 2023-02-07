@@ -1,0 +1,22 @@
+query MyOffers($filters: [OfferFilterInput!], $after: String, $first: Int) {
+  myOffers(where: {
+    isAvailable: {
+      eq: true
+    },
+    and: $filters
+  },
+  after: $after,
+  first: $first
+ ) {
+    nodes {
+      ...offerFragment,
+      user {
+        ...mediumUserFragment
+      }
+    },
+    pageInfo {
+       endCursor,
+       hasNextPage,
+    }
+  }
+}
