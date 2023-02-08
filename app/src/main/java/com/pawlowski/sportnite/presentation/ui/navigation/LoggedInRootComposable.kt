@@ -108,6 +108,11 @@ fun LoggedInRootComposable(
                         navController.navigate("FullScreenList/$it") {
                             launchSingleTop = true
                         }
+                    },
+                    onNavigateToNotificationsScreen = {
+                        navController.navigate("Notifications") {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
@@ -243,6 +248,14 @@ fun LoggedInRootComposable(
                         navController.navigate("Sport/${it.sportId}") {
                             launchSingleTop = true
                         }
+                    }
+                )
+            }
+
+            composable(route = "Notifications") {
+                NotificationsScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
                     }
                 )
             }

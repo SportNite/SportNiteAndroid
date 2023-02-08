@@ -14,6 +14,7 @@ interface IGraphQLService {
     suspend fun getPlayerDetails(playerUid: String): Resource<PlayerDetails>
     suspend fun getInfoAboutMe(): Resource<PlayerDetails>
     suspend fun getIncomingMeetings(filters: MeetingsFilter, myUid: String): Resource<List<Meeting>>
+    suspend fun getNotifications(cursor: String? = null, pageSize: Int = 10): Resource<PaginationPage<UserNotification>>
 
     //Mutations
     suspend fun createOffer(offerParams: AddGameOfferParams): Resource<String>

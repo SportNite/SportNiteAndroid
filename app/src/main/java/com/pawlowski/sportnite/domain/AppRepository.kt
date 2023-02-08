@@ -113,6 +113,25 @@ class AppRepository @Inject constructor(
         ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
+    override fun getPagedNotifications(): Flow<PagingData<UserNotification>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PagingFactory(
+                    request = { page, pageSize ->
+                        graphQLService.getNotifications(
+                            cursor = page,
+                            pageSize = pageSize
+                        )
+                    }
+                )
+            }
+        ).flow
+    }
+
     override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
         return gameOffersToAcceptStore.stream(
             StoreRequest.cached(
@@ -148,7 +167,7 @@ class AppRepository @Inject constructor(
         }
     }
 
-    override fun getUserNotifications(): Flow<UiData<List<Notification>>> {
+    override fun getUserNotifications(): Flow<UiData<List<UserNotification>>> {
         TODO("Not yet implemented")
     }
 
@@ -339,7 +358,7 @@ class AppRepository @Inject constructor(
             graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
                 .onSuccess {
                     offersInMemoryCache.updateElementsIf(
-                        predicate = {offer ->
+                        predicate = { offer ->
                             offer.myResponseIdIfExists == offerToAcceptUid
                         },
                         newValue = { offer ->
