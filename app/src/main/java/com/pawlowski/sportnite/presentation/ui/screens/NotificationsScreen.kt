@@ -16,12 +16,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.pawlowski.models.UserNotification
 import com.pawlowski.sportnite.R
+import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
 import com.pawlowski.sportnite.presentation.ui.reusable_components.displayPagingItemsWithIndicators
+import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.INotificationsViewModel
+import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.NotificationsSideEffect
+import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.NotificationsState
 import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.NotificationsViewModel
+import kotlinx.coroutines.flow.Flow
+import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @Composable
 fun NotificationsScreen(
@@ -29,35 +36,36 @@ fun NotificationsScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(text = "Powiadomienia")
-                IconButton(onClick = { onNavigateBack() }, modifier = Modifier.align(Alignment.CenterStart)) {
-                    Icon(painter = painterResource(id = R.drawable.back_icon), contentDescription = "")
+        val pagedNotifications = viewModel.pagetNotifications.collectAsLazyPagingItems()
+        DisappearingSwipeRefresh(onRefresh = {
+            pagedNotifications.refresh()
+        }) {
+            Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(text = "Powiadomienia")
+                    IconButton(onClick = { onNavigateBack() }, modifier = Modifier.align(Alignment.CenterStart)) {
+                        Icon(painter = painterResource(id = R.drawable.back_icon), contentDescription = "")
+                    }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(10.dp))
-            val pagedNotifications = viewModel.pagetNotifications.collectAsLazyPagingItems()
-            LazyColumn {
-                displayPagingItemsWithIndicators(
-                    pagingItems = pagedNotifications
-                ) {
-                    NotificationCard(
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        notification = it
-                    )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                LazyColumn(modifier= Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    displayPagingItemsWithIndicators(
+                        pagingItems = pagedNotifications
+                    ) {
+                        NotificationCard(
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            notification = it
+                        )
+                    }
                 }
             }
         }
+
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun NotificationScreenPreview() {
-    NotificationsScreen()
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
