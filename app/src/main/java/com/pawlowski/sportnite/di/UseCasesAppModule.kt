@@ -150,4 +150,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun deleteMyOfferToAcceptUseCase(appRepository: IAppRepository) = DeleteMyOfferToAcceptUseCase(appRepository::deleteMyOfferToAccept)
+
+    @Singleton
+    @Provides
+    fun getPagedNotificationsUseCase(appRepository: IAppRepository) = GetPagedNotificationsUseCase(appRepository::getPagedNotifications)
 }

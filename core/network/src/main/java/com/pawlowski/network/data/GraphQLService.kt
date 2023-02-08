@@ -17,6 +17,7 @@ import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import java.time.OffsetDateTime
 import javax.inject.Inject
 
 internal class GraphQLService @Inject constructor(
@@ -137,6 +138,35 @@ internal class GraphQLService @Inject constructor(
         )
     }
 
+    override suspend fun getNotifications(
+        cursor: String?,
+        pageSize: Int
+    ): Resource<PaginationPage<UserNotification>> {
+        return executeApolloQuery(
+            request = {
+                apolloClient.query(
+                    NotificationsQuery(
+                        first = Optional.present(pageSize),
+                        cursor = Optional.presentIfNotNull(cursor)
+                    )
+                ).execute()
+            },
+            mapper = { data ->
+                PaginationPage(
+                    hasNextPage = data.notifications!!.pageInfo.hasNextPage,
+                    endCursor = data.notifications.pageInfo.endCursor,
+                    data = data.notifications.nodes!!.map {
+                        UserNotification(
+                            tittle = UiText.NonTranslatable(it.title),
+                            text = UiText.NonTranslatable(it.body),
+                            date = UiDate(OffsetDateTime.parse(it.dateTime.toString()))
+                        )
+                    }
+                )
+            }
+        )
+    }
+
     override suspend fun getOffersToAccept(
         filters: OffersFilter,
         cursor: String?,
@@ -253,6 +283,17 @@ internal class GraphQLService @Inject constructor(
         }
     }
 
+    override suspend fun sendNotificationToken(token: String, deviceId: String): Resource<Unit> {
+        return withContext(ioDispatcher) {
+            executeApolloMutation(
+                request = {
+                    apolloClient.mutation(UpdateNotificationTokenMutation(SetDeviceInput(deviceId = deviceId, token = token))).execute()
+                }
+            ).asUnitResource()
+        }
+
+    }
+
 
     private suspend fun <T : Operation.Data> executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
@@ -274,7 +315,7 @@ internal class GraphQLService @Inject constructor(
                 }?.reduce { acc, s -> "$acc$s " }
                 return@withContext Resource.Error(UiText.NonTranslatable("Error: $message"))
             }
-            val responseData = response?.data
+            val responseData = response?.dataAssertNoErrors
             if (responseData != null && !validateResult(responseData)) {
                 return@withContext Resource.Error(defaultRequestError)
             }

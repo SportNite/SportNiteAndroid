@@ -1,0 +1,23 @@
+query Notifications($first: Int, $cursor: String) {
+  notifications(
+    first: $first,
+    after: $cursor,
+    order: {
+      dateTime: DESC
+    }
+  ) {
+    nodes {
+      notificationId,
+      title,
+      body,
+      dateTime,
+      type
+    },
+    pageInfo {
+      endCursor,
+      hasNextPage,
+      hasPreviousPage,
+      startCursor
+    }
+  }
+}

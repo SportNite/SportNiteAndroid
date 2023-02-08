@@ -15,6 +15,7 @@ import com.pawlowski.models.*
 import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
 import com.pawlowski.sportnite.presentation.models.SportObject
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +44,7 @@ class AppRepository @Inject constructor(
     @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
     private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
+    private val notificationTokenSynchronizer: INotificationTokenSynchronizer
 ) : IAppRepository {
     override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
         return meetingsStore.stream(
@@ -111,6 +113,25 @@ class AppRepository @Inject constructor(
         ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
     }
 
+    override fun getPagedNotifications(): Flow<PagingData<UserNotification>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PagingFactory(
+                    request = { page, pageSize ->
+                        graphQLService.getNotifications(
+                            cursor = page,
+                            pageSize = pageSize
+                        )
+                    }
+                )
+            }
+        ).flow
+    }
+
     override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
         return gameOffersToAcceptStore.stream(
             StoreRequest.cached(
@@ -146,7 +167,7 @@ class AppRepository @Inject constructor(
         }
     }
 
-    override fun getUserNotifications(): Flow<UiData<List<Notification>>> {
+    override fun getUserNotifications(): Flow<UiData<List<UserNotification>>> {
         TODO("Not yet implemented")
     }
 
@@ -279,6 +300,7 @@ class AppRepository @Inject constructor(
     override fun signOut() {
         authManager.signOut()
         userInfoUpdateCache.deleteUserInfoCache()
+        notificationTokenSynchronizer.deleteCurrentToken()
     }
 
     override suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit> {
@@ -336,7 +358,7 @@ class AppRepository @Inject constructor(
             graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
                 .onSuccess {
                     offersInMemoryCache.updateElementsIf(
-                        predicate = {offer ->
+                        predicate = { offer ->
                             offer.myResponseIdIfExists == offerToAcceptUid
                         },
                         newValue = { offer ->

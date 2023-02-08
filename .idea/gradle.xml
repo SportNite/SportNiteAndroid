@@ -21,6 +21,8 @@
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/localstorage" />
+            <option value="$PROJECT_DIR$/service" />
+            <option value="$PROJECT_DIR$/service/notificationservice" />
           </set>
         </option>
       </GradleProjectSettings>

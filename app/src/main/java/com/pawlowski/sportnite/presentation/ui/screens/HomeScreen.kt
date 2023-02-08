@@ -45,6 +45,7 @@ fun HomeScreen(
     onNavigateToSettingsScreen: () -> Unit = {},
     onNavigateToMeetingDetails: (String) -> Unit = {},
     onNavigateToFullScreenList: (String) -> Unit = {},
+    onNavigateToNotificationsScreen: () -> Unit = {}
 ) {
     val isExitAppDialogVisible = remember {
         mutableStateOf(false)
@@ -106,7 +107,8 @@ fun HomeScreen(
                 ProfileSegment(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     user = userState.value,
-                    onSettingsButtonClick = onNavigateToSettingsScreen
+                    onSettingsButtonClick = onNavigateToSettingsScreen,
+                    onNotificationsButtonClick = onNavigateToNotificationsScreen
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 IncomingMeetingsRow(
@@ -175,7 +177,8 @@ fun SportsRow(
 fun ProfileSegment(
     modifier: Modifier = Modifier,
     user: User?,
-    onSettingsButtonClick: () -> Unit = {}
+    onSettingsButtonClick: () -> Unit = {},
+    onNotificationsButtonClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -194,8 +197,7 @@ fun ProfileSegment(
         Spacer(modifier = Modifier.weight(1f))
         val context = LocalContext.current
         FilledIconButton(onClick = {
-            //TODO
-            Toast.makeText(context, "Opcja powiadomień będzie dostępna wkrótce!", Toast.LENGTH_LONG).show()
+            onNotificationsButtonClick()
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.notifications_icon),

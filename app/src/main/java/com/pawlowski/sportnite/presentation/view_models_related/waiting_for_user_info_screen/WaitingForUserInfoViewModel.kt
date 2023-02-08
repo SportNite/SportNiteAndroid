@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.cache.RegistrationProgress
+import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
 import com.pawlowski.utils.onError
 import com.pawlowski.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
-    private val authManager: IAuthManager
+    private val authManager: IAuthManager,
+    private val notificationTokenSynchronizationWorkStarter: INotificationTokenSynchronizationWorkStarter
 ):IWaitingForUserInfoViewModel, ViewModel() {
 
     override val container: Container<WaitingForUserInfoUiState, WaitingForUserInfoSideEffect> = container(
@@ -34,6 +36,8 @@ class WaitingForUserInfoViewModel @Inject constructor(
         reduce {
             state.copy(isLoading = true, message = "Please wait...")
         }
+
+        notificationTokenSynchronizationWorkStarter.startWorker()
         val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
         info.onSuccess {
             when (it) {
