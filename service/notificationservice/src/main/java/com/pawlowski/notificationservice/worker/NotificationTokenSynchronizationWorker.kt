@@ -11,6 +11,7 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pawlowski.auth.ILightAuthManager
+import com.pawlowski.notificationservice.R
 import com.pawlowski.notificationservice.channel_handler.INotificationChannelHandler
 import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
 import com.pawlowski.utils.Resource
@@ -61,6 +62,7 @@ internal class NotificationTokenSynchronizationWorker @AssistedInject constructo
         return NotificationCompat.Builder(appContext, CHANNEL_ID)
             .setContentTitle("Synchronization with server")
             .setContentText("Synchronization with server is happening...")
+            .setSmallIcon(R.drawable.app_logo)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
     }
