@@ -18,7 +18,6 @@ interface IAppRepository {
 
     fun getPagedNotifications(): Flow<PagingData<UserNotification>>
 
-    fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>>
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
     fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>>
     fun getUserNotifications(): Flow<UiData<List<UserNotification>>>
@@ -26,13 +25,10 @@ interface IAppRepository {
 
 
 
-    suspend fun sendOfferToAccept(offerUid: String): Resource<String>
-    suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit>
+
     suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
-    suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit>
 
-    suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit>
     fun signOut()
     fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>>
 }

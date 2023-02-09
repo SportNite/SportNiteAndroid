@@ -12,6 +12,7 @@ import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Player
 import com.pawlowski.repository.IOffersRepository
+import com.pawlowski.responses.IResponsesRepository
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText
@@ -35,7 +36,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getOffersToAcceptUseCase(appRepository: IAppRepository): GetOffersToAcceptUseCase = GetOffersToAcceptUseCase(appRepository::getOffersToAccept)
+    fun getOffersToAcceptUseCase(appRepository: IResponsesRepository): GetOffersToAcceptUseCase = GetOffersToAcceptUseCase(appRepository::getOffersToAccept)
 
     @Singleton
     @Provides
@@ -43,7 +44,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun sendGameOfferToAcceptUseCase(appRepository: IAppRepository): SendGameOfferToAcceptUseCase = SendGameOfferToAcceptUseCase(appRepository::sendOfferToAccept)
+    fun sendGameOfferToAcceptUseCase(appRepository: IResponsesRepository): SendGameOfferToAcceptUseCase = SendGameOfferToAcceptUseCase(appRepository::sendOfferToAccept)
 
     @Singleton
     @Provides
@@ -71,7 +72,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun acceptOfferToAcceptUseCase(appRepository: IAppRepository): AcceptOfferToAcceptUseCase = AcceptOfferToAcceptUseCase(appRepository::acceptOfferToAccept)
+    fun acceptOfferToAcceptUseCase(appRepository: IResponsesRepository): AcceptOfferToAcceptUseCase = AcceptOfferToAcceptUseCase(appRepository::acceptOfferToAccept)
 
     @Singleton
     @Provides
@@ -151,7 +152,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun deleteMyOfferToAcceptUseCase(appRepository: IAppRepository) = DeleteMyOfferToAcceptUseCase(appRepository::deleteMyOfferToAccept)
+    fun deleteMyOfferToAcceptUseCase(appRepository: IResponsesRepository) = DeleteMyOfferToAcceptUseCase(appRepository::deleteMyOfferToAccept)
 
     @Singleton
     @Provides
@@ -159,5 +160,5 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun rejectOfferToAcceptUseCase(appRepository: IAppRepository) = RejectOfferToAcceptUseCase(appRepository::rejectOfferToAccept)
+    fun rejectOfferToAcceptUseCase(appRepository: IResponsesRepository) = RejectOfferToAcceptUseCase(appRepository::rejectOfferToAccept)
 }

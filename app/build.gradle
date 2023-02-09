@@ -193,5 +193,7 @@ dependencies {
     implementation project(":service:notificationservice")
     implementation project(":data:offers")
     implementation project(":data:meetings")
+    implementation project(":data:responses")
+
 
 }

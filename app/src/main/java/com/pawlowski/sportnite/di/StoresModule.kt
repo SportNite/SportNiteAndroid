@@ -57,30 +57,6 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun offersToAcceptStore(
-        graphQLService: IGraphQLService,
-        offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache
-    ): Store<OffersFilter, List<GameOfferToAccept>> {
-        return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            graphQLService.getOffersToAccept(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
-        }, sourceOfTruth = SourceOfTruth.of(
-            reader = { key: OffersFilter ->
-                offersToAcceptMemoryCache.observeData(key, sortBy = {
-                    it.offer.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
-                })
-            },
-            writer = { _: OffersFilter, input: List<GameOfferToAccept> ->
-                offersToAcceptMemoryCache.upsertManyElements(input)
-            },
-            delete = { key: OffersFilter ->
-                offersToAcceptMemoryCache.deleteAllElementsWithKey(key)
-            },
-            deleteAll = { offersToAcceptMemoryCache.clearAll() }
-        )).build()
-    }
-
-    @Singleton
-    @Provides
     fun playerDetailsStore(
         graphQLService: IGraphQLService,
         playerDetailsInMemoryCache: PlayerDetailsInMemoryCache

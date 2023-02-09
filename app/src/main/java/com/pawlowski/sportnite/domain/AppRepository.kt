@@ -4,14 +4,16 @@ import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.dropbox.android.external.store4.*
+import com.dropbox.android.external.store4.ResponseOrigin
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreRequest
+import com.dropbox.android.external.store4.StoreResponse
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.imageupload.IPhotoUploader
-import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
-import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
-import com.pawlowski.models.params_models.*
+import com.pawlowski.models.params_models.PlayersFilter
+import com.pawlowski.models.params_models.UserUpdateInfoParams
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
 import com.pawlowski.sportnite.presentation.models.SportObject
@@ -23,7 +25,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -33,11 +34,7 @@ class AppRepository @Inject constructor(
     private val photoUploader: IPhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
     private val playersStore: Store<PlayersFilter, List<Player>>,
-    private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
-    private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
-    @Named("other") private val offersInMemoryCache: OffersIntelligentInMemoryCache,
-    private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
     private val notificationTokenSynchronizer: INotificationTokenSynchronizer
 ) : IAppRepository {
@@ -99,15 +96,7 @@ class AppRepository @Inject constructor(
         ).flow
     }
 
-    override fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>> {
-        return gameOffersToAcceptStore.stream(
-            StoreRequest.cached(
-                key = OffersFilter(
-                    sportFilter = sportFilter
-                ), refresh = true
-            )
-        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
-    }
+
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {
         TODO("Not yet implemented")
@@ -157,35 +146,6 @@ class AppRepository @Inject constructor(
         ).flow
     }
 
-
-
-
-
-
-    override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
-        return graphQLService.sendOfferToAccept(offerUid)
-            .onSuccess {
-                offersInMemoryCache.updateElementsIf(
-                    predicate = { offer ->
-                        offer.offerUid == offerUid
-                    },
-                    newValue = { offer ->
-                        offer.copy(myResponseIdIfExists = it)
-                    }
-                )
-
-            }
-    }
-
-    override suspend fun acceptOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        return graphQLService.acceptOfferToAccept(offerToAcceptUid)
-            .onSuccess {
-                offersToAcceptMemoryCache.deleteElementsIf { it.offerToAcceptUid == offerToAcceptUid }
-                meetingsStore.fresh(MeetingsFilter(sportFilter = null))
-                //TODO: Add meeting to cache instead of refreshing?
-            }
-    }
-
     override fun signOut() {
         authManager.signOut()
         userInfoUpdateCache.deleteUserInfoCache()
@@ -230,34 +190,6 @@ class AppRepository @Inject constructor(
             else
                 Resource.Error(defaultRequestError)
         }
-    }
-
-
-
-    override suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        return withContext(ioDispatcher) {
-            graphQLService.deleteMyOfferToAccept(offerToAcceptUid)
-                .onSuccess {
-                    offersInMemoryCache.updateElementsIf(
-                        predicate = { offer ->
-                            offer.myResponseIdIfExists == offerToAcceptUid
-                        },
-                        newValue = { offer ->
-                            offer.copy(myResponseIdIfExists = null)
-                        }
-                    )
-
-                }
-        }
-    }
-
-    override suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
-        return graphQLService.rejectOfferToAccept(offerToAcceptUid= offerToAcceptUid)
-            .onSuccess {
-                offersToAcceptMemoryCache.deleteElementsIf {
-                    it.offerToAcceptUid == offerToAcceptUid
-                }
-            }
     }
 
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(
