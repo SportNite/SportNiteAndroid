@@ -14,12 +14,10 @@ import kotlinx.coroutines.flow.Flow
 interface IAppRepository {
     fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>>
     fun getUserSports(): Flow<UiData<List<Sport>>>
-    fun getPlayers(sportFilter: Sport? = null, nameSearch: String? = null, level: AdvanceLevel?): Flow<UiData<List<Player>>>
 
     fun getPagedNotifications(): Flow<PagingData<UserNotification>>
 
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
-    fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>>
     fun getUserNotifications(): Flow<UiData<List<UserNotification>>>
     fun getInfoAboutMe() : Flow<User?>
 
@@ -30,5 +28,4 @@ interface IAppRepository {
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
 
     fun signOut()
-    fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>>
 }

@@ -11,6 +11,7 @@ import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Player
+import com.pawlowski.players.IPlayersRepository
 import com.pawlowski.repository.IOffersRepository
 import com.pawlowski.responses.IResponsesRepository
 import com.pawlowski.sportnite.presentation.use_cases.*
@@ -64,7 +65,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPlayersUseCase(appRepository: IAppRepository): GetPlayersUseCase = GetPlayersUseCase(appRepository::getPlayers)
+    fun getPlayersUseCase(appRepository: IPlayersRepository): GetPlayersUseCase = GetPlayersUseCase(appRepository::getPlayers)
 
     @Singleton
     @Provides
@@ -80,7 +81,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPlayerDetailsUseCase(appRepository: IAppRepository) = GetPlayerDetailsUseCase(appRepository::getPlayerDetails)
+    fun getPlayerDetailsUseCase(appRepository: IPlayersRepository) = GetPlayerDetailsUseCase(appRepository::getPlayerDetails)
 
     @Singleton
     @Provides
@@ -100,7 +101,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPagedPlayersUseCase(appRepository: IAppRepository) = GetPagedPlayersUseCase(appRepository::getPagedPlayers)
+    fun getPagedPlayersUseCase(appRepository: IPlayersRepository) = GetPagedPlayersUseCase(appRepository::getPagedPlayers)
 
     @Singleton
     @Provides

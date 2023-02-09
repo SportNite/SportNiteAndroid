@@ -194,6 +194,7 @@ dependencies {
     implementation project(":data:offers")
     implementation project(":data:meetings")
     implementation project(":data:responses")
+    implementation project(":data:players")
 
 
 }

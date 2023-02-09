@@ -30,30 +30,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class StoresModule {
-    @Singleton
-    @Provides
-    fun playersStore(graphQLService: IGraphQLService, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
-        return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
-            graphQLService.getPlayers(
-                filters = filters,
-                cursor = null,
-                pageSize = 10
-            ).dataOrNull()!!.data
-        }, sourceOfTruth = SourceOfTruth.of(
-            reader = { key: PlayersFilter ->
-                playersInMemoryCache.observeData(key)
-            },
-            writer = { key: PlayersFilter, input: List<Player> ->
-                playersInMemoryCache.addManyElements(key, input) {
-                    it.uid
-                }
-            },
-            delete = { key: PlayersFilter ->
-                playersInMemoryCache.deleteAllElementsWithKey(key)
-            },
-            deleteAll = { playersInMemoryCache.deleteAllData() }
-        )).build()
-    }
+
 
     @Singleton
     @Provides
