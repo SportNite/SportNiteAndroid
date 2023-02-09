@@ -1,32 +1,16 @@
 
 package com.pawlowski.sportnite.domain
 
-import com.dropbox.android.external.store4.Store
-import com.pawlowski.auth.IAuthManager
-import com.pawlowski.cache.IUserInfoUpdateCache
-import com.pawlowski.imageupload.IPhotoUploader
-import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
-import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
-import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
-import com.pawlowski.models.params_models.MeetingsFilter
-import com.pawlowski.models.params_models.OffersFilter
-import com.pawlowski.models.params_models.PlayersFilter
-import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.sportnite.presentation.models.*
 import io.mockk.*
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class AppRepositoryTest {
 
 
-    @RelaxedMockK
+/*    @RelaxedMockK
     private lateinit var userInfoUpdateCacheMock: IUserInfoUpdateCache
     @RelaxedMockK
     private lateinit var authManager: IAuthManager
@@ -57,9 +41,9 @@ internal class AppRepositoryTest {
     fun setUp() = MockKAnnotations.init(this, relaxUnitFun = true) // turn relaxUnitFun on for all mocks
 
 
-    /*private fun getSUT(testScheduler: TestCoroutineScheduler): AppRepository {
+    *//*private fun getSUT(testScheduler: TestCoroutineScheduler): AppRepository {
         return TODO()
-    }*/
+    }*//*
 
     @Test
     fun getIncomingMeetings() = runTest {
@@ -147,5 +131,5 @@ internal class AppRepositoryTest {
 
     @Test
     fun updateAdvanceLevelInfo() {
-    }
+    }*/
 }

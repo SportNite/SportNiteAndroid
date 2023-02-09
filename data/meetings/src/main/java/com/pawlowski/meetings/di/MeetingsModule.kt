@@ -2,7 +2,7 @@ package com.pawlowski.meetings.di
 
 import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
-import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.meetings.data.cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.meetings.IMeetingsRepository
 import com.pawlowski.meetings.MeetingsRepository
 import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
@@ -32,7 +32,7 @@ object MeetingsModule {
 
     @Singleton
     @Provides
-    fun meetingStore(
+    internal fun meetingStore(
         graphQLService: IGraphQLService,
         meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
         authManager: IAuthManager

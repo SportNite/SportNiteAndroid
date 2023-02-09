@@ -58,5 +58,6 @@ dependencies {
     implementation project(":core:models")
     implementation project(":core:network")
     implementation project(":core:auth")
-    implementation project(":data:localstorage")
+    implementation project(":core:cacheutils")
+
 }

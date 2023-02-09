@@ -1,4 +1,4 @@
-package com.pawlowski.localstorage.intelligent_cache.base
+package com.pawlowski.cacheutils.intelligent_cache.base
 
 import kotlinx.coroutines.flow.Flow
 

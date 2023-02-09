@@ -1,12 +1,10 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    namespace 'com.pawlowski.meetings'
+    namespace 'com.pawlowski.cacheutils'
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
@@ -38,26 +36,11 @@ dependencies {
     androidTestImplementation libs.junit.androidx
     androidTestImplementation libs.espresso.androidx
 
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-
     //coroutines
     implementation libs.bundles.coroutines
     testImplementation libs.coroutines.test
 
-    //Paging
-    implementation(libs.paging.runtime)
-
-    //Store
-    implementation libs.store
-
     //Modules
     implementation project(":core:utils")
-    implementation project(":core:domainutils")
     implementation project(":core:models")
-    implementation project(":core:network")
-    implementation project(":core:auth")
-    implementation project(":core:cacheutils")
-
 }

@@ -1,7 +1,7 @@
 package com.pawlowski.responses.di
 
 import com.dropbox.android.external.store4.*
-import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
+import com.pawlowski.responses.data.cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.network.data.IGraphQLService
@@ -34,7 +34,7 @@ object ResponsesModule {
 
     @Singleton
     @Provides
-    fun offersToAcceptStore(
+    internal fun offersToAcceptStore(
         graphQLService: IGraphQLService,
         offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache
     ): Store<OffersFilter, List<GameOfferToAccept>> {

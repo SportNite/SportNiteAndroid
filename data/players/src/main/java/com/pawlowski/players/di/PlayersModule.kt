@@ -1,8 +1,8 @@
 package com.pawlowski.players.di
 
 import com.dropbox.android.external.store4.*
-import com.pawlowski.localstorage.key_based_cache.PlayerDetailsInMemoryCache
-import com.pawlowski.localstorage.key_based_cache.PlayersInMemoryCache
+import com.pawlowski.players.data.cache.PlayerDetailsInMemoryCache
+import com.pawlowski.players.data.cache.PlayersInMemoryCache
 import com.pawlowski.models.Player
 import com.pawlowski.models.PlayerDetails
 import com.pawlowski.models.params_models.PlayersFilter
@@ -33,7 +33,7 @@ object PlayersModule {
 
     @Singleton
     @Provides
-    fun playersStore(graphQLService: IGraphQLService, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
+    internal fun playersStore(graphQLService: IGraphQLService, playersInMemoryCache: PlayersInMemoryCache): Store<PlayersFilter, List<Player>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: PlayersFilter ->
             graphQLService.getPlayers(
                 filters = filters,
@@ -58,7 +58,7 @@ object PlayersModule {
 
     @Singleton
     @Provides
-    fun playerDetailsStore(
+    internal fun playerDetailsStore(
         graphQLService: IGraphQLService,
         playerDetailsInMemoryCache: PlayerDetailsInMemoryCache
     ): Store<String, PlayerDetails> {

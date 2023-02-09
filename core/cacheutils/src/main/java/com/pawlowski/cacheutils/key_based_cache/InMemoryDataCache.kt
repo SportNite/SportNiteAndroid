@@ -1,4 +1,4 @@
-package com.pawlowski.localstorage.key_based_cache
+package com.pawlowski.cacheutils.key_based_cache
 
 import kotlinx.coroutines.flow.*
 

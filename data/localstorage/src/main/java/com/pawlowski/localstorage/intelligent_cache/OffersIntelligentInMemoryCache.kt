@@ -1,7 +1,7 @@
 package com.pawlowski.localstorage.intelligent_cache
 
-import com.pawlowski.localstorage.intelligent_cache.base.ElementIdAndKeyExtractor
-import com.pawlowski.localstorage.intelligent_cache.base.IntelligentMemoryCache
+import com.pawlowski.cacheutils.intelligent_cache.base.ElementIdAndKeyExtractor
+import com.pawlowski.cacheutils.intelligent_cache.base.IntelligentMemoryCache
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.params_models.OffersFilter
 
