@@ -2,12 +2,18 @@ package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
+import com.pawlowski.meetings.use_cases.RefreshMeetingsUseCase
 import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.GameOffer
-import com.pawlowski.sportnite.presentation.use_cases.*
+import com.pawlowski.players.use_cases.GetPlayersUseCase
+import com.pawlowski.players.use_cases.RefreshPlayersUseCase
+import com.pawlowski.repository.use_cases.GetGameOffersUseCase
+import com.pawlowski.repository.use_cases.RefreshOffersUseCase
+import com.pawlowski.responses.use_cases.*
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

@@ -2,11 +2,10 @@ package com.pawlowski.sportnite.presentation.view_models_related.home_screen
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.models.params_models.MeetingsFilter
-import com.pawlowski.models.mappers.getMeetingsListForPreview
-import com.pawlowski.sportnite.presentation.use_cases.GetIncomingMeetingsUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetInfoAboutMeUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetUserSportsUseCase
-import com.pawlowski.sportnite.presentation.use_cases.RefreshMeetingsUseCase
+import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
+import com.pawlowski.user.use_cases.GetInfoAboutMeUseCase
+import com.pawlowski.user.use_cases.GetUserSportsUseCase
+import com.pawlowski.meetings.use_cases.RefreshMeetingsUseCase
 import com.pawlowski.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

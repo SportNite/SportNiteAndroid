@@ -1,16 +1,19 @@
 package com.pawlowski.meetings.di
 
-import com.dropbox.android.external.store4.Fetcher
-import com.dropbox.android.external.store4.SourceOfTruth
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.meetings.IMeetingsRepository
 import com.pawlowski.meetings.MeetingsRepository
+import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
+import com.pawlowski.meetings.use_cases.GetMeetingByIdUseCase
+import com.pawlowski.meetings.use_cases.GetPagedMeetingsUseCase
+import com.pawlowski.meetings.use_cases.RefreshMeetingsUseCase
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.network.data.IGraphQLService
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
 import com.pawlowski.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
@@ -51,5 +54,29 @@ object MeetingsModule {
             },
             deleteAll = { meetingsInMemoryCache.clearAll() }
         )).build()
+    }
+
+    @Singleton
+    @Provides
+    fun getIncomingMeetingsUseCase(appRepository: IMeetingsRepository): GetIncomingMeetingsUseCase = GetIncomingMeetingsUseCase(appRepository::getIncomingMeetings)
+
+    @Singleton
+    @Provides
+    fun getMeetingByIdUseCase(appRepository: IMeetingsRepository) = GetMeetingByIdUseCase(appRepository::getMeetingDetails)
+
+    @Singleton
+    @Provides
+    fun getPagedMeetingsUseCase(appRepository: IMeetingsRepository) = GetPagedMeetingsUseCase(appRepository::getPagedMeetings)
+
+    @Singleton
+    @Provides
+    fun refreshMeetingsUseCase(meetingsStore: Store<MeetingsFilter, List<Meeting>>) = RefreshMeetingsUseCase {
+        try {
+            meetingsStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
     }
 }

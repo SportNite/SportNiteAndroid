@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.use_cases
+package com.pawlowski.user.use_cases
 
 import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiData

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.use_cases
+package com.pawlowski.notifications.use_cases
 
 import androidx.paging.PagingData
 import com.pawlowski.models.UserNotification

@@ -2,7 +2,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.meeting_details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.presentation.use_cases.GetMeetingByIdUseCase
+import com.pawlowski.meetings.use_cases.GetMeetingByIdUseCase
 import com.pawlowski.utils.UiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

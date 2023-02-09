@@ -11,10 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.sportnite.*
 import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
-
 import com.pawlowski.sportnite.data.local.*
-import com.pawlowski.sportnite.domain.AppRepository
-import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.sportnite.presentation.models.*
 import dagger.Module
 import dagger.Provides
@@ -55,10 +52,6 @@ class AppModule {
 
     @Provides
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Singleton
-    @Provides
-    fun appRepository(appRepository: AppRepository): IAppRepository = appRepository
 
     @Singleton
     @Provides

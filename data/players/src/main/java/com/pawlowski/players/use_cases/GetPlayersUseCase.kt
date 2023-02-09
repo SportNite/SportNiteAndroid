@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.use_cases
+package com.pawlowski.players.use_cases
 
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Player

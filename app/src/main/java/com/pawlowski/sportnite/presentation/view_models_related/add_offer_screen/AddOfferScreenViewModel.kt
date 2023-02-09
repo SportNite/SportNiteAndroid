@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.models.params_models.AddGameOfferParams
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.use_cases.AddGameOfferUseCase
+import com.pawlowski.repository.use_cases.AddGameOfferUseCase
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container

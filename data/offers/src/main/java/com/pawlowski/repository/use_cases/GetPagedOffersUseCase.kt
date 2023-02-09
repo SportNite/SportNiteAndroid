@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.use_cases
+package com.pawlowski.repository.use_cases
 
 import androidx.paging.PagingData
 import com.pawlowski.models.params_models.OffersFilter

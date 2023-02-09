@@ -1,9 +1,6 @@
 package com.pawlowski.players.di
 
-import com.dropbox.android.external.store4.Fetcher
-import com.dropbox.android.external.store4.SourceOfTruth
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.*
 import com.pawlowski.localstorage.key_based_cache.PlayerDetailsInMemoryCache
 import com.pawlowski.localstorage.key_based_cache.PlayersInMemoryCache
 import com.pawlowski.models.Player
@@ -12,6 +9,12 @@ import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.players.IPlayersRepository
 import com.pawlowski.players.PlayersRepository
+import com.pawlowski.players.use_cases.GetPagedPlayersUseCase
+import com.pawlowski.players.use_cases.GetPlayerDetailsUseCase
+import com.pawlowski.players.use_cases.GetPlayersUseCase
+import com.pawlowski.players.use_cases.RefreshPlayersUseCase
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
 import com.pawlowski.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
@@ -77,4 +80,29 @@ object PlayersModule {
             deleteAll = { playerDetailsInMemoryCache.deleteAllData() }
         )).build()
     }
+
+    @Singleton
+    @Provides
+    fun getPlayersUseCase(appRepository: IPlayersRepository): GetPlayersUseCase = GetPlayersUseCase(appRepository::getPlayers)
+
+    @Singleton
+    @Provides
+    fun getPlayerDetailsUseCase(appRepository: IPlayersRepository) = GetPlayerDetailsUseCase(appRepository::getPlayerDetails)
+
+    @Singleton
+    @Provides
+    fun getPagedPlayersUseCase(appRepository: IPlayersRepository) = GetPagedPlayersUseCase(appRepository::getPagedPlayers)
+
+    @Singleton
+    @Provides
+    fun refreshPlayersUseCase(playersStore: Store<PlayersFilter, List<Player>>) = RefreshPlayersUseCase {
+        try {
+            playersStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
+    }
+
 }

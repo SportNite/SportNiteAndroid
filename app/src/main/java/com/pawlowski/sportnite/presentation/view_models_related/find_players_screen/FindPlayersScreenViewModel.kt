@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.pawlowski.models.params_models.PlayersFilter
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.use_cases.GetPagedPlayersUseCase
+import com.pawlowski.players.use_cases.GetPagedPlayersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*

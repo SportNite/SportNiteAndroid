@@ -1,15 +1,20 @@
 package com.pawlowski.repository.di
 
-import com.dropbox.android.external.store4.Fetcher
-import com.dropbox.android.external.store4.SourceOfTruth
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.*
 import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.repository.IOffersRepository
 import com.pawlowski.repository.OffersRepository
+import com.pawlowski.repository.use_cases.AddGameOfferUseCase
+import com.pawlowski.repository.use_cases.DeleteMyOfferUseCase
+import com.pawlowski.repository.use_cases.GetGameOffersUseCase
+import com.pawlowski.repository.use_cases.GetMyOffersUseCase
+import com.pawlowski.repository.use_cases.GetPagedOffersUseCase
+import com.pawlowski.repository.use_cases.RefreshOffersUseCase
+import com.pawlowski.utils.Resource
+import com.pawlowski.utils.UiText
 import com.pawlowski.utils.dataOrNull
 import dagger.Module
 import dagger.Provides
@@ -75,4 +80,37 @@ object OffersModule {
             }
         )).build()
     }
+
+    @Singleton
+    @Provides
+    fun AddGameOfferUseCase(appRepository: IOffersRepository): AddGameOfferUseCase = AddGameOfferUseCase(appRepository::addGameOffer)
+
+    @Singleton
+    @Provides
+    fun getGameOffersUseCase(appRepository: IOffersRepository): GetGameOffersUseCase = GetGameOffersUseCase(appRepository::getGameOffers)
+
+    @Singleton
+    @Provides
+    fun getMyOffersUseCase(appRepository: IOffersRepository): GetMyOffersUseCase = GetMyOffersUseCase(appRepository::getMyGameOffers)
+
+    @Singleton
+    @Provides
+    fun deleteMyOfferUseCase(appRepository: IOffersRepository): DeleteMyOfferUseCase = DeleteMyOfferUseCase(appRepository::deleteMyOffer)
+
+    @Singleton
+    @Provides
+    fun getPagedOffersUseCase(appRepository: IOffersRepository) = GetPagedOffersUseCase(appRepository::getPagedOffers)
+
+    @Singleton
+    @Provides
+    fun refreshOffersUseCase(offersStore: Store<OffersFilter, List<GameOffer>>) = RefreshOffersUseCase {
+        try {
+            offersStore.fresh(it)
+            Resource.Success(Unit)
+        }
+        catch (e: Exception) {
+            Resource.Error(message = UiText.NonTranslatable(e.message?:e.toString()))
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
 
-import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
+import com.pawlowski.user.use_cases.UpdateUserInfoUseCase
 import com.pawlowski.sportnite.utils.*
 import com.pawlowski.utils.*
 import io.mockk.coEvery

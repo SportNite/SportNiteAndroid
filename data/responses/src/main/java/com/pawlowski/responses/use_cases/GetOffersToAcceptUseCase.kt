@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.use_cases
+package com.pawlowski.responses.use_cases
 
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Sport
