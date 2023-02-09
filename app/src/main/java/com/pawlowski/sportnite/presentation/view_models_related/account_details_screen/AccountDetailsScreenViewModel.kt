@@ -2,7 +2,7 @@ package com.pawlowski.sportnite.presentation.view_models_related.account_details
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.models.params_models.UserUpdateInfoParams
-import com.pawlowski.sportnite.presentation.use_cases.UpdateUserInfoUseCase
+import com.pawlowski.user.use_cases.UpdateUserInfoUseCase
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container

@@ -5,7 +5,7 @@ import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLe
 import com.pawlowski.models.mappers.getAvailableLevelsForSport
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.use_cases.UpdateAdvanceLevelInfoUseCase
+import com.pawlowski.user.use_cases.UpdateAdvanceLevelInfoUseCase
 import com.pawlowski.utils.UiText
 import com.pawlowski.utils.onError
 import com.pawlowski.utils.onSuccess

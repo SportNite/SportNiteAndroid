@@ -9,11 +9,10 @@ import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.models.params_models.OffersFilter
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
-import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
-import com.pawlowski.sportnite.presentation.use_cases.RejectOfferToAcceptUseCase
-import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
+import com.pawlowski.responses.use_cases.DeleteMyOfferToAcceptUseCase
+import com.pawlowski.repository.use_cases.GetPagedOffersUseCase
+import com.pawlowski.responses.use_cases.RejectOfferToAcceptUseCase
+import com.pawlowski.responses.use_cases.SendGameOfferToAcceptUseCase
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

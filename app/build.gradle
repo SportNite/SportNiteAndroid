@@ -191,4 +191,13 @@ dependencies {
     implementation project(":core:imageupload")
     implementation project(":data:localstorage")
     implementation project(":service:notificationservice")
+    implementation project(":data:offers")
+    implementation project(":data:meetings")
+    implementation project(":data:responses")
+    implementation project(":data:players")
+    implementation project(":data:notifications")
+    implementation project(":data:user")
+
+
+
 }

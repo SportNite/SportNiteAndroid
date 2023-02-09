@@ -1,10 +1,18 @@
 package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
+import com.pawlowski.meetings.use_cases.RefreshMeetingsUseCase
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
-import com.pawlowski.sportnite.presentation.use_cases.*
+import com.pawlowski.repository.use_cases.DeleteMyOfferUseCase
+import com.pawlowski.repository.use_cases.GetMyOffersUseCase
+import com.pawlowski.repository.use_cases.RefreshOffersUseCase
+import com.pawlowski.responses.use_cases.AcceptOfferToAcceptUseCase
+import com.pawlowski.responses.use_cases.GetOffersToAcceptUseCase
+import com.pawlowski.responses.use_cases.RefreshOffersToAcceptUseCase
+import com.pawlowski.responses.use_cases.RejectOfferToAcceptUseCase
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
