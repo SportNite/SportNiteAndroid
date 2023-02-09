@@ -16,6 +16,7 @@ import com.pawlowski.players.IPlayersRepository
 import com.pawlowski.repository.IOffersRepository
 import com.pawlowski.responses.IResponsesRepository
 import com.pawlowski.sportnite.presentation.use_cases.*
+import com.pawlowski.user.IUserRepository
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText
 import dagger.Module
@@ -50,11 +51,11 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun updateUserInfoUseCase(appRepository: IAppRepository): UpdateUserInfoUseCase = UpdateUserInfoUseCase(appRepository::updateUserInfo)
+    fun updateUserInfoUseCase(appRepository: IUserRepository): UpdateUserInfoUseCase = UpdateUserInfoUseCase(appRepository::updateUserInfo)
 
     @Singleton
     @Provides
-    fun getInfoAboutMeUseCase(appRepository: IAppRepository): GetInfoAboutMeUseCase = GetInfoAboutMeUseCase(appRepository::getInfoAboutMe)
+    fun getInfoAboutMeUseCase(appRepository: IUserRepository): GetInfoAboutMeUseCase = GetInfoAboutMeUseCase(appRepository::getInfoAboutMe)
 
     @Singleton
     @Provides
@@ -70,7 +71,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun signOutUseCase(appRepository: IAppRepository): SignOutUseCase = SignOutUseCase(appRepository::signOut)
+    fun signOutUseCase(appRepository: IUserRepository): SignOutUseCase = SignOutUseCase(appRepository::signOut)
 
     @Singleton
     @Provides
@@ -78,7 +79,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getUserSportsUseCase(appRepository: IAppRepository) = GetUserSportsUseCase(appRepository::getUserSports)
+    fun getUserSportsUseCase(appRepository: IUserRepository) = GetUserSportsUseCase(appRepository::getUserSports)
 
     @Singleton
     @Provides
@@ -90,7 +91,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun updateAdvanceLevelInfoUseCase(appRepository: IAppRepository) = UpdateAdvanceLevelInfoUseCase(appRepository::updateAdvanceLevelInfo)
+    fun updateAdvanceLevelInfoUseCase(appRepository: IUserRepository) = UpdateAdvanceLevelInfoUseCase(appRepository::updateAdvanceLevelInfo)
 
     @Singleton
     @Provides

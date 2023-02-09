@@ -13,13 +13,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IAppRepository {
     fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>>
-    fun getUserSports(): Flow<UiData<List<Sport>>>
 
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
-    fun getInfoAboutMe() : Flow<User?>
 
-    suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
-    suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
 
-    fun signOut()
 }

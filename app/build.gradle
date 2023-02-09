@@ -196,6 +196,7 @@ dependencies {
     implementation project(":data:responses")
     implementation project(":data:players")
     implementation project(":data:notifications")
+    implementation project(":data:user")
 
 
 
