@@ -1,16 +1,15 @@
-package com.pawlowski.repository
+package com.pawlowski.domainutils
 
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.pawlowski.utils.PaginationPage
 import com.pawlowski.utils.Resource
 
-internal class PagingFactory<T: Any> constructor(
+class PagingKeyBasedFactory<T: Any> constructor(
     private val request: suspend (page: String?, pageSize: Int) -> Resource<PaginationPage<T>>,
 ): PagingSource<String, T>() {
-    private val previousKeysMap = mutableStateMapOf<String, String?>()
-    private val nextKeysMap = mutableStateMapOf<String, String?>()
+    private val previousKeysMap = mutableMapOf<String, String?>()
+    private val nextKeysMap = mutableMapOf<String, String?>()
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, T> {
         val position = params.key
