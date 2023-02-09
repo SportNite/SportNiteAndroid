@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -131,6 +132,11 @@ fun MyMeetingsScreen(
                     },
                     onOfferTextButtonClick = {
                         viewModel.acceptOfferToAccept(it.offerUid)
+                    },
+                    leftButton = {
+                        TextButton(onClick = { viewModel.rejectOfferToAccept(it.offerUid) }) {
+                            Text(text = "Odrzuć propozycję", color = Color.Red)
+                        }
                     }
                 )
                 item {

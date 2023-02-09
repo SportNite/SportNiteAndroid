@@ -32,6 +32,7 @@ class SportScreenViewModel @Inject constructor(
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
     private val refreshPlayersUseCase: RefreshPlayersUseCase,
     private val deleteMyOfferToAcceptUseCase: DeleteMyOfferToAcceptUseCase,
+    private val rejectOfferToAcceptUseCase: RejectOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): ISportScreenViewModel, ViewModel() {
     private val currentSport = getSportFromSportId(savedStateHandle.get<String>("sportId")!!)
@@ -121,6 +122,15 @@ class SportScreenViewModel @Inject constructor(
         val result = deleteMyOfferToAcceptUseCase(offerToAcceptId)
         result.onSuccess {
             postSideEffect(SportScreenSideEffect.ShowToastMessage(offerToAcceptDeletionSuccessText))
+        }.onError { message, _ ->
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(message))
+        }
+    }
+
+    override fun rejectOfferToAccept(offerToAcceptUid: String) = intent {
+        val result = rejectOfferToAcceptUseCase(offerToAcceptUid)
+        result.onSuccess {
+            postSideEffect(SportScreenSideEffect.ShowToastMessage(UiText.NonTranslatable("Oferta została pomyślnie odrzucona")))
         }.onError { message, _ ->
             postSideEffect(SportScreenSideEffect.ShowToastMessage(message))
         }

@@ -39,6 +39,8 @@ interface IAppRepository {
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>
     suspend fun deleteMyOffer(offerId: String): Resource<Unit>
     suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit>
+
+    suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit>
     fun signOut()
     fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>>
 }

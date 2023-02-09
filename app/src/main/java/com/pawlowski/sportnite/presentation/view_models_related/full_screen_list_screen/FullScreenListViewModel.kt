@@ -11,7 +11,9 @@ import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
 import com.pawlowski.sportnite.presentation.use_cases.DeleteMyOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.GetPagedOffersUseCase
+import com.pawlowski.sportnite.presentation.use_cases.RejectOfferToAcceptUseCase
 import com.pawlowski.sportnite.presentation.use_cases.SendGameOfferToAcceptUseCase
+import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +29,7 @@ class FullScreenListViewModel @Inject constructor(
     private val getPagedOffersUseCase: GetPagedOffersUseCase,
     private val deleteMyOfferToAcceptUseCase: DeleteMyOfferToAcceptUseCase,
     private val sendGameOfferToAcceptUseCase: SendGameOfferToAcceptUseCase,
+    private val rejectOfferToAcceptUseCase: RejectOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): IFullScreenListViewModel, ViewModel() {
     private val dataType = FullScreenDataType.getTypeFromString(savedStateHandle.get<String>("dataType")!!)
@@ -66,6 +69,15 @@ class FullScreenListViewModel @Inject constructor(
                 }
             }
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(offerAcceptingSuccessText))
+        }.onError { message, _ ->
+            postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
+        }
+    }
+
+    override fun rejectOfferToAccept(offerToAcceptUid: String) = intent {
+        val result = rejectOfferToAcceptUseCase(offerToAcceptUid)
+        result.onSuccess {
+            postSideEffect(FullScreenListSideEffect.ShowToastMessage(UiText.NonTranslatable("Oferta została pomyślnie odrzucona")))
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
         }

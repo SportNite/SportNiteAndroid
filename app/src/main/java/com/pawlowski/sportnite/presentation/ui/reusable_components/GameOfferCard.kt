@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,7 @@ fun GameOfferCard(
     isExpanded: () -> Boolean = {false},
     textButtonText: @Composable () -> Unit,
     onTextButtonClick: () -> Unit = {},
+    cancelButton: (@Composable (GameOffer) -> Unit)? = null,
     onExpandClick: (GameOffer) -> Unit = {}
 ) {
     Card(
@@ -79,14 +81,19 @@ fun GameOfferCard(
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Divider(modifier = Modifier.fillMaxWidth())
-                TextButton(
+                Row(
                     modifier = Modifier
                         .align(Alignment.End)
-                        .padding(end = 10.dp),
-                    onClick = { onTextButtonClick() }
+                        .padding(end = 10.dp)
                 ) {
-                    textButtonText()
+                    cancelButton?.invoke(gameOffer)
+                    TextButton(
+                        onClick = onTextButtonClick
+                    ) {
+                        textButtonText()
+                    }
                 }
+
             }
         }
     }
@@ -99,6 +106,12 @@ fun GameOfferCardPreview() {
         getGameOfferForPreview(),
         textButtonText = {
             Text(text = "Akceptuj propozycję")
+        },
+        isExpanded = {true},
+        cancelButton = {
+            TextButton(onClick = { /*TODO*/ }) {
+                Text(text = "Odrzuć propozycję", color = Color.Red)
+            }
         }
     )
 }

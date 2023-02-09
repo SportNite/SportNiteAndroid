@@ -1,9 +1,9 @@
 package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
 
 import androidx.lifecycle.ViewModel
+import com.pawlowski.models.GameOffer
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
-import com.pawlowski.models.GameOffer
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +25,7 @@ class MyMeetingsScreenViewModel @Inject constructor(
     private val refreshMeetingsUseCase: RefreshMeetingsUseCase,
     private val refreshOffersToAcceptUseCase: RefreshOffersToAcceptUseCase,
     private val acceptOfferToAcceptUseCase: AcceptOfferToAcceptUseCase,
-
+    private val rejectOfferToAcceptUseCase: RejectOfferToAcceptUseCase,
     ): IMyMeetingsScreenViewModel, ViewModel() {
     override val container: Container<MyMeetingsScreenUiState, MyMeetingsScreenSideEffect> =
         container(
@@ -80,7 +80,7 @@ class MyMeetingsScreenViewModel @Inject constructor(
 
     override fun refresh() = intent {
         refreshMeetingsUseCase(MeetingsFilter(null))
-        //refreshOffersUseCase(OffersFilter(null, myOffers = true))
+        refreshOffersUseCase(OffersFilter(null, myOffers = true))
         refreshOffersToAcceptUseCase(OffersFilter(sportFilter = null))
     }
 
@@ -93,6 +93,15 @@ class MyMeetingsScreenViewModel @Inject constructor(
         }.onError { message, _ ->
             postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
 
+        }
+    }
+
+    override fun rejectOfferToAccept(offerToAcceptUid: String) = intent {
+        val result = rejectOfferToAcceptUseCase(offerToAcceptUid)
+        result.onSuccess {
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(UiText.NonTranslatable("Oferta została pomyślnie odrzucona")))
+        }.onError { message, _ ->
+            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
         }
     }
 

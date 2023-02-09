@@ -71,8 +71,16 @@ fun FullScreenListScreen(
                     onSportClick = {
                         onNavigateToSportScreen(it)
                     },
-                    onRemoveOfferToAccept = { viewModel.deleteMyOfferToAccept(it) }
-                ) { viewModel.sendOfferToAccept(it) }
+                    onRemoveOfferToAccept = {
+                        viewModel.deleteMyOfferToAccept(it)
+                    },
+                    onRejectOfferToAccept = {
+                        viewModel.rejectOfferToAccept(it.offerUid)
+                    },
+                    onSendOfferToAccept = {
+                        viewModel.sendOfferToAccept(it)
+                    }
+                )
 
             }
         }
@@ -87,6 +95,7 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
     sports: () -> List<Sport>,
     onSportClick: (Sport) -> Unit = {},
     onRemoveOfferToAccept: (GameOffer) -> Unit = {},
+    onRejectOfferToAccept: (GameOffer) -> Unit = {},
     onSendOfferToAccept: (GameOffer) -> Unit = {}
 ) {
 
@@ -116,6 +125,11 @@ private fun LazyGridScope.displayItemsBasedOnDataType(
                         else
                         {
                             Text(text = "Akceptuj propozycję")
+                        }
+                    },
+                    cancelButton = {
+                        TextButton(onClick = { onRejectOfferToAccept(it) }) {
+                            Text(text = "Odrzuć propozycję", color = Color.Red)
                         }
                     },
                     onExpandClick = {

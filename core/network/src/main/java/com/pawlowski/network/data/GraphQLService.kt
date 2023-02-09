@@ -304,6 +304,16 @@ internal class GraphQLService @Inject constructor(
 
     }
 
+    override suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
+        return withContext(ioDispatcher) {
+            executeApolloMutation(
+                request = {
+                    apolloClient.mutation(RejectResponseMutation(responseId = offerToAcceptUid)).execute()
+                }
+            ).asUnitResource()
+        }
+    }
+
 
     private suspend fun <T : Operation.Data> executeApolloMutation(
         request: suspend () -> ApolloResponse<T>,
