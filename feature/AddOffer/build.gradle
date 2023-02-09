@@ -75,6 +75,15 @@ dependencies {
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
+    //Orbit MVI
+    implementation("org.orbit-mvi:orbit-viewmodel:4.3.2")
+    testImplementation("org.orbit-mvi:orbit-test:4.3.2")
+
+    //Modules
+    implementation project(":core:models")
+    implementation project(":core:utils")
+    implementation project(":core:commonui")
     implementation project(":core:sharedresources")
+    implementation project(":data:offers")
 
 }

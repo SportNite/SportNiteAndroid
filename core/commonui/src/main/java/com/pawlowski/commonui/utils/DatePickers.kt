@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.utils
+package com.pawlowski.commonui.utils
 
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog

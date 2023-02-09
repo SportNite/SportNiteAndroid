@@ -62,6 +62,9 @@ dependencies {
     implementation libs.bundles.coroutines
     testImplementation libs.coroutines.test
 
+    //Datetime picker dialog
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+
     //Modules
     implementation project(":core:utils")
     implementation project(":core:models")

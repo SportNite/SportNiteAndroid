@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
+package com.pawlowski.addoffer.view_model_related
 
 import com.pawlowski.models.Sport
 import com.pawlowski.utils.UiDate

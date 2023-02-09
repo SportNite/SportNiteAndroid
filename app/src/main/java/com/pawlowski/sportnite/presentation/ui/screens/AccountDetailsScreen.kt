@@ -26,7 +26,7 @@ import com.pawlowski.commonui.DateInputField
 import com.pawlowski.commonui.GenderInputField
 import com.pawlowski.commonui.ProfilePictureWithEditIcon
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
+import com.pawlowski.commonui.utils.showDatePicker
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel

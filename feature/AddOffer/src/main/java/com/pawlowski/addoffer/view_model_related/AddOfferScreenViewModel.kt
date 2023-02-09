@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
+package com.pawlowski.addoffer.view_model_related
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.models.mappers.getSportFromSportId
@@ -15,7 +15,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class AddOfferScreenViewModel @Inject constructor(
+internal class AddOfferScreenViewModel @Inject constructor(
     private val addGameOfferUseCase: AddGameOfferUseCase,
 ): IAddOfferScreenViewModel, ViewModel() {
 

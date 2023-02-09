@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.addoffer.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -12,15 +12,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.commonui.DateInputField
 import com.pawlowski.commonui.SportInputField
 import com.pawlowski.commonui.SportPickerDialog
-import com.pawlowski.sportnite.presentation.ui.utils.showDateTimePicker
-import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.AddOfferScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen.IAddOfferScreenViewModel
+import com.pawlowski.commonui.utils.showDateTimePicker
+import com.pawlowski.addoffer.view_model_related.AddOfferScreenSideEffect
+import com.pawlowski.addoffer.view_model_related.AddOfferScreenViewModel
+import com.pawlowski.addoffer.view_model_related.IAddOfferScreenViewModel
 import com.pawlowski.utils.UiDate
 import kotlinx.coroutines.flow.collectLatest
 import java.util.*
