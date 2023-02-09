@@ -10,6 +10,7 @@ import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Player
+import com.pawlowski.repository.IOffersRepository
 import com.pawlowski.sportnite.presentation.use_cases.*
 import com.pawlowski.utils.Resource
 import com.pawlowski.utils.UiText
@@ -25,11 +26,11 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun AddGameOfferUseCase(appRepository: IAppRepository): AddGameOfferUseCase = AddGameOfferUseCase(appRepository::addGameOffer)
+    fun AddGameOfferUseCase(appRepository: IOffersRepository): AddGameOfferUseCase = AddGameOfferUseCase(appRepository::addGameOffer)
 
     @Singleton
     @Provides
-    fun getGameOffersUseCase(appRepository: IAppRepository): GetGameOffersUseCase = GetGameOffersUseCase(appRepository::getGameOffers)
+    fun getGameOffersUseCase(appRepository: IOffersRepository): GetGameOffersUseCase = GetGameOffersUseCase(appRepository::getGameOffers)
 
     @Singleton
     @Provides
@@ -53,11 +54,11 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getMyOffersUseCase(appRepository: IAppRepository): GetMyOffersUseCase = GetMyOffersUseCase(appRepository::getMyGameOffers)
+    fun getMyOffersUseCase(appRepository: IOffersRepository): GetMyOffersUseCase = GetMyOffersUseCase(appRepository::getMyGameOffers)
 
     @Singleton
     @Provides
-    fun deleteMyOfferUseCase(appRepository: IAppRepository): DeleteMyOfferUseCase = DeleteMyOfferUseCase(appRepository::deleteMyOffer)
+    fun deleteMyOfferUseCase(appRepository: IOffersRepository): DeleteMyOfferUseCase = DeleteMyOfferUseCase(appRepository::deleteMyOffer)
 
     @Singleton
     @Provides
@@ -89,7 +90,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPagedOffersUseCase(appRepository: IAppRepository) = GetPagedOffersUseCase(appRepository::getPagedOffers)
+    fun getPagedOffersUseCase(appRepository: IOffersRepository) = GetPagedOffersUseCase(appRepository::getPagedOffers)
 
     @Singleton
     @Provides

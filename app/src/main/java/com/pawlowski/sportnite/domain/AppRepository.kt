@@ -89,29 +89,9 @@ class AppRepository @Inject constructor(
         }, isDataEmpty = { it.isNullOrEmpty() })
     }
 
-    override fun getGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
-        val myUid = authManager.getCurrentUserUid()!!
-        return offersStore.stream(
-            StoreRequest.cached(
-                key = OffersFilter(
-                    sportFilter = sportFilter
-                ), refresh = true
-            )
-        ).toUiData(filterPredicateOnListData = {
-            it.owner.uid != myUid
-        }, isDataEmpty = { it.isNullOrEmpty() })
-    }
 
-    override fun getMyGameOffers(sportFilter: Sport?): Flow<UiData<List<GameOffer>>> {
-        return offersStore.stream(
-            StoreRequest.cached(
-                key = OffersFilter(
-                    sportFilter = sportFilter,
-                    myOffers = true
-                ), refresh = true
-            )
-        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
-    }
+
+
 
     override fun getPagedNotifications(): Flow<PagingData<UserNotification>> {
         return Pager(
@@ -175,28 +155,7 @@ class AppRepository @Inject constructor(
         return userInfoUpdateCache.cachedUser
     }
 
-    override fun getPagedOffers(filter: OffersFilter): Flow<PagingData<GameOffer>> {
-        val myUid = authManager.getCurrentUserUid()!!
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                PagingFactory(
-                    request = { page, pageSize ->
-                        graphQLService.getOffers(
-                            filters = filter,
-                            cursor = page,
-                            pageSize = pageSize
-                        ).filterIfSuccess {
-                            filter.myOffers || it.owner.uid != myUid
-                        }
-                    }
-                )
-            }
-        ).flow
-    }
+
 
     override fun getPagedPlayers(filters: PlayersFilter): Flow<PagingData<Player>> {
         val myUid = authManager.getCurrentUserUid()!!
@@ -258,20 +217,7 @@ class AppRepository @Inject constructor(
     }
 
 
-    override suspend fun addGameOffer(gameParams: AddGameOfferParams): Resource<Unit> {
-        return graphQLService.createOffer(gameParams)
-            .onSuccess {
-                val paramsAsGameOffer = gameParams.toGameOffer(
-                    offerId = it,
-                    playerName = userInfoUpdateCache.cachedUser.value?.userName?:""
-                )
 
-                myOffersInMemoryCache.upsertElement(
-                    element = paramsAsGameOffer
-                )
-
-            }.asUnitResource()
-    }
 
     override suspend fun sendOfferToAccept(offerUid: String): Resource<String> {
         return graphQLService.sendOfferToAccept(offerUid)
@@ -343,15 +289,7 @@ class AppRepository @Inject constructor(
         }
     }
 
-    override suspend fun deleteMyOffer(offerId: String): Resource<Unit> {
 
-        return withContext(ioDispatcher) {
-            graphQLService.deleteMyOffer(offerId)
-                .onSuccess {
-                    myOffersInMemoryCache.deleteElementsIf { it.offerUid == offerId }
-                }
-        }
-    }
 
     override suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
         return withContext(ioDispatcher) {
