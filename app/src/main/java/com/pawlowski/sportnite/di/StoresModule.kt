@@ -105,29 +105,5 @@ class StoresModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun meetingStore(
-        graphQLService: IGraphQLService,
-        meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
-        authManager: IAuthManager
-    ): Store<MeetingsFilter, List<Meeting>> {
-        return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
-            val userUid = authManager.getCurrentUserUid()!!
-            graphQLService.getIncomingMeetings(filters, userUid).dataOrNull()!!
-        }, sourceOfTruth = SourceOfTruth.of(
-            reader = { key: MeetingsFilter ->
-                meetingsInMemoryCache.observeData(key, sortBy= {
-                    it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
-                })
-            },
-            writer = { _: MeetingsFilter, input: List<Meeting> ->
-                meetingsInMemoryCache.upsertManyElements(input)
-            },
-            delete = { key: MeetingsFilter ->
-                meetingsInMemoryCache.deleteAllElementsWithKey(key)
-            },
-            deleteAll = { meetingsInMemoryCache.clearAll() }
-        )).build()
-    }
+
 }

@@ -12,7 +12,6 @@ import com.pawlowski.utils.UiData
 import kotlinx.coroutines.flow.Flow
 
 interface IAppRepository {
-    fun getIncomingMeetings(sportFilter: Sport? = null): Flow<UiData<List<Meeting>>>
     fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>>
     fun getUserSports(): Flow<UiData<List<Sport>>>
     fun getPlayers(sportFilter: Sport? = null, nameSearch: String? = null, level: AdvanceLevel?): Flow<UiData<List<Player>>>
@@ -22,11 +21,9 @@ interface IAppRepository {
     fun getOffersToAccept(sportFilter: Sport?): Flow<UiData<List<GameOfferToAccept>>>
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
     fun getPlayerDetails(playerUid: String): Flow<UiData<PlayerDetails>>
-    fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>>
     fun getUserNotifications(): Flow<UiData<List<UserNotification>>>
     fun getInfoAboutMe() : Flow<User?>
 
-    fun getPagedMeetings(): Flow<PagingData<Meeting>>
 
 
     suspend fun sendOfferToAccept(offerUid: String): Resource<String>

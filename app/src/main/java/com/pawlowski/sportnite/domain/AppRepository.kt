@@ -8,7 +8,6 @@ import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.imageupload.IPhotoUploader
-import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
 import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
@@ -37,21 +36,12 @@ class AppRepository @Inject constructor(
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
-    private val meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
     @Named("other") private val offersInMemoryCache: OffersIntelligentInMemoryCache,
     private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
     private val notificationTokenSynchronizer: INotificationTokenSynchronizer
 ) : IAppRepository {
-    override fun getIncomingMeetings(sportFilter: Sport?): Flow<UiData<List<Meeting>>> {
-        return meetingsStore.stream(
-            StoreRequest.cached(
-                key = MeetingsFilter(
-                    sportFilter = sportFilter
-                ), refresh = true
-            )
-        ).toUiData(isDataEmpty = { it.isNullOrEmpty() })
-    }
+
 
     override fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>> {
         TODO("Not yet implemented")
@@ -132,17 +122,7 @@ class AppRepository @Inject constructor(
         ).toUiData()
     }
 
-    override fun getMeetingDetails(meetingUid: String): Flow<UiData<Meeting>> = flow {
-        //It's collected only from cache because it will be always there (meetings are always fetched before navigating to see their details)
-        emit(UiData.Loading())
-        meetingsInMemoryCache.observeData(key = null).map {
-            it.first { meeting ->
-                meeting.meetingUid == meetingUid
-            }
-        }.collect {
-            emit(UiData.Success(isFresh = true, data = it))
-        }
-    }
+
 
     override fun getUserNotifications(): Flow<UiData<List<UserNotification>>> {
         TODO("Not yet implemented")
@@ -177,41 +157,7 @@ class AppRepository @Inject constructor(
         ).flow
     }
 
-    override fun getPagedMeetings(): Flow<PagingData<Meeting>> {
-        TODO()
-//        return Pager(
-//            config = PagingConfig(
-//                pageSize = 10,
-//                enablePlaceholders = false
-//            ),
-//            pagingSourceFactory = {
-//                PagingFactory(
-//                    request = { page, pageSize ->
-//                        executeApolloQuery(
-//                            request = {
-//                                apolloClient.query(
-//                                    IncomingOffersQuery(
-//                                        offersFilter = MeetingsFilter(null).toOfferFilterInput()
-//                                    )
-//                                ).execute()
-//                            },
-//                            mapper = {
-//                                val data = it.incomingOffers.let { beforeMappingData ->
-//                                    val userUid = authManager.getCurrentUserUid()!!
-//                                    beforeMappingData.map {
-//                                        it.toMeeting(userUid)
-//                                    }
-//                                }
-//                                //val pageInfo = it.offers?.pageInfo!!
-//                                PaginationPage(data = data, hasNextPage = pageInfo.hasNextPage, endCursor = /pageInfo.endCursor)
-//                            }
-//                        )
-//
-//                    }
-//                )
-//            }
-//        ).flow
-    }
+
 
 
 

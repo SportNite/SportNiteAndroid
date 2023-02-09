@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.pawlowski.repository'
+    namespace 'com.pawlowski.meetings'
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {

@@ -192,5 +192,6 @@ dependencies {
     implementation project(":data:localstorage")
     implementation project(":service:notificationservice")
     implementation project(":data:offers")
+    implementation project(":data:meetings")
 
 }

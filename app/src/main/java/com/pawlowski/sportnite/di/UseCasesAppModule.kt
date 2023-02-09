@@ -2,6 +2,7 @@ package com.pawlowski.sportnite.di
 
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.fresh
+import com.pawlowski.meetings.IMeetingsRepository
 import com.pawlowski.sportnite.domain.IAppRepository
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter
@@ -38,7 +39,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getIncomingMeetingsUseCase(appRepository: IAppRepository): GetIncomingMeetingsUseCase = GetIncomingMeetingsUseCase(appRepository::getIncomingMeetings)
+    fun getIncomingMeetingsUseCase(appRepository: IMeetingsRepository): GetIncomingMeetingsUseCase = GetIncomingMeetingsUseCase(appRepository::getIncomingMeetings)
 
     @Singleton
     @Provides
@@ -82,7 +83,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getMeetingByIdUseCase(appRepository: IAppRepository) = GetMeetingByIdUseCase(appRepository::getMeetingDetails)
+    fun getMeetingByIdUseCase(appRepository: IMeetingsRepository) = GetMeetingByIdUseCase(appRepository::getMeetingDetails)
 
     @Singleton
     @Provides
@@ -94,7 +95,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPagedMeetingsUseCase(appRepository: IAppRepository) = GetPagedMeetingsUseCase(appRepository::getPagedMeetings)
+    fun getPagedMeetingsUseCase(appRepository: IMeetingsRepository) = GetPagedMeetingsUseCase(appRepository::getPagedMeetings)
 
     @Singleton
     @Provides
