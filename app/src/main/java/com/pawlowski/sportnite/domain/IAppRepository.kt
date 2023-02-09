@@ -15,14 +15,8 @@ interface IAppRepository {
     fun getWeatherForecast(): Flow<UiData<List<WeatherForecastDay>>>
     fun getUserSports(): Flow<UiData<List<Sport>>>
 
-    fun getPagedNotifications(): Flow<PagingData<UserNotification>>
-
     fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>>
-    fun getUserNotifications(): Flow<UiData<List<UserNotification>>>
     fun getInfoAboutMe() : Flow<User?>
-
-
-
 
     suspend fun updateUserInfo(params: UserUpdateInfoParams): Resource<Unit>
     suspend fun updateAdvanceLevelInfo(levels: Map<Sport, AdvanceLevel>): Resource<Unit>

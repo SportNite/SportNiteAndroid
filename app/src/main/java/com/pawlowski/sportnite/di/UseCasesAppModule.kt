@@ -11,6 +11,7 @@ import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Player
+import com.pawlowski.notifications.INotificationsRepository
 import com.pawlowski.players.IPlayersRepository
 import com.pawlowski.repository.IOffersRepository
 import com.pawlowski.responses.IResponsesRepository
@@ -157,7 +158,7 @@ class UseCasesAppModule {
 
     @Singleton
     @Provides
-    fun getPagedNotificationsUseCase(appRepository: IAppRepository) = GetPagedNotificationsUseCase(appRepository::getPagedNotifications)
+    fun getPagedNotificationsUseCase(appRepository: INotificationsRepository) = GetPagedNotificationsUseCase(appRepository::getPagedNotifications)
 
     @Singleton
     @Provides

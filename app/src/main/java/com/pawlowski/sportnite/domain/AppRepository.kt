@@ -1,13 +1,13 @@
 package com.pawlowski.sportnite.domain
 
 import android.net.Uri
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.cache.IUserInfoUpdateCache
 import com.pawlowski.imageupload.IPhotoUploader
-import com.pawlowski.models.*
+import com.pawlowski.models.AdvanceLevel
+import com.pawlowski.models.Sport
+import com.pawlowski.models.User
+import com.pawlowski.models.WeatherForecastDay
 import com.pawlowski.models.params_models.UserUpdateInfoParams
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
@@ -46,34 +46,9 @@ class AppRepository @Inject constructor(
         }
     }
 
-    override fun getPagedNotifications(): Flow<PagingData<UserNotification>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                PagingFactory(
-                    request = { page, pageSize ->
-                        graphQLService.getNotifications(
-                            cursor = page,
-                            pageSize = pageSize
-                        )
-                    }
-                )
-            }
-        ).flow
-    }
+
 
     override fun getSportObjects(sportFilters: List<Sport>): Flow<UiData<List<SportObject>>> {
-        TODO("Not yet implemented")
-    }
-
-
-
-
-
-    override fun getUserNotifications(): Flow<UiData<List<UserNotification>>> {
         TODO("Not yet implemented")
     }
 
