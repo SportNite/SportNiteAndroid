@@ -12,7 +12,6 @@ import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryC
 import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
 import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
-import com.pawlowski.models.mappers.toGameOffer
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
@@ -35,13 +34,11 @@ class AppRepository @Inject constructor(
     private val photoUploader: IPhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
     private val playersStore: Store<PlayersFilter, List<Player>>,
-    private val offersStore: Store<OffersFilter, List<GameOffer>>,
     private val gameOffersToAcceptStore: Store<OffersFilter, List<GameOfferToAccept>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val meetingsStore: Store<MeetingsFilter, List<Meeting>>,
     private val meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
     @Named("other") private val offersInMemoryCache: OffersIntelligentInMemoryCache,
-    @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
     private val offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache,
     private val graphQLService: IGraphQLService,
     private val notificationTokenSynchronizer: INotificationTokenSynchronizer

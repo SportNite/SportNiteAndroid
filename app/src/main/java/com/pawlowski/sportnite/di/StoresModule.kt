@@ -57,55 +57,6 @@ class StoresModule {
 
     @Singleton
     @Provides
-    fun offersStore(graphQLService: IGraphQLService, @Named("other") offersInMemoryCache: OffersIntelligentInMemoryCache, @Named("my") myOffersInMemoryCache: OffersIntelligentInMemoryCache): Store<OffersFilter, List<GameOffer>> {
-        return StoreBuilder.from(fetcher = Fetcher.of { filters: OffersFilter ->
-            graphQLService.getOffers(filters, cursor = null, pageSize = 50).dataOrNull()!!.data
-        }, sourceOfTruth = SourceOfTruth.of(
-            reader = { key: OffersFilter ->
-                val cache = when(key.myOffers) {
-                    true -> {
-                        myOffersInMemoryCache
-                    }
-                    false -> {
-                        offersInMemoryCache
-                    }
-                }
-                cache.observeData(key, sortBy = {
-                    it.date.offsetDateTimeDate.toLocalDateTime().toInstant(ZoneOffset.UTC)
-                })
-
-            },
-            writer = { key: OffersFilter, input: List<GameOffer> ->
-                val cache = when(key.myOffers) {
-                    true -> {
-                        myOffersInMemoryCache
-                    }
-                    false -> {
-                        offersInMemoryCache
-                    }
-                }
-                cache.upsertManyElements(input)
-            },
-            delete = { key: OffersFilter ->
-                val cache = when(key.myOffers) {
-                    true -> {
-                        myOffersInMemoryCache
-                    }
-                    false -> {
-                        offersInMemoryCache
-                    }
-                }
-                cache.deleteAllElementsWithKey(key)
-            },
-            deleteAll = {
-                myOffersInMemoryCache.clearAll()
-                offersInMemoryCache.clearAll()
-            }
-        )).build()
-    }
-
-    @Singleton
-    @Provides
     fun offersToAcceptStore(
         graphQLService: IGraphQLService,
         offersToAcceptMemoryCache: OffersToAcceptIntelligentInMemoryCache
