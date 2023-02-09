@@ -199,6 +199,7 @@ dependencies {
     implementation project(":data:user")
 
     implementation project(":feature:AddOffer")
+    implementation project(":feature:AccountDetails")
 
 
 }

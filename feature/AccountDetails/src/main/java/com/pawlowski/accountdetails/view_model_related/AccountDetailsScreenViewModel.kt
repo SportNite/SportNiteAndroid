@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
+package com.pawlowski.accountdetails.view_model_related
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.models.params_models.UserUpdateInfoParams
@@ -13,7 +13,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountDetailsScreenViewModel @Inject constructor(
+internal class AccountDetailsScreenViewModel @Inject constructor(
     private val updateUserInfoUseCase: UpdateUserInfoUseCase,
 ): IAccountDetailsScreenViewModel, ViewModel() {
     override val container: Container<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect> =

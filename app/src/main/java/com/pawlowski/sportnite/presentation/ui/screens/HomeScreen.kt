@@ -27,7 +27,7 @@ import com.pawlowski.models.mappers.getUserForPreview
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
 import com.pawlowski.commonui.IncomingMeetingsRow
 import com.pawlowski.commonui.SportCard
-import com.pawlowski.sportnite.presentation.ui.utils.*
+import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
@@ -194,7 +194,6 @@ fun ProfileSegment(
             Text(text = user?.userName ?: "")
         }
         Spacer(modifier = Modifier.weight(1f))
-        val context = LocalContext.current
         FilledIconButton(onClick = {
             onNotificationsButtonClick()
         }) {

@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.reusable_components.LoginLottieAnimation
 import com.pawlowski.commonui.TextDivider
-import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeUiState

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.accountdetails.ui
 
 import android.net.Uri
 import android.widget.Toast
@@ -21,23 +21,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.options
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.commonui.DateInputField
 import com.pawlowski.commonui.GenderInputField
 import com.pawlowski.commonui.ProfilePictureWithEditIcon
-import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.commonui.utils.showDatePicker
-import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.IAccountDetailsScreenViewModel
+import com.pawlowski.accountdetails.view_model_related.AccountDetailsScreenSideEffect
+import com.pawlowski.accountdetails.view_model_related.AccountDetailsScreenUiState
+import com.pawlowski.accountdetails.view_model_related.IAccountDetailsScreenViewModel
 import com.pawlowski.utils.UiDate
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountDetailsScreen(
-    viewModel: IAccountDetailsScreenViewModel = hiltViewModel<AccountDetailsScreenViewModel>(),
+    viewModel: IAccountDetailsScreenViewModel = hiltViewModel<com.pawlowski.accountdetails.view_model_related.AccountDetailsScreenViewModel>(),
     onNavigateBack: () -> Unit = {},
     onNavigateToNextScreen: () -> Unit = {}
 ) {
@@ -262,7 +261,8 @@ fun AccountDetailsScreen(
 @Preview(showBackground = true)
 @Composable
 fun AccountDetailsScreenPreview() {
-    AccountDetailsScreen(viewModel = object : OrbitMviPreviewViewModel<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect>(), IAccountDetailsScreenViewModel {
+    AccountDetailsScreen(viewModel = object : OrbitMviPreviewViewModel<AccountDetailsScreenUiState, AccountDetailsScreenSideEffect>(),
+        IAccountDetailsScreenViewModel {
         override fun stateForPreview(): AccountDetailsScreenUiState {
             return AccountDetailsScreenUiState()
         }

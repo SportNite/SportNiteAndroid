@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.utils
+package com.pawlowski.commonui.utils
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

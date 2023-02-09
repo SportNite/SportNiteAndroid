@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.account_details_screen
+package com.pawlowski.accountdetails.view_model_related
 
 import com.pawlowski.utils.UiText
 
