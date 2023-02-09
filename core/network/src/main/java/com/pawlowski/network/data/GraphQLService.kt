@@ -177,13 +177,23 @@ internal class GraphQLService @Inject constructor(
                 apolloClient.query(
                     ResponsesQuery(
                         first = Optional.present(50),
-                        otherFilters = filters.sportFilter?.let {
-                            Optional.present(listOf(
-                                OfferFilterInput(sport = Optional.present(
-                                    SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))
-                                ))
-                            ))
-                        }?:Optional.absent()
+                        otherFilters =
+                            Optional.presentIfNotNull(
+                                listOfNotNull(
+                                    filters.sportFilter?.let {
+                                        OfferFilterInput(sport = Optional.present(
+                                            SportTypeOperationFilterInput(eq = Optional.present(it.toSportType()))
+                                        ))
+                                    },
+                                    OfferFilterInput(
+                                        dateTime = Optional.present(
+                                            ComparableDateTimeOperationFilterInput(
+                                                gte = Optional.present(OffsetDateTime.now().toString())
+                                            )
+                                        )
+                                    )
+                                ).ifEmpty { null }
+                            )
                     )
                 ).execute()
             },
