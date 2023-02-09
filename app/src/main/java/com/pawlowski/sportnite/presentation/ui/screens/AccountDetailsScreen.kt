@@ -22,9 +22,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.options
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.ui.reusable_components.DateInputField
-import com.pawlowski.sportnite.presentation.ui.reusable_components.GenderInputField
-import com.pawlowski.sportnite.presentation.ui.reusable_components.ProfilePictureWithEditIcon
+import com.pawlowski.commonui.DateInputField
+import com.pawlowski.commonui.GenderInputField
+import com.pawlowski.commonui.ProfilePictureWithEditIcon
 import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.ui.utils.showDatePicker
 import com.pawlowski.sportnite.presentation.view_models_related.account_details_screen.AccountDetailsScreenSideEffect

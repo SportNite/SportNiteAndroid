@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.pawlowski.commonui.GameOfferCard
+import com.pawlowski.commonui.SportCard
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport

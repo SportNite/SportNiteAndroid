@@ -67,7 +67,6 @@ dependencies {
 
     //Compose tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
     implementation libs.core.ktx
@@ -187,8 +186,11 @@ dependencies {
     implementation project(":core:network")
     implementation project(":core:auth")
     implementation project(":core:imageupload")
-    implementation project(':data:commoncache')
+    implementation project(":core:commonui")
+
     implementation project(":service:notificationservice")
+
+    implementation project(':data:commoncache')
     implementation project(":data:offers")
     implementation project(":data:meetings")
     implementation project(":data:responses")
@@ -196,6 +198,7 @@ dependencies {
     implementation project(":data:notifications")
     implementation project(":data:user")
 
+    implementation project(":feature:AddOffer")
 
 
 }

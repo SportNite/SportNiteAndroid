@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.models.mappers.asGameOffer
 import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
-import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
-import com.pawlowski.sportnite.presentation.ui.reusable_components.ScreenHeader
-import com.pawlowski.sportnite.presentation.ui.reusable_components.gameOffersColumnItem
+import com.pawlowski.commonui.IncomingMeetingsRow
+import com.pawlowski.commonui.ScreenHeader
+import com.pawlowski.commonui.gameOffersColumnItem
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
