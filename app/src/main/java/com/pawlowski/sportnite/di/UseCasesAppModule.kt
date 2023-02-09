@@ -154,4 +154,8 @@ class UseCasesAppModule {
     @Singleton
     @Provides
     fun getPagedNotificationsUseCase(appRepository: IAppRepository) = GetPagedNotificationsUseCase(appRepository::getPagedNotifications)
+
+    @Singleton
+    @Provides
+    fun rejectOfferToAcceptUseCase(appRepository: IAppRepository) = RejectOfferToAcceptUseCase(appRepository::rejectOfferToAccept)
 }

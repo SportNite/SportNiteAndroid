@@ -25,4 +25,5 @@ interface IGraphQLService {
     suspend fun deleteMyOffer(offerId: String): Resource<Unit>
     suspend fun deleteMyOfferToAccept(offerToAcceptUid: String): Resource<Unit>
     suspend fun sendNotificationToken(token: String, deviceId: String): Resource<Unit>
+    suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit>
 }

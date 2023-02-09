@@ -7,4 +7,5 @@ interface IMyMeetingsScreenViewModel: ContainerHost<MyMeetingsScreenUiState, MyM
     fun deleteOffer(offer: GameOffer)
     fun refresh()
     fun acceptOfferToAccept(offerToAcceptUid: String)
+    fun rejectOfferToAccept(offerToAcceptUid: String)
 }

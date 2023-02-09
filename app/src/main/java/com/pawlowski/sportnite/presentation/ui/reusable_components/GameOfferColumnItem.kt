@@ -23,7 +23,8 @@ fun LazyListScope.gameOffersColumnItem(
     onSeeMoreClick: () -> Unit = {},
     offerTextButtonText: @Composable (GameOffer) -> Unit = { Text(text = "Akceptuj propozycję") },
     onOfferTextButtonClick: (GameOffer) -> Unit = {},
-    isLoading: () -> Boolean = {false}
+    leftButton: @Composable ((GameOffer) -> Unit)? = null,
+    isLoading: () -> Boolean = {false},
 ) {
     item {
         Row(modifier = Modifier.padding(headersPadding), verticalAlignment = Alignment.CenterVertically) {
@@ -63,7 +64,8 @@ fun LazyListScope.gameOffersColumnItem(
                 },
                 onTextButtonClick = {
                     onOfferTextButtonClick(it)
-                }
+                },
+                cancelButton = leftButton
             )
         }
     }

@@ -168,7 +168,7 @@ fun LoggedInRootComposable(
                         }
                     },
                     onNavigateToFullScreenList = { dataType, sportFilter ->
-                        navController.navigate("FullScreenList/$it")
+                        navController.navigate("FullScreenList/$dataType?sportFilter=${sportFilter.sportId}")
                     }
                 )
             }

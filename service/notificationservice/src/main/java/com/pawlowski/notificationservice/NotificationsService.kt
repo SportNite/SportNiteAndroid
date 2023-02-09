@@ -1,13 +1,19 @@
 package com.pawlowski.notificationservice
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class NotificationsService @Inject constructor() : FirebaseMessagingService() {
@@ -30,7 +36,8 @@ class NotificationsService @Inject constructor() : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
-            sendNotification(it.body!!)
+            sendNotification(appContext = applicationContext, tittle = it.title?:"Przyszło nowe powiadomienie w aplikacji!", body = it.body?:"Kliknij aby sprawdzić szczegóły", channelId = it.channelId?:NotificationChannel.DEFAULT_CHANNEL_ID)
+
         }
     }
 
@@ -47,10 +54,22 @@ class NotificationsService @Inject constructor() : FirebaseMessagingService() {
         notificationTokenWorkStarter.startWorker()
     }
 
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(appContext: Context, tittle: String, body: String, channelId: String) {
         val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
-        //TODO: Send notification
-        //notificationManager.sendNotification(messageBody, applicationContext)
+
+        val intent = Intent(appContext, Class.forName("com.pawlowski.sportnite.MainActivity"))
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val notification = NotificationCompat.Builder(appContext, channelId)
+            .setContentTitle(tittle)
+            .setContentText(body)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSmallIcon(R.drawable.app_logo)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+        notificationManager.notify(Random.nextInt(), notification)
     }
 
     companion object {

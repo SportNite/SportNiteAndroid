@@ -370,6 +370,15 @@ class AppRepository @Inject constructor(
         }
     }
 
+    override suspend fun rejectOfferToAccept(offerToAcceptUid: String): Resource<Unit> {
+        return graphQLService.rejectOfferToAccept(offerToAcceptUid= offerToAcceptUid)
+            .onSuccess {
+                offersToAcceptMemoryCache.deleteElementsIf {
+                    it.offerToAcceptUid == offerToAcceptUid
+                }
+            }
+    }
+
     private fun <Output> Flow<StoreResponse<Output>>.toUiData(
         isDataEmpty: (Output?) -> Boolean = { it != null }
     ): Flow<UiData<Output>> = flow {

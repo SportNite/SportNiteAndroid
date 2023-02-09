@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,6 +150,11 @@ fun SportScreen(
                     isLoading = {
                         offersToAcceptDataState.value.isLoading()
                     },
+                    leftButton = {
+                        TextButton(onClick = { viewModel.rejectOfferToAccept(it.offerUid) }) {
+                            Text(text = "Odrzuć propozycję", color = Color.Red)
+                        }
+                    },
                     displaySeeMore = false/*offersToAcceptDataState.value.isLoading() || !offersToAcceptDataState.value.dataOrNull().isNullOrEmpty()*/
                 )
                 item {
@@ -258,6 +264,7 @@ fun SportScreenPreview() {
         override fun acceptOfferToAccept(gameOfferToAcceptId: String) {}
         override fun refresh() {}
         override fun deleteMyOfferToAccept(offerToAcceptId: String) {}
+        override fun rejectOfferToAccept(offerToAcceptUid: String) {}
 
     })
 }

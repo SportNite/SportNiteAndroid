@@ -9,6 +9,7 @@ import org.orbitmvi.orbit.ContainerHost
 interface IFullScreenListViewModel: ContainerHost<FullScreenListUiState, FullScreenListSideEffect> {
     fun deleteMyOfferToAccept(offer: GameOffer)
     fun sendOfferToAccept(offer: GameOffer)
+    fun rejectOfferToAccept(offerToAcceptUid: String)
 
     val offersFlow: Flow<PagingData<GameOffer>>
     val dataTypeFlow: StateFlow<FullScreenDataType>
