@@ -26,11 +26,11 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseAdvanceLevelScreen(
+internal fun ChooseAdvanceLevelScreen(
     modifier: Modifier = Modifier,
     viewModel: IChooseAdvanceLevelScreenViewModel = hiltViewModel<ChooseAdvanceLevelScreenViewModel>(),
     onNavigateToChooseSportsScreen: () -> Unit = {},
-    onNavigateToHomeScreen: () -> Unit = {}
+    onNavigateToNextScreen: () -> Unit = {}
 ) {
     BackHandler {
         viewModel.navigateBack()
@@ -46,7 +46,7 @@ fun ChooseAdvanceLevelScreen(
                     onNavigateToChooseSportsScreen()
                 }
                 is ChooseAdvanceLevelScreenSideEffect.NavigateToHomeScreen -> {
-                    onNavigateToHomeScreen()
+                    onNavigateToNextScreen()
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_le
 import com.pawlowski.models.AdvanceLevel
 import org.orbitmvi.orbit.ContainerHost
 
-interface IChooseAdvanceLevelScreenViewModel: ContainerHost<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect> {
+internal interface IChooseAdvanceLevelScreenViewModel: ContainerHost<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect> {
     fun selectLevel(level: AdvanceLevel)
     fun continueClick()
     fun navigateBack()

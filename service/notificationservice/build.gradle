@@ -48,7 +48,7 @@ dependencies {
 
     //Hilt with WorkManager
     implementation(libs.hilt.workmanager)
-    kapt(libs.hilt.workmanager)
+    kapt(libs.hilt.workmanager.compiler)
 
     //coroutines
     implementation libs.bundles.coroutines

@@ -3,7 +3,7 @@ package com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_le
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
 
-data class ChooseAdvanceLevelScreenUiState(
+internal data class ChooseAdvanceLevelScreenUiState(
     val currentSport: Sport,
     val availableLevels: List<AdvanceLevel>? = null,
     val chosenLevel: AdvanceLevel? = null,

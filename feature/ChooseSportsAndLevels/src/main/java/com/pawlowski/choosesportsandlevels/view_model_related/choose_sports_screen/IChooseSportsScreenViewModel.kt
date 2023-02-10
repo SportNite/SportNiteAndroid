@@ -3,7 +3,7 @@ package com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_scr
 import com.pawlowski.models.Sport
 import org.orbitmvi.orbit.ContainerHost
 
-interface IChooseSportsScreenViewModel: ContainerHost<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> {
+internal interface IChooseSportsScreenViewModel: ContainerHost<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> {
     fun changeSelectionOfSport(sport: Sport)
     fun continueClick()
     fun navigateBack()

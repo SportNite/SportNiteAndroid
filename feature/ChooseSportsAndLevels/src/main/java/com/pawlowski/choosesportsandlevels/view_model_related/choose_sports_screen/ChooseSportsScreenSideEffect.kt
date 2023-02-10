@@ -2,7 +2,7 @@ package com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_scr
 
 import com.pawlowski.utils.UiText
 
-sealed interface ChooseSportsScreenSideEffect {
+internal sealed interface ChooseSportsScreenSideEffect {
     data class ShowToastMessage(val message: UiText): ChooseSportsScreenSideEffect
     object NavigateToChoseAdvanceLevelScreen: ChooseSportsScreenSideEffect
 }

@@ -20,10 +20,10 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(
+internal fun SignInScreen(
     viewModel: ISignInScreenViewModel = hiltViewModel<SignInScreenViewModel>(),
     onNavigateToEnterSignInCodeScreen: () -> Unit = {},
-    onNavigateToWaitingForUserInfoScreen: () -> Unit = {},
+    onNavigateToNextScreen: () -> Unit = {},
 )
 {
     val uiState = viewModel.container.stateFlow.collectAsState()
@@ -43,7 +43,7 @@ fun SignInScreen(
                     Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
                 }
                 is SignInScreenSideEffect.NavigateToSignedInScreen -> {
-                    onNavigateToWaitingForUserInfoScreen()
+                    onNavigateToNextScreen()
                 }
             }
         }

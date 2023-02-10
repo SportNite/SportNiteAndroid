@@ -1,4 +1,4 @@
-package com.pawlowski.authentication.ui.sign_in_screen
+package com.pawlowski.authentication.ui.enter_sign_in_code_screen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -22,9 +22,9 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnterSignInCodeScreen(
+internal fun EnterSignInCodeScreen(
     viewModel: IEnterSignInCodeScreenViewModel = hiltViewModel<EnterSignInCodeScreenViewModel>(),
-    onNavigateToWaitingForUserInfoScreen: () -> Unit = {},
+    onNavigateToNextScreen: () -> Unit = {},
     onNavigateToHomeScreen: () -> Unit = {},
     onNavigateBack: () -> Unit = {},
     ) {
@@ -52,7 +52,7 @@ fun EnterSignInCodeScreen(
                     onNavigateToHomeScreen()
                 }
                 is EnterSignInCodeSideEffect.MoveToAccountDetailsScreen -> {
-                    onNavigateToWaitingForUserInfoScreen()
+                    onNavigateToNextScreen()
                 }
                 is EnterSignInCodeSideEffect.ShowErrorToast -> {
                     Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()

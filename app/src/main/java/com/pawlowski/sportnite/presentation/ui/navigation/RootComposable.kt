@@ -16,7 +16,7 @@ fun RootComposable(
     }
     LoginNavigationGraph(navController = controller,
         startDestination = if(!isLoggedInValue)
-            "SignIn"
+            "Authentication"
         else
             "WaitingForUserInfo")
 }

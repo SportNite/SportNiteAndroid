@@ -25,7 +25,7 @@ import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseSportsScreen(
+internal fun ChooseSportsScreen(
     modifier: Modifier = Modifier,
     viewModel: IChooseSportsScreenViewModel = hiltViewModel<ChooseSportsScreenViewModel>(),
     onNavigateToChoseAdvanceLevelScreen: () -> Unit = {}
