@@ -77,13 +77,8 @@ dependencies {
     androidTestImplementation libs.junit.androidx
     androidTestImplementation libs.espresso.androidx
 
-
     //Navigation
-    implementation "androidx.navigation:navigation-compose:2.5.3"
-    implementation 'androidx.activity:activity-compose:1.6.1'
-
-    //Coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation libs.bundles.navigation
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -94,7 +89,7 @@ dependencies {
     kapt(libs.hilt.workmanager)
 
     //Hilt for Jetpack Compose navigation
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation libs.hilt.navigation.compose
 
     //coroutines
     implementation libs.bundles.coroutines
@@ -103,100 +98,48 @@ dependencies {
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    implementation "androidx.activity:activity-ktx:1.6.1"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation libs.activity.ktx
+
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
-    //Room
-    implementation "androidx.room:room-ktx:$rootProject.room_version"
-    kapt "androidx.room:room-compiler:$rootProject.room_version"
-
-    //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
-    //Google Maps
-    implementation "com.google.maps.android:maps-compose:2.7.0"
-    implementation "com.google.android.gms:play-services-maps:18.1.0"
-
     //Permission
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
-
-    //Flow Layout
-    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
     //Placeholder modifier
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     //Firebase auth
     implementation 'com.google.firebase:firebase-auth-ktx'
-    //Firebase storage
-    implementation 'com.google.firebase:firebase-storage-ktx'
     //Firebase crashlytics
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     //Firebase analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
     //SafetyNet
-    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
+    implementation libs.safetynet
 
     //Firebase coroutines support
     implementation libs.firebase.coroutines
 
-    //Google sign in
-    implementation "com.google.android.gms:play-services-auth:20.4.1"
-
-    //Paging
-    implementation(libs.paging.runtime)
-    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
-
-    //Lottie
-    implementation "com.airbnb.android:lottie-compose:5.2.0"
-
     //Orbit MVI
-    implementation("org.orbit-mvi:orbit-viewmodel:4.3.2")
-    testImplementation("org.orbit-mvi:orbit-test:4.3.2")
-
-    //Datetime picker dialog
-    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
-
-    //Image cropper
-    implementation 'com.github.CanHub:Android-Image-Cropper:4.3.2'
-
-    //Store
-    implementation libs.store
+    implementation(libs.orbit)
+    testImplementation(libs.orbit.tests)
 
     //Mockk
-    testImplementation "io.mockk:mockk:1.13.2"
+    testImplementation libs.mockk
 
     //Apollo GraphQL
-    implementation "com.apollographql.apollo3:apollo-runtime:3.7.2"
+    implementation libs.apollo.runtime
 
     //Swipe to refresh
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.28.0"
+    implementation libs.swipetorefresh
 
 
     //Modules
     implementation project(":core:utils")
     implementation project(":core:models")
-    implementation project(":core:network")
-    implementation project(":core:auth")
-    implementation project(":core:imageupload")
-    implementation project(":core:commonui")
-
-    implementation project(":service:notificationservice")
-
-    implementation project(':data:commoncache')
-    implementation project(":data:offers")
-    implementation project(":data:meetings")
-    implementation project(":data:responses")
-    implementation project(":data:players")
-    implementation project(":data:notifications")
-    implementation project(":data:user")
 
     implementation project(":feature:AddOffer")
     implementation project(":feature:AccountDetails")

@@ -14,13 +14,15 @@ fun NavGraphBuilder.authenticationDestination(
     navigation(startDestination = "SignIn", route = "Authentication") {
         composable(route = "SignIn")
         {
-            SignInScreen(onNavigateToEnterSignInCodeScreen = {
-                navController.navigate("EnterCode")
-                {
-                    launchSingleTop = true
-                }
-            },
-                onNavigateToNextScreen = onNavigateToNextScreen)
+            SignInScreen(
+                onNavigateToEnterSignInCodeScreen = {
+                    navController.navigate("EnterCode")
+                    {
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToNextScreen = onNavigateToNextScreen
+            )
         }
         composable(route = "EnterCode")
         {

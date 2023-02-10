@@ -2,6 +2,7 @@ package com.pawlowski.notificationservice.di
 
 import android.app.NotificationManager
 import android.content.Context
+import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pawlowski.notificationservice.channel_handler.INotificationChannelHandler
 import com.pawlowski.notificationservice.channel_handler.NotificationChannelHandler
@@ -44,4 +45,9 @@ object NotificationServiceModule {
     @Provides
     internal fun notificationChannelHandler(notificationChannelHandler: NotificationChannelHandler): INotificationChannelHandler = notificationChannelHandler
 
+    @Singleton
+    @Provides
+    internal fun workManager(appContext: Context): WorkManager {
+        return WorkManager.getInstance(appContext)
+    }
 }

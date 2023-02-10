@@ -48,7 +48,7 @@ dependencies {
     testImplementation libs.coroutines.test
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
 
     //Firebase auth
     implementation 'com.google.firebase:firebase-auth-ktx'
