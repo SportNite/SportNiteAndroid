@@ -1,5 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen
 
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.ChooseSportsScreenUiState
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.ChooseSportsScreenViewModel
 import com.pawlowski.models.mappers.getSportFromSportId
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

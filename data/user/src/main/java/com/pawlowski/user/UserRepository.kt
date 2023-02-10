@@ -2,7 +2,7 @@ package com.pawlowski.user
 
 import android.net.Uri
 import com.pawlowski.auth.IAuthManager
-import com.pawlowski.cache.IUserInfoUpdateCache
+import com.pawlowski.auth.cache.IUserInfoUpdateCache
 import com.pawlowski.imageupload.IPhotoUploader
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport

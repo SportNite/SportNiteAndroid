@@ -32,7 +32,20 @@
             <option value="$PROJECT_DIR$/data/responses" />
             <option value="$PROJECT_DIR$/data/user" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/AccountDetails" />
             <option value="$PROJECT_DIR$/feature/AddOffer" />
+            <option value="$PROJECT_DIR$/feature/Authentication" />
+            <option value="$PROJECT_DIR$/feature/ChooseSportsAndLevels" />
+            <option value="$PROJECT_DIR$/feature/FindPlayerrs" />
+            <option value="$PROJECT_DIR$/feature/FullScreenList" />
+            <option value="$PROJECT_DIR$/feature/Home" />
+            <option value="$PROJECT_DIR$/feature/MeetingDetails" />
+            <option value="$PROJECT_DIR$/feature/MyMeetings" />
+            <option value="$PROJECT_DIR$/feature/Notifications" />
+            <option value="$PROJECT_DIR$/feature/PlayerDetails" />
+            <option value="$PROJECT_DIR$/feature/Settings" />
+            <option value="$PROJECT_DIR$/feature/Sport" />
+            <option value="$PROJECT_DIR$/feature/WaitingForUserInfo" />
             <option value="$PROJECT_DIR$/service" />
             <option value="$PROJECT_DIR$/service/notificationservice" />
           </set>

@@ -201,6 +201,17 @@ dependencies {
     implementation project(":feature:AddOffer")
     implementation project(":feature:AccountDetails")
     implementation project(":feature:Notifications")
+    implementation project(":feature:MeetingDetails")
+    implementation project(':feature:Settings')
+    implementation project(':feature:PlayerDetails')
+    implementation project(':feature:FindPlayerrs')
+    implementation project(':feature:Authentication')
+    implementation project(':feature:MyMeetings')
+    implementation project(':feature:Home')
+    implementation project(':feature:FullScreenList')
+    implementation project(':feature:Sport')
+    implementation project(':feature:ChooseSportsAndLevels')
+    implementation project(':feature:WaitingForUserInfo')
 
 
 }

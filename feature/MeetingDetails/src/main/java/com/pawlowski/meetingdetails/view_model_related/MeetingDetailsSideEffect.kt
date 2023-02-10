@@ -1,0 +1,3 @@
+package com.pawlowski.meetingdetails.view_model_related
+
+sealed interface MeetingDetailsSideEffect

@@ -5,7 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pawlowski.accountdetails.ui.AccountDetailsScreen
-import com.pawlowski.sportnite.presentation.ui.screens.*
+import com.pawlowski.authentication.navigation.authenticationDestination
+import com.pawlowski.choosesportsandlevels.navigation.chooseSportsAndLevelsDestination
+import com.pawlowski.waitingforuserinfo.ui.WaitingForUserInfoScreen
 
 
 @Composable
@@ -16,46 +18,26 @@ fun LoginNavigationGraph(
 {
     NavHost(navController = navController, startDestination = startDestination)
     {
-        composable(route = "SignIn")
-        {
-            SignInScreen(onNavigateToEnterSignInCodeScreen = {
-                navController.navigate("EnterCode")
-                {
-                    launchSingleTop = true
-                }
-            },
-            onNavigateToWaitingForUserInfoScreen = {
+        authenticationDestination(
+            navController = navController,
+            onNavigateToNextScreen = {
                 navController.navigate("WaitingForUserInfo")
                 {
                     launchSingleTop = true
-                    popUpTo("SignIn") {
+                    popUpTo("Authentication") {
                         inclusive = true
                     }
                 }
-            })
-        }
-        composable(route = "EnterCode")
-        {
-            EnterSignInCodeScreen(onNavigateBack = {
-                navController.popBackStack()
-            },
-            onNavigateToWaitingForUserInfoScreen = {
-                navController.navigate("WaitingForUserInfo")
-                {
-                    launchSingleTop = true
-                    popUpTo("SignIn") {
-                        inclusive = true
-                    }
-                }
-            })
-        }
+            }
+        )
+
         composable(route = "WaitingForUserInfo") {
             WaitingForUserInfoScreen(
                 onNavigateToAccountDetailsScreen = {
                     navController.navigate("AccountDetails")
                     {
                         launchSingleTop = true
-                        popUpTo("SignIn") {
+                        popUpTo("Authentication") {
                             inclusive = true
                         }
                     }
@@ -63,13 +45,13 @@ fun LoginNavigationGraph(
                 onNavigateToHomeScreen = {
                     navController.navigate("LoggedInRoot") {
                         launchSingleTop = true
-                        popUpTo("SignIn") {
+                        popUpTo("Authentication") {
                             inclusive = true
                         }
                     }
                 },
                 onNavigateToChooseSports = {
-                    navController.navigate("ChooseSports") {
+                    navController.navigate("ChooseSportAndLevels") {
                         launchSingleTop = true
                     }
                 }
@@ -80,44 +62,34 @@ fun LoginNavigationGraph(
             AccountDetailsScreen(
                 onNavigateBack = { /*navController.popBackStack()*/ }, //TODO: add logout option
                 onNavigateToNextScreen = {
-                    navController.navigate("ChooseSports") {
+                    navController.navigate("ChooseSportAndLevels") {
                         launchSingleTop = true
-                        popUpTo("SignIn") {
+                        popUpTo("Authentication") {
                             inclusive = true
                         }
                     }
                 }
             )
         }
-        composable(route = "ChooseSports") {
-            ChooseSportsScreen(onNavigateToChoseAdvanceLevelScreen = {
-                navController.navigate("ChooseAdvanceLevel") {
+        chooseSportsAndLevelsDestination(
+            navController = navController,
+            onNavigateToNextScreen = {
+                navController.navigate("LoggedInRoot") {
                     launchSingleTop = true
-                }
-            })
-        }
-        composable(route = "ChooseAdvanceLevel") {
-            ChooseAdvanceLevelScreen(
-                onNavigateToHomeScreen = {
-                    navController.navigate("LoggedInRoot") {
-                        launchSingleTop = true
-                        popUpTo("SignIn") {
-                            inclusive = true
-                        }
+                    popUpTo("Authentication") {
+                        inclusive = true
                     }
-                },
-                onNavigateToChooseSportsScreen = {
-                    navController.popBackStack()
                 }
-            )
-        }
+            }
+        )
         composable(route = "LoggedInRoot")
         {
             LoggedInRootComposable(onNavigateToSignInScreen = {
-                navController.navigate("SignIn")
+                navController.navigate("Authentication")
                 {
                     launchSingleTop = true
-                    popUpTo("SignIn") {
+
+                    popUpTo("LoggedInRoot") {
                         inclusive = true
                     }
                 }

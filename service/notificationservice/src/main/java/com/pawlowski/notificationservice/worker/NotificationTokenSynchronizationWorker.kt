@@ -18,6 +18,7 @@ import com.pawlowski.utils.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
 /**
  * Updates token if user is authenticated and token isn't already updated
