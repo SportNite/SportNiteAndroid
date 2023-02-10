@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen
+package com.pawlowski.authentication.view_model_related.sign_in_screen
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.auth.IAuthManager
@@ -15,7 +15,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInScreenViewModel @Inject constructor(
+internal class SignInScreenViewModel @Inject constructor(
     private val authManager: IAuthManager,
 ): ISignInScreenViewModel, ViewModel() {
     override val container: Container<SignInScreenUiState, SignInScreenSideEffect> = container(

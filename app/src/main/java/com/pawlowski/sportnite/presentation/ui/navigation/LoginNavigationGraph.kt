@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pawlowski.accountdetails.ui.AccountDetailsScreen
+import com.pawlowski.authentication.ui.sign_in_screen.EnterSignInCodeScreen
+import com.pawlowski.authentication.ui.sign_in_screen.SignInScreen
 import com.pawlowski.sportnite.presentation.ui.screens.*
 
 

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.authentication.ui.sign_in_screen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -10,14 +10,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.commonui.LoginLottieAnimation
 import com.pawlowski.commonui.TextDivider
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeUiState
-import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.IEnterSignInCodeScreenViewModel
+import com.pawlowski.authentication.view_model_related.enter_sign_in_code_screen.EnterSignInCodeScreenViewModel
+import com.pawlowski.authentication.view_model_related.enter_sign_in_code_screen.EnterSignInCodeSideEffect
+import com.pawlowski.authentication.view_model_related.enter_sign_in_code_screen.EnterSignInCodeUiState
+import com.pawlowski.authentication.view_model_related.enter_sign_in_code_screen.IEnterSignInCodeScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,9 +133,10 @@ fun EnterSignInCodeScreen(
 @OrbitInternal
 @Preview(showBackground = true)
 @Composable
-fun EnterSignInCodeScreenPreview() {
+private fun EnterSignInCodeScreenPreview() {
     EnterSignInCodeScreen(object :
-        OrbitMviPreviewViewModel<EnterSignInCodeUiState, EnterSignInCodeSideEffect>(), IEnterSignInCodeScreenViewModel
+        OrbitMviPreviewViewModel<EnterSignInCodeUiState, EnterSignInCodeSideEffect>(),
+        IEnterSignInCodeScreenViewModel
     {
         override fun stateForPreview(): EnterSignInCodeUiState {
             return EnterSignInCodeUiState(phoneNumber = "762821051")

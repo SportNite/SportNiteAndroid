@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen
+package com.pawlowski.authentication.view_model_related.enter_sign_in_code_screen
 
 import com.pawlowski.utils.UiText
 

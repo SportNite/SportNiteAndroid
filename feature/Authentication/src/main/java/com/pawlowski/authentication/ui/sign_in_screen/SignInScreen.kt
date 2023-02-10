@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.authentication.ui.sign_in_screen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.commonui.LoginLottieAnimation
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.ISignInScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.sign_in_screen.SignInScreenViewModel
+import com.pawlowski.authentication.view_model_related.sign_in_screen.ISignInScreenViewModel
+import com.pawlowski.authentication.view_model_related.sign_in_screen.SignInScreenSideEffect
+import com.pawlowski.authentication.view_model_related.sign_in_screen.SignInScreenUiState
+import com.pawlowski.authentication.view_model_related.sign_in_screen.SignInScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +97,7 @@ fun SignInScreen(
 @OrbitInternal
 @Preview(showBackground = true)
 @Composable
-fun SignInScreenPreview()
+private fun SignInScreenPreview()
 {
     SignInScreen(viewModel = object :
         OrbitMviPreviewViewModel<SignInScreenUiState, SignInScreenSideEffect>(),
