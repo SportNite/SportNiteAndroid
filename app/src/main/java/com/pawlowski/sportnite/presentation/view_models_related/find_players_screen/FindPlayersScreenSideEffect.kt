@@ -1,3 +1,0 @@
-package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
-
-sealed interface FindPlayersScreenSideEffect

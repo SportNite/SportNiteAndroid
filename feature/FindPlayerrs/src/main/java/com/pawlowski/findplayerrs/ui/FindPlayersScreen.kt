@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.findplayerrs.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
@@ -22,13 +22,11 @@ import com.pawlowski.commonui.PlayerCard
 import com.pawlowski.commonui.SportInputField
 import com.pawlowski.commonui.SportPickerDialog
 import com.pawlowski.commonui.displayPagingItemsWithIndicators
-import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.FindPlayersScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.find_players_screen.IFindPlayersScreenViewModel
 
 @Composable
 fun FindPlayersScreen(
     modifier: Modifier = Modifier,
-    viewModel: IFindPlayersScreenViewModel = hiltViewModel<FindPlayersScreenViewModel>(),
+    viewModel: com.pawlowski.findplayerrs.view_model_related.IFindPlayersScreenViewModel = hiltViewModel<com.pawlowski.findplayerrs.view_model_related.FindPlayersScreenViewModel>(),
     onNavigateToHomeScreen: () -> Unit = {},
     onNavigateToPlayerDetailsScreen: (String) -> Unit = {}
 ) {
@@ -104,7 +102,7 @@ fun FindPlayersScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FiltersCard(
+internal fun FiltersCard(
     modifier: Modifier = Modifier,
     searchInput: () -> String,
     sportInput: () -> Sport?,

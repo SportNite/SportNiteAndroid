@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.find_players_screen
+package com.pawlowski.findplayerrs.view_model_related
 
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport

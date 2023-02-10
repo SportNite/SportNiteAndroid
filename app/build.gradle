@@ -204,6 +204,7 @@ dependencies {
     implementation project(":feature:MeetingDetails")
     implementation project(':feature:Settings')
     implementation project(':feature:PlayerDetails')
+    implementation project(':feature:FindPlayerrs')
 
 
 }
