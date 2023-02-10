@@ -1,0 +1,3 @@
+package com.pawlowski.home.view_model_related
+
+sealed interface HomeScreenSideEffect

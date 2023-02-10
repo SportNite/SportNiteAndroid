@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.home_screen
+package com.pawlowski.home.view_model_related
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.models.params_models.MeetingsFilter
@@ -17,7 +17,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+internal class HomeScreenViewModel @Inject constructor(
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getInfoAboutMeUseCase: GetInfoAboutMeUseCase,
     private val getUserSportsUseCase: GetUserSportsUseCase,

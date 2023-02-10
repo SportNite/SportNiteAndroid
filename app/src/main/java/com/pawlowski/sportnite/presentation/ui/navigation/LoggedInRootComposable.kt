@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pawlowski.addoffer.ui.AddOfferScreen
 import com.pawlowski.findplayerrs.ui.FindPlayersScreen
+import com.pawlowski.home.ui.HomeScreen
 import com.pawlowski.meetingdetails.ui.MeetingDetailsScreen
 import com.pawlowski.module_notifications.ui.NotificationsScreen
 import com.pawlowski.mymeetings.ui.MyMeetingsScreen

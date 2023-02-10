@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.home_screen
+package com.pawlowski.home.view_model_related
 
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Sport

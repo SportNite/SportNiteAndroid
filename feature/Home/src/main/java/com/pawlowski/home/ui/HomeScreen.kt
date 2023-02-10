@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.home.ui
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.models.Sport
 import com.pawlowski.models.User
 import com.pawlowski.models.mappers.getMeetingsListForPreview
@@ -28,10 +28,10 @@ import com.pawlowski.commonui.DisappearingSwipeRefresh
 import com.pawlowski.commonui.IncomingMeetingsRow
 import com.pawlowski.commonui.SportCard
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.home_screen.IHomeScreenViewModel
+import com.pawlowski.home.view_model_related.HomeScreenSideEffect
+import com.pawlowski.home.view_model_related.HomeScreenUiState
+import com.pawlowski.home.view_model_related.HomeScreenViewModel
+import com.pawlowski.home.view_model_related.IHomeScreenViewModel
 import com.pawlowski.utils.UiData
 import com.pawlowski.utils.dataOrNull
 import org.orbitmvi.orbit.annotation.OrbitInternal
@@ -141,7 +141,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun SportsRow(
+internal fun SportsRow(
     modifier: Modifier = Modifier,
     headersPadding: PaddingValues = PaddingValues(),
     sports: List<Sport>,
@@ -173,7 +173,7 @@ fun SportsRow(
 }
 
 @Composable
-fun ProfileSegment(
+internal fun ProfileSegment(
     modifier: Modifier = Modifier,
     user: User?,
     onSettingsButtonClick: () -> Unit = {},
@@ -215,7 +215,7 @@ fun ProfileSegment(
 
 
 @Composable
-fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {
+internal fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {
     Card(modifier = modifier, shape = CircleShape) {
         if (profileUrl.isNotEmpty()) {
             AsyncImage(
@@ -231,9 +231,10 @@ fun ProfileImageCard(modifier: Modifier = Modifier, profileUrl: String) {
 @OptIn(OrbitInternal::class)
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview() {
     HomeScreen(viewModel = object :
-        OrbitMviPreviewViewModel<HomeScreenUiState, HomeScreenSideEffect>(), IHomeScreenViewModel {
+        OrbitMviPreviewViewModel<HomeScreenUiState, HomeScreenSideEffect>(),
+        IHomeScreenViewModel {
         override fun stateForPreview(): HomeScreenUiState {
             return HomeScreenUiState(
                 user = getUserForPreview(),
