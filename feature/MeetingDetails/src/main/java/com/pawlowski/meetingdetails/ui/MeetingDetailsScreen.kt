@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.meetingdetails.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -19,15 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.IMeetingDetailsViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.meeting_details.MeetingDetailsViewModel
+import com.pawlowski.sharedresources.R
 import com.pawlowski.utils.dataOrNull
 
 @Composable
 fun MeetingDetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: IMeetingDetailsViewModel = hiltViewModel<MeetingDetailsViewModel>(),
+    viewModel: com.pawlowski.meetingdetails.view_model_related.IMeetingDetailsViewModel = hiltViewModel<com.pawlowski.meetingdetails.view_model_related.MeetingDetailsViewModel>(),
     onNavigateBack: () -> Unit = {},
 ) {
     val uiState = viewModel.container.stateFlow.collectAsState()

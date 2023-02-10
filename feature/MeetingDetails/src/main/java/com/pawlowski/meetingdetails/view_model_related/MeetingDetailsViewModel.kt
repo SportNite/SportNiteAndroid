@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.meeting_details
+package com.pawlowski.meetingdetails.view_model_related
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class MeetingDetailsViewModel @Inject constructor(
+internal class MeetingDetailsViewModel @Inject constructor(
     private val getMeetingByIdUseCase: GetMeetingByIdUseCase,
     savedStateHandle: SavedStateHandle
 ): IMeetingDetailsViewModel, ViewModel() {

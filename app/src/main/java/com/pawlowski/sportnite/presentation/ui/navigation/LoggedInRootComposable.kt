@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pawlowski.addoffer.ui.AddOfferScreen
+import com.pawlowski.meetingdetails.ui.MeetingDetailsScreen
 import com.pawlowski.module_notifications.ui.NotificationsScreen
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.screens.*
