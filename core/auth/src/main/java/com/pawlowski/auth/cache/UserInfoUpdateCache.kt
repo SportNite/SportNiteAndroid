@@ -1,4 +1,4 @@
-package com.pawlowski.cache
+package com.pawlowski.auth.cache
 
 import android.content.SharedPreferences
 import com.pawlowski.models.AdvanceLevel

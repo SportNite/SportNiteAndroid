@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen
+package com.pawlowski.waitingforuserinfo.view_model_related
 
 data class WaitingForUserInfoUiState(
     val message: String,

@@ -1,4 +1,4 @@
-package com.pawlowski.cache
+package com.pawlowski.auth.cache
 
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport

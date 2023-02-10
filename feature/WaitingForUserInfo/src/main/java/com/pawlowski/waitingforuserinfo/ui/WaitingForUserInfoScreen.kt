@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.waitingforuserinfo.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -12,9 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen.IWaitingForUserInfoViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen.WaitingForUserInfoSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.waiting_for_user_info_screen.WaitingForUserInfoViewModel
+import com.pawlowski.waitingforuserinfo.view_model_related.IWaitingForUserInfoViewModel
+import com.pawlowski.waitingforuserinfo.view_model_related.WaitingForUserInfoSideEffect
+import com.pawlowski.waitingforuserinfo.view_model_related.WaitingForUserInfoViewModel
 
 @Composable
 fun WaitingForUserInfoScreen(

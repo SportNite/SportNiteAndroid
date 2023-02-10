@@ -1,11 +1,11 @@
-package com.pawlowski.di
+package com.pawlowski.auth.di
 
 import com.pawlowski.auth.AuthManager
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.auth.LightAuthManager
-import com.pawlowski.cache.IUserInfoUpdateCache
-import com.pawlowski.cache.UserInfoUpdateCache
+import com.pawlowski.auth.cache.IUserInfoUpdateCache
+import com.pawlowski.auth.cache.UserInfoUpdateCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

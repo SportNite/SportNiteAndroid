@@ -211,6 +211,7 @@ dependencies {
     implementation project(':feature:FullScreenList')
     implementation project(':feature:Sport')
     implementation project(':feature:ChooseSportsAndLevels')
+    implementation project(':feature:WaitingForUserInfo')
 
 
 }
