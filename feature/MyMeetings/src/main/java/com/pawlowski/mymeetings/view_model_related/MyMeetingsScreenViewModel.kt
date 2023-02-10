@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
+package com.pawlowski.mymeetings.view_model_related
 
 import androidx.lifecycle.ViewModel
 import com.pawlowski.meetings.use_cases.GetIncomingMeetingsUseCase
@@ -24,7 +24,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class MyMeetingsScreenViewModel @Inject constructor(
+internal class MyMeetingsScreenViewModel @Inject constructor(
     private val getOffersToAcceptUseCase: GetOffersToAcceptUseCase,
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getMyOffersUseCase: GetMyOffersUseCase,
@@ -95,9 +95,11 @@ class MyMeetingsScreenViewModel @Inject constructor(
     override fun acceptOfferToAccept(offerToAcceptUid: String) = intent {
         val response = acceptOfferToAcceptUseCase(offerToAcceptUid)
         response.onSuccess {
-            postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(
-                offerToAcceptAcceptSuccessText
-            ))
+            postSideEffect(
+                MyMeetingsScreenSideEffect.ShowToastMessage(
+                    offerToAcceptAcceptSuccessText
+                )
+            )
         }.onError { message, _ ->
             postSideEffect(MyMeetingsScreenSideEffect.ShowToastMessage(message))
 

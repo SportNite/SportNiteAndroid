@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.mymeetings.ui
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -23,9 +23,9 @@ import com.pawlowski.commonui.DisappearingSwipeRefresh
 import com.pawlowski.commonui.IncomingMeetingsRow
 import com.pawlowski.commonui.ScreenHeader
 import com.pawlowski.commonui.gameOffersColumnItem
-import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.IMyMeetingsScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen.MyMeetingsScreenViewModel
+import com.pawlowski.mymeetings.view_model_related.IMyMeetingsScreenViewModel
+import com.pawlowski.mymeetings.view_model_related.MyMeetingsScreenSideEffect
+import com.pawlowski.mymeetings.view_model_related.MyMeetingsScreenViewModel
 import com.pawlowski.utils.dataOrNull
 import com.pawlowski.utils.isLoading
 

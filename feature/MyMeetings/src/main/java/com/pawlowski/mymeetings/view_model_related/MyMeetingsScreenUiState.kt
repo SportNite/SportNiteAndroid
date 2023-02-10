@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.my_meetings_screen
+package com.pawlowski.mymeetings.view_model_related
 
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.GameOfferToAccept

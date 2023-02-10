@@ -15,6 +15,7 @@ import com.pawlowski.addoffer.ui.AddOfferScreen
 import com.pawlowski.findplayerrs.ui.FindPlayersScreen
 import com.pawlowski.meetingdetails.ui.MeetingDetailsScreen
 import com.pawlowski.module_notifications.ui.NotificationsScreen
+import com.pawlowski.mymeetings.ui.MyMeetingsScreen
 import com.pawlowski.playerdetails.ui.PlayerDetailsScreen
 import com.pawlowski.settings.ui.SettingsScreen
 import com.pawlowski.sportnite.R
