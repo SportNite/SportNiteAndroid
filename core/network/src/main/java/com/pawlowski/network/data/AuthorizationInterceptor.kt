@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.auth
+package com.pawlowski.network.data
 
 import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.api.http.HttpResponse

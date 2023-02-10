@@ -5,9 +5,7 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
-import com.apollographql.apollo3.ApolloClient
 import com.pawlowski.sportnite.*
-import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,13 +32,6 @@ class AppModule {
         //It's needed because Firebase Auth with phone number needs it...
         return MainActivity.getInstance()!!
     }
-
-    @Singleton
-    @Provides
-    fun apolloClient(authorizationInterceptor: AuthorizationInterceptor): ApolloClient = ApolloClient.Builder()
-        .serverUrl(serverUrl = "https://projektinzynieria.bieszczadywysokie.pl/graphql/")
-        .addHttpInterceptor(authorizationInterceptor)
-        .build()
 
     @Provides
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO

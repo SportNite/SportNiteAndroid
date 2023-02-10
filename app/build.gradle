@@ -129,8 +129,6 @@ dependencies {
     //Mockk
     testImplementation libs.mockk
 
-    //Apollo GraphQL
-    implementation libs.apollo.runtime
 
     //Swipe to refresh
     implementation libs.swipetorefresh
