@@ -47,28 +47,26 @@ App is based on MVI pattern. It consists of 3 layers:
 - Data - responsible for accessing data from api or from local storage (in our project memory or SharedPreferences) 
 
 ## Code organization
-Some infomation can be outdated. App is being refactored to multi modules
-#### `SportNiteAndroid/app/src/main` - package with production code
-##### `/graphql` - package with graphql schema (.json extension) and mutations and queries (.graphql extensions)
-##### `/res` - package with app resources like icons and images, translated texts
-##### `/java/com/pawlowski/sportnite` - package with kotlin code of the app
-- `MainActivity.kt` - starting point of the app. Its responsible for displaying navigation composable
-- `/di` - package with dependency injection related classes
-- `/presentation/view_models_related/{screen}` - package with view models, ui state, side effects for particular screen
-- `/presentation/use_cases` - package with use cases
-- `/presentation/ui` - package with ui composables
-- `/presentation/models` - package with presentation data models
-- `/presentation/mappers` - package with functions mapping presentation models to domain models
-- `/presentation/domain` - package with repository 
-- `/presentation/data/auth` - package with authentication and classes caching user data
-- `/presentation/data/firebase_storage` - package with classes uploading user profile image to Firebase Storage
-- `/presentation/data/local` - package with classes caching data
-- `/presentation/data/mappers` - package with functions mapping graphql models to domain/presentation models
-- `/presentation/data/remote` - package with GraphQLService - class responsible with comunication with GraphQL server
+App is divided into modules:
+### :app
+Module with android app and navigation between features
+### :feature
+...
+### :data
+#### :offers
+#### :meetings
+#### :responses
+#### :players
+#### :user
+...
+### :core
+#### :network
+Module with GraphqlService. It's responsible for all calls to GraphQL API
+#### :utils
+#### :models
+#### :commonui
 
-
-#### `SportNiteAndroid/app/src/test` - package with unit tests
-
+...
 
 
 ## User documentation
