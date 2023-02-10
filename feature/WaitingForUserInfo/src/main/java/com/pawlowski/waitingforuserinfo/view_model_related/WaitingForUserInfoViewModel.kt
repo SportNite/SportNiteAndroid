@@ -1,10 +1,9 @@
 package com.pawlowski.waitingforuserinfo.view_model_related
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.auth.IAuthManager
-import com.pawlowski.auth.cache.IUserInfoUpdateCache
-import com.pawlowski.auth.cache.RegistrationProgress
 import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
+import com.pawlowski.user.data.RegistrationProgress
+import com.pawlowski.user.use_cases.GetUserRegistrationProgress
 import com.pawlowski.utils.onError
 import com.pawlowski.utils.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
-    private val userInfoUpdateCache: IUserInfoUpdateCache,
-    private val authManager: IAuthManager,
+    private val getUserRegistrationProgress: GetUserRegistrationProgress,
     private val notificationTokenSynchronizationWorkStarter: INotificationTokenSynchronizationWorkStarter
 ): IWaitingForUserInfoViewModel, ViewModel() {
 
@@ -38,7 +36,7 @@ class WaitingForUserInfoViewModel @Inject constructor(
         }
 
         notificationTokenSynchronizationWorkStarter.startWorker()
-        val info = userInfoUpdateCache.didUserAddInfo(authManager.getUserPhone())
+        val info = getUserRegistrationProgress()
         info.onSuccess {
             when (it) {
                 RegistrationProgress.EVERYTHING_ADDED -> {

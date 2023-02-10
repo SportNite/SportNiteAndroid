@@ -1,4 +1,4 @@
-package com.pawlowski.auth.cache
+package com.pawlowski.user.data
 
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
@@ -6,7 +6,7 @@ import com.pawlowski.models.User
 import com.pawlowski.utils.Resource
 import kotlinx.coroutines.flow.StateFlow
 
-interface IUserInfoUpdateCache {
+internal interface IUserInfoUpdateCache {
     val cachedUser: StateFlow<User?>
     val cachedLevels: StateFlow<Map<Sport, AdvanceLevel>?>
 

@@ -1,11 +1,10 @@
 package com.pawlowski.auth.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.auth.AuthManager
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.auth.LightAuthManager
-import com.pawlowski.auth.cache.IUserInfoUpdateCache
-import com.pawlowski.auth.cache.UserInfoUpdateCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,9 +20,9 @@ object AuthModule {
 
     @Singleton
     @Provides
-    internal fun userInfoUpdateCache(userInfoUpdateCache: UserInfoUpdateCache): IUserInfoUpdateCache = userInfoUpdateCache
+    internal fun lightAuthManager(lightAuthManager: LightAuthManager): ILightAuthManager = lightAuthManager
 
     @Singleton
     @Provides
-    internal fun lightAuthManager(lightAuthManager: LightAuthManager): ILightAuthManager = lightAuthManager
+    fun firebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }

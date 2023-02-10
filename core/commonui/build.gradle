@@ -56,27 +56,27 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     //Coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(libs.coil)
 
     //coroutines
     implementation libs.bundles.coroutines
     testImplementation libs.coroutines.test
 
     //Datetime picker dialog
-    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    implementation libs.datetimepicker
 
     //Orbit MVI
-    implementation("org.orbit-mvi:orbit-viewmodel:4.3.2")
+    implementation(libs.orbit)
 
     //Swipe to refresh
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.28.0"
+    implementation libs.swipetorefresh
 
     //Paging
     implementation(libs.paging.runtime)
-    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
+    implementation(libs.paging.compose)
 
     //Lottie
-    implementation "com.airbnb.android:lottie-compose:5.2.0"
+    implementation libs.lottie
 
     //Modules
     implementation project(":core:utils")

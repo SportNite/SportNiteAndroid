@@ -7,13 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.google.firebase.auth.FirebaseAuth
+import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.sportnite.presentation.ui.navigation.RootComposable
 import com.pawlowski.sportnite.presentation.ui.theme.SportNiteTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    internal lateinit var lightAuthManager: ILightAuthManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setActivityInstance(this)
         super.onCreate(savedInstanceState)
@@ -25,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     RootComposable(
-                        isUserLoggedIn = { FirebaseAuth.getInstance().currentUser != null }
+                        isUserLoggedIn = { lightAuthManager.isUserAuthenticated() }
                     )
                 }
             }

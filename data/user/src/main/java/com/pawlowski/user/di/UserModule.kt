@@ -3,6 +3,7 @@ package com.pawlowski.user.di
 import com.pawlowski.user.IUserRepository
 import com.pawlowski.user.UserRepository
 import com.pawlowski.user.use_cases.GetInfoAboutMeUseCase
+import com.pawlowski.user.use_cases.GetUserRegistrationProgress
 import com.pawlowski.user.use_cases.GetUserSportsUseCase
 import com.pawlowski.user.use_cases.SignOutUseCase
 import com.pawlowski.user.use_cases.UpdateAdvanceLevelInfoUseCase
@@ -40,4 +41,12 @@ object UserModule {
     @Singleton
     @Provides
     fun updateAdvanceLevelInfoUseCase(appRepository: IUserRepository) = UpdateAdvanceLevelInfoUseCase(appRepository::updateAdvanceLevelInfo)
+
+    @Singleton
+    @Provides
+    internal fun userInfoUpdateCache(userInfoUpdateCache: com.pawlowski.user.data.UserInfoUpdateCache): com.pawlowski.user.data.IUserInfoUpdateCache = userInfoUpdateCache
+
+    @Singleton
+    @Provides
+    fun getUserRegistrationProgress(userRepository: IUserRepository): GetUserRegistrationProgress = GetUserRegistrationProgress(userRepository::getUserRegistrationProgress)
 }

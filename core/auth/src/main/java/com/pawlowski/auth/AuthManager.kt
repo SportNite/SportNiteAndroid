@@ -116,14 +116,6 @@ internal class AuthManager @Inject constructor(
         authCallbacks.onVerificationFailed(exception as FirebaseException)
     }
 
-    override fun getUserPhone(): String {
-        return auth.currentUser?.phoneNumber.orEmpty()
-    }
-
-    override fun getCurrentUserUid(): String? {
-        return auth.currentUser?.uid
-    }
-
     override fun signOut() {
         auth.signOut()
         _signUpState.value = AuthResponse.NotInitialized

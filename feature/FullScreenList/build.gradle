@@ -61,7 +61,7 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     //Hilt for Jetpack Compose navigation
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation libs.hilt.navigation.compose
 
     //coroutines
     implementation libs.bundles.coroutines
@@ -74,15 +74,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     //Orbit MVI
-    implementation("org.orbit-mvi:orbit-viewmodel:4.3.2")
-    testImplementation("org.orbit-mvi:orbit-test:4.3.2")
+    implementation(libs.orbit)
+    testImplementation(libs.orbit.tests)
 
     //Coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(libs.coil)
 
     //Paging
     implementation(libs.paging.runtime)
-    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
+    implementation(libs.paging.compose)
 
     //Modules
     implementation project(":core:models")

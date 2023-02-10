@@ -2,6 +2,7 @@ package com.pawlowski.meetings.di
 
 import com.dropbox.android.external.store4.*
 import com.pawlowski.auth.IAuthManager
+import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.meetings.data.cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.meetings.IMeetingsRepository
 import com.pawlowski.meetings.MeetingsRepository
@@ -35,7 +36,7 @@ object MeetingsModule {
     internal fun meetingStore(
         graphQLService: IGraphQLService,
         meetingsInMemoryCache: MeetingsIntelligentInMemoryCache,
-        authManager: IAuthManager
+        authManager: ILightAuthManager
     ): Store<MeetingsFilter, List<Meeting>> {
         return StoreBuilder.from(fetcher = Fetcher.of { filters: MeetingsFilter ->
             val userUid = authManager.getCurrentUserUid()!!

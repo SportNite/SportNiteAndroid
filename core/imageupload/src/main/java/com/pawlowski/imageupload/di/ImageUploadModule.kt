@@ -1,5 +1,6 @@
 package com.pawlowski.imageupload.di
 
+import com.google.firebase.storage.FirebaseStorage
 import com.pawlowski.imageupload.FirebaseStoragePhotoUploader
 import com.pawlowski.imageupload.IPhotoUploader
 import dagger.Module
@@ -14,4 +15,7 @@ object ImageUploadModule {
     @Singleton
     @Provides
     internal fun photoUploader(firebaseStoragePhotoUploader: FirebaseStoragePhotoUploader): IPhotoUploader = firebaseStoragePhotoUploader
+
+    @Provides
+    fun firebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
 }

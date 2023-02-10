@@ -2,7 +2,8 @@ package com.pawlowski.user
 
 import android.net.Uri
 import com.pawlowski.auth.IAuthManager
-import com.pawlowski.auth.cache.IUserInfoUpdateCache
+import com.pawlowski.auth.ILightAuthManager
+import com.pawlowski.user.data.IUserInfoUpdateCache
 import com.pawlowski.imageupload.IPhotoUploader
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
@@ -10,6 +11,7 @@ import com.pawlowski.models.User
 import com.pawlowski.models.params_models.UserUpdateInfoParams
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.notificationservice.synchronization.INotificationTokenSynchronizer
+import com.pawlowski.user.data.RegistrationProgress
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -23,6 +25,7 @@ import javax.inject.Singleton
 internal class UserRepository @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
     private val authManager: IAuthManager,
+    private val lightAuthManager: ILightAuthManager,
     private val photoUploader: IPhotoUploader,
     private val ioDispatcher: CoroutineDispatcher,
     private val graphQLService: IGraphQLService,
@@ -42,6 +45,10 @@ internal class UserRepository @Inject constructor(
         return userInfoUpdateCache.cachedUser
     }
 
+    override suspend fun getUserRegistrationProgress(): Resource<RegistrationProgress> {
+        return userInfoUpdateCache.didUserAddInfo(lightAuthManager.getUserPhone())
+    }
+
     override fun signOut() {
         authManager.signOut()
         userInfoUpdateCache.deleteUserInfoCache()
@@ -52,7 +59,7 @@ internal class UserRepository @Inject constructor(
         val uploadedPhotoUri = params.photoUrl?.let {
             val result = photoUploader.uploadNewImage(
                 Uri.parse(it),
-                authManager.getCurrentUserUid()!!
+                lightAuthManager.getCurrentUserUid()!!
             )
             result.dataOrNull()
         } ?: return Resource.Error(defaultRequestError)
@@ -63,7 +70,7 @@ internal class UserRepository @Inject constructor(
                 User(
                     userName = params.name,
                     userPhotoUrl = uploadedPhotoUri,
-                    userPhoneNumber = authManager.getUserPhone()
+                    userPhoneNumber = lightAuthManager.getUserPhone()
                 )
             )
         }

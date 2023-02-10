@@ -21,7 +21,5 @@ interface IAuthManager {
     )
 
     fun onVerificationFailed(exception: Exception)
-    fun getUserPhone(): String
-    fun getCurrentUserUid(): String?
     fun signOut()
 }
