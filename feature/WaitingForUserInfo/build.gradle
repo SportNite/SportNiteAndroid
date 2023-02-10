@@ -85,6 +85,6 @@ dependencies {
     implementation project(":core:utils")
     implementation project(":core:commonui")
     implementation project(":core:sharedresources")
-    implementation project(":core:auth")
+    implementation project(":data:user")
     implementation project(":service:notificationservice")
 }

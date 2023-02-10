@@ -1,4 +1,4 @@
-package com.pawlowski.auth.cache
+package com.pawlowski.user.data
 
 enum class RegistrationProgress {
     NO_INFO_ADDED,

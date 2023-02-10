@@ -5,8 +5,6 @@ import com.pawlowski.auth.AuthManager
 import com.pawlowski.auth.IAuthManager
 import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.auth.LightAuthManager
-import com.pawlowski.auth.cache.IUserInfoUpdateCache
-import com.pawlowski.auth.cache.UserInfoUpdateCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,10 +17,6 @@ object AuthModule {
     @Singleton
     @Provides
     internal fun authManager(authManager: AuthManager): IAuthManager = authManager
-
-    @Singleton
-    @Provides
-    internal fun userInfoUpdateCache(userInfoUpdateCache: UserInfoUpdateCache): IUserInfoUpdateCache = userInfoUpdateCache
 
     @Singleton
     @Provides
