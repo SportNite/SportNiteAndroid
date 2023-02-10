@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen
+package com.pawlowski.fullscreenlist.view_model_related
 
 import com.pawlowski.utils.UiText
 

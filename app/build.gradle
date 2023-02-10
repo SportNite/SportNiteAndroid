@@ -208,6 +208,6 @@ dependencies {
     implementation project(':feature:Authentication')
     implementation project(':feature:MyMeetings')
     implementation project(':feature:Home')
-
+    implementation project(':feature:FullScreenList')
 
 }

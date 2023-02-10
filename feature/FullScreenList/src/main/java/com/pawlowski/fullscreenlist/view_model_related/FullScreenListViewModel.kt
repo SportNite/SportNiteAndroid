@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen
+package com.pawlowski.fullscreenlist.view_model_related
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -31,7 +31,8 @@ class FullScreenListViewModel @Inject constructor(
     private val rejectOfferToAcceptUseCase: RejectOfferToAcceptUseCase,
     savedStateHandle: SavedStateHandle
 ): IFullScreenListViewModel, ViewModel() {
-    private val dataType = FullScreenDataType.getTypeFromString(savedStateHandle.get<String>("dataType")!!)
+    private val dataType =
+        FullScreenDataType.getTypeFromString(savedStateHandle.get<String>("dataType")!!)
     private val sportFilter: Sport? = savedStateHandle.get<String>("sportFilter")?.let {
         getSportFromSportId(it)
     }
@@ -50,9 +51,11 @@ class FullScreenListViewModel @Inject constructor(
                     add(offer.copy(myResponseIdIfExists = null))
                 }
             }
-            postSideEffect(FullScreenListSideEffect.ShowToastMessage(
-                offerToAcceptDeletionSuccessText
-            ))
+            postSideEffect(
+                FullScreenListSideEffect.ShowToastMessage(
+                    offerToAcceptDeletionSuccessText
+                )
+            )
         }.onError { message, _ ->
             postSideEffect(FullScreenListSideEffect.ShowToastMessage(message))
         }

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.fullscreenlist.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -21,10 +21,10 @@ import com.pawlowski.commonui.displayPagingItemsWithIndicators
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenDataType
-import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.FullScreenListViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.full_screen_list_screen.IFullScreenListViewModel
+import com.pawlowski.fullscreenlist.view_model_related.FullScreenDataType
+import com.pawlowski.fullscreenlist.view_model_related.FullScreenListSideEffect
+import com.pawlowski.fullscreenlist.view_model_related.FullScreenListViewModel
+import com.pawlowski.fullscreenlist.view_model_related.IFullScreenListViewModel
 
 @Composable
 fun FullScreenListScreen(
@@ -56,7 +56,7 @@ fun FullScreenListScreen(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(text = dataTypeState.value.name.asString())
                 IconButton(modifier = Modifier.align(Alignment.CenterStart), onClick = onNavigateBack) {
-                    Icon(painter = painterResource(id = com.pawlowski.sportnite.R.drawable.back_icon), contentDescription = "")
+                    Icon(painter = painterResource(id = com.pawlowski.sharedresources.R.drawable.back_icon), contentDescription = "")
                 }
             }
 
