@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
-import com.pawlowski.auth.IAuthManager
+import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.domainutils.PagingKeyBasedFactory
 import com.pawlowski.domainutils.toUiData
 import com.pawlowski.models.AdvanceLevel
@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class PlayersRepository @Inject constructor(
-    private val authManager: IAuthManager,
+    private val authManager: ILightAuthManager,
     private val playersStore: Store<PlayersFilter, List<Player>>,
     private val playerDetailsStore: Store<String, PlayerDetails>,
     private val graphQLService: IGraphQLService,

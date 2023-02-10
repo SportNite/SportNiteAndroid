@@ -111,8 +111,7 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
-    //Firebase auth
-    implementation 'com.google.firebase:firebase-auth-ktx'
+
     //Firebase crashlytics
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     //Firebase analytics
@@ -140,6 +139,8 @@ dependencies {
     //Modules
     implementation project(":core:utils")
     implementation project(":core:models")
+    implementation project(":core:auth")
+
 
     implementation project(":feature:AddOffer")
     implementation project(":feature:AccountDetails")

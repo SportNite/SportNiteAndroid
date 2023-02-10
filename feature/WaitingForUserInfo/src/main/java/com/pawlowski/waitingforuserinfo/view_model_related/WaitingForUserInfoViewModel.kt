@@ -1,7 +1,7 @@
 package com.pawlowski.waitingforuserinfo.view_model_related
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.auth.IAuthManager
+import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.auth.cache.IUserInfoUpdateCache
 import com.pawlowski.auth.cache.RegistrationProgress
 import com.pawlowski.notificationservice.worker.INotificationTokenSynchronizationWorkStarter
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WaitingForUserInfoViewModel @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
-    private val authManager: IAuthManager,
+    private val authManager: ILightAuthManager,
     private val notificationTokenSynchronizationWorkStarter: INotificationTokenSynchronizationWorkStarter
 ): IWaitingForUserInfoViewModel, ViewModel() {
 

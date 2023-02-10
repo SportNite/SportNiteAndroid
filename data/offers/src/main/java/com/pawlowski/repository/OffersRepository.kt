@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
-import com.pawlowski.auth.IAuthManager
+import com.pawlowski.auth.ILightAuthManager
 import com.pawlowski.auth.cache.IUserInfoUpdateCache
 import com.pawlowski.domainutils.PagingKeyBasedFactory
 import com.pawlowski.domainutils.toUiData
@@ -24,7 +24,7 @@ import javax.inject.Named
 
 internal class OffersRepository @Inject constructor(
     private val userInfoUpdateCache: IUserInfoUpdateCache,
-    private val authManager: IAuthManager,
+    private val authManager: ILightAuthManager,
     private val ioDispatcher: CoroutineDispatcher,
     private val offersStore: Store<OffersFilter, List<GameOffer>>,
     @Named("my") private val myOffersInMemoryCache: OffersIntelligentInMemoryCache,
