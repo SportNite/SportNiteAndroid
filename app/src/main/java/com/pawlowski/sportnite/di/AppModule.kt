@@ -6,9 +6,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import com.apollographql.apollo3.ApolloClient
-import com.google.firebase.auth.FirebaseAuth
 import com.pawlowski.sportnite.*
-import com.pawlowski.network.data.AuthorizationInterceptor
+import com.pawlowski.sportnite.data.auth.AuthorizationInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,9 +27,6 @@ class AppModule {
         return app.applicationContext
     }
 
-    @Singleton
-    @Provides
-    fun firebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
     fun mainActivity(): Activity
@@ -41,7 +37,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun apolloClient(authorizationInterceptor: com.pawlowski.network.data.AuthorizationInterceptor): ApolloClient = ApolloClient.Builder()
+    fun apolloClient(authorizationInterceptor: AuthorizationInterceptor): ApolloClient = ApolloClient.Builder()
         .serverUrl(serverUrl = "https://projektinzynieria.bieszczadywysokie.pl/graphql/")
         .addHttpInterceptor(authorizationInterceptor)
         .build()
