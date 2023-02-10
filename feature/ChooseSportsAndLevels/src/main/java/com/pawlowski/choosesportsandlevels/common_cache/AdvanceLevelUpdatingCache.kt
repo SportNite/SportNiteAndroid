@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.data.local.advance_level_updating_cache
+package com.pawlowski.choosesportsandlevels.common_cache
 
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AdvanceLevelUpdatingCache @Inject constructor() {
+internal class AdvanceLevelUpdatingCache @Inject constructor() {
     private val _chosenSports: MutableStateFlow<Map<Sport, AdvanceLevel?>> by lazy {
         MutableStateFlow(mapOf())
     }

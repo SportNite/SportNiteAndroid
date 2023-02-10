@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.choosesportsandlevels.ui.choose_sports_screen
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -17,10 +17,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.Sport
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.ChooseSportsScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen.IChooseSportsScreenViewModel
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.ChooseSportsScreenSideEffect
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.ChooseSportsScreenUiState
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.ChooseSportsScreenViewModel
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen.IChooseSportsScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)

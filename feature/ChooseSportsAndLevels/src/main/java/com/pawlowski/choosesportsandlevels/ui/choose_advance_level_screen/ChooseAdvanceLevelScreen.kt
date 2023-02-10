@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.choosesportsandlevels.ui.choose_advance_level_screen
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -18,10 +18,10 @@ import com.pawlowski.models.mappers.getAvailableLevelsForSport
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.models.mappers.getSportForPreview
-import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.ChooseAdvanceLevelScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.ChooseAdvanceLevelScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.ChooseAdvanceLevelScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.IChooseAdvanceLevelScreenViewModel
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_level_screen.ChooseAdvanceLevelScreenSideEffect
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_level_screen.ChooseAdvanceLevelScreenUiState
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_level_screen.ChooseAdvanceLevelScreenViewModel
+import com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_level_screen.IChooseAdvanceLevelScreenViewModel
 import org.orbitmvi.orbit.annotation.OrbitInternal
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,7 +114,7 @@ fun ChooseAdvanceLevelScreen(
 @OptIn(OrbitInternal::class)
 @Preview(showBackground = true)
 @Composable
-fun ChooseAdvanceLevelScreenPreview() {
+private fun ChooseAdvanceLevelScreenPreview() {
     ChooseAdvanceLevelScreen(
         viewModel = object :
             OrbitMviPreviewViewModel<ChooseAdvanceLevelScreenUiState, ChooseAdvanceLevelScreenSideEffect>(),

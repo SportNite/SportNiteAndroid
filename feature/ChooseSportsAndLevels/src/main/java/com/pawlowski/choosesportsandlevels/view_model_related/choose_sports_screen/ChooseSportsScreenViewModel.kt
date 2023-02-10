@@ -1,7 +1,7 @@
-package com.pawlowski.sportnite.presentation.view_models_related.choose_sports_screen
+package com.pawlowski.choosesportsandlevels.view_model_related.choose_sports_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
+import com.pawlowski.choosesportsandlevels.common_cache.AdvanceLevelUpdatingCache
 import com.pawlowski.models.mappers.availableSports
 import com.pawlowski.models.Sport
 import com.pawlowski.utils.selectMinimumOneSport
@@ -14,7 +14,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class ChooseSportsScreenViewModel @Inject constructor(
+internal class ChooseSportsScreenViewModel @Inject constructor(
     private val chooseLevelUpdatingCache: AdvanceLevelUpdatingCache,
 ): IChooseSportsScreenViewModel, ViewModel() {
     override val container: Container<ChooseSportsScreenUiState, ChooseSportsScreenSideEffect> =

@@ -210,6 +210,7 @@ dependencies {
     implementation project(':feature:Home')
     implementation project(':feature:FullScreenList')
     implementation project(':feature:Sport')
+    implementation project(':feature:ChooseSportsAndLevels')
 
 
 }

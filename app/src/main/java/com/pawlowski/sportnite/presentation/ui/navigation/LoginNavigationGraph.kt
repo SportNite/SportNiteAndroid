@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import com.pawlowski.accountdetails.ui.AccountDetailsScreen
 import com.pawlowski.authentication.ui.sign_in_screen.EnterSignInCodeScreen
 import com.pawlowski.authentication.ui.sign_in_screen.SignInScreen
+import com.pawlowski.choosesportsandlevels.ui.choose_advance_level_screen.ChooseAdvanceLevelScreen
+import com.pawlowski.choosesportsandlevels.ui.choose_sports_screen.ChooseSportsScreen
 import com.pawlowski.sportnite.presentation.ui.screens.*
 
 

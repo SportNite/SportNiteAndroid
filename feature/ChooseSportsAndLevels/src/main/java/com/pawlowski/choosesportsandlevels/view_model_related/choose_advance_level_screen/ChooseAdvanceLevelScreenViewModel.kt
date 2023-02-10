@@ -1,7 +1,7 @@
-package com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen
+package com.pawlowski.choosesportsandlevels.view_model_related.choose_advance_level_screen
 
 import androidx.lifecycle.ViewModel
-import com.pawlowski.sportnite.data.local.advance_level_updating_cache.AdvanceLevelUpdatingCache
+import com.pawlowski.choosesportsandlevels.common_cache.AdvanceLevelUpdatingCache
 import com.pawlowski.models.mappers.getAvailableLevelsForSport
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
@@ -23,7 +23,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class ChooseAdvanceLevelScreenViewModel @Inject constructor(
+internal class ChooseAdvanceLevelScreenViewModel @Inject constructor(
     private val advanceLevelUpdatingCache: AdvanceLevelUpdatingCache,
     private val updateAdvanceLevelInfoUseCase: UpdateAdvanceLevelInfoUseCase,
 ): IChooseAdvanceLevelScreenViewModel, ViewModel() {
@@ -77,7 +77,13 @@ class ChooseAdvanceLevelScreenViewModel @Inject constructor(
             }
         }
         else {
-            postSideEffect(ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(UiText.NonTranslatable("Something is missing!")))
+            postSideEffect(
+                ChooseAdvanceLevelScreenSideEffect.ShowToastMessage(
+                    UiText.NonTranslatable(
+                        "Something is missing!"
+                    )
+                )
+            )
         }
     }
 
