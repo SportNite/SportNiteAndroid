@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.sports.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,10 +24,10 @@ import com.pawlowski.models.GameOffer
 import com.pawlowski.models.Sport
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.models.mappers.getSportForPreview
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.ISportScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenUiState
-import com.pawlowski.sportnite.presentation.view_models_related.sport_screen.SportScreenViewModel
+import com.pawlowski.sports.view_model_related.ISportScreenViewModel
+import com.pawlowski.sports.view_model_related.SportScreenSideEffect
+import com.pawlowski.sports.view_model_related.SportScreenUiState
+import com.pawlowski.sports.view_model_related.SportScreenViewModel
 import com.pawlowski.utils.UiData
 import com.pawlowski.utils.dataOrNull
 import com.pawlowski.utils.isLoading
@@ -249,7 +249,7 @@ private fun SportHeader(
 @OrbitInternal
 @Preview(showBackground = true)
 @Composable
-fun SportScreenPreview() {
+private fun SportScreenPreview() {
     SportScreen(viewModel = object :
         OrbitMviPreviewViewModel<SportScreenUiState, SportScreenSideEffect>(),
         ISportScreenViewModel {

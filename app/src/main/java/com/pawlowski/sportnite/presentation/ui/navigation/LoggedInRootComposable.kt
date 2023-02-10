@@ -22,6 +22,7 @@ import com.pawlowski.playerdetails.ui.PlayerDetailsScreen
 import com.pawlowski.settings.ui.SettingsScreen
 import com.pawlowski.sportnite.R
 import com.pawlowski.sportnite.presentation.ui.screens.*
+import com.pawlowski.sports.ui.SportScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

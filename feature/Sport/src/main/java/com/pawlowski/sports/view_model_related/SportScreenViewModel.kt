@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.sport_screen
+package com.pawlowski.sports.view_model_related
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -26,7 +26,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class SportScreenViewModel @Inject constructor(
+internal class SportScreenViewModel @Inject constructor(
     private val getIncomingMeetingsUseCase: GetIncomingMeetingsUseCase,
     private val getGameOffersUseCase: GetGameOffersUseCase,
     private val getOffersToAcceptUseCase: GetOffersToAcceptUseCase,
