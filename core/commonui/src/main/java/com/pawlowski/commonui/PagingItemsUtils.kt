@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.reusable_components
+package com.pawlowski.commonui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

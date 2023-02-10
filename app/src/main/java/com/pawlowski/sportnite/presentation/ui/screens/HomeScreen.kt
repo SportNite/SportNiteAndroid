@@ -24,7 +24,7 @@ import com.pawlowski.models.Sport
 import com.pawlowski.models.User
 import com.pawlowski.models.mappers.getMeetingsListForPreview
 import com.pawlowski.models.mappers.getUserForPreview
-import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
+import com.pawlowski.commonui.DisappearingSwipeRefresh
 import com.pawlowski.commonui.IncomingMeetingsRow
 import com.pawlowski.commonui.SportCard
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel

@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.module_notifications.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,11 +17,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.pawlowski.models.UserNotification
-import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
-import com.pawlowski.sportnite.presentation.ui.reusable_components.displayPagingItemsWithIndicators
-import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.INotificationsViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.notifications_screen.NotificationsViewModel
+import com.pawlowski.sharedresources.R
+import com.pawlowski.commonui.DisappearingSwipeRefresh
+import com.pawlowski.commonui.displayPagingItemsWithIndicators
+import com.pawlowski.module_notifications.view_models_related.INotificationsViewModel
+import com.pawlowski.module_notifications.view_models_related.NotificationsViewModel
 
 @Composable
 fun NotificationsScreen(
@@ -29,7 +29,7 @@ fun NotificationsScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
-        val pagedNotifications = viewModel.pagetNotifications.collectAsLazyPagingItems()
+        val pagedNotifications = viewModel.pagedNotifications.collectAsLazyPagingItems()
         DisappearingSwipeRefresh(onRefresh = {
             pagedNotifications.refresh()
         }) {

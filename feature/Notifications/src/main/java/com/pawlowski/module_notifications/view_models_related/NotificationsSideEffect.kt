@@ -1,0 +1,3 @@
+package com.pawlowski.module_notifications.view_models_related
+
+sealed interface NotificationsSideEffect

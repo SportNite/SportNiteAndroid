@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.ui.reusable_components.LoginLottieAnimation
+import com.pawlowski.commonui.LoginLottieAnimation
 import com.pawlowski.commonui.TextDivider
 import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.enter_sign_in_code_screen.EnterSignInCodeScreenViewModel

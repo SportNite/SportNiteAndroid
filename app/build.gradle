@@ -200,6 +200,7 @@ dependencies {
 
     implementation project(":feature:AddOffer")
     implementation project(":feature:AccountDetails")
+    implementation project(":feature:Notifications")
 
 
 }

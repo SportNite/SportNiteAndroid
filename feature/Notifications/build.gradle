@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    namespace 'com.pawlowski.commonui'
+    namespace 'com.pawlowski.module_notifications'
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
@@ -28,6 +30,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         compose true
     }
@@ -37,7 +40,6 @@ android {
 }
 
 dependencies {
-
     testImplementation libs.junit
     androidTestImplementation libs.junit.androidx
     androidTestImplementation libs.espresso.androidx
@@ -55,32 +57,35 @@ dependencies {
     //Compose tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
-    //Coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //Hilt for Jetpack Compose navigation
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //coroutines
     implementation libs.bundles.coroutines
     testImplementation libs.coroutines.test
 
-    //Datetime picker dialog
-    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     //Orbit MVI
     implementation("org.orbit-mvi:orbit-viewmodel:4.3.2")
-
-    //Swipe to refresh
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.28.0"
+    testImplementation("org.orbit-mvi:orbit-test:4.3.2")
 
     //Paging
     implementation(libs.paging.runtime)
     implementation("androidx.paging:paging-compose:1.0.0-alpha17")
 
-    //Lottie
-    implementation "com.airbnb.android:lottie-compose:5.2.0"
-
     //Modules
-    implementation project(":core:utils")
     implementation project(":core:models")
+    implementation project(":core:utils")
+    implementation project(":core:commonui")
     implementation project(":core:sharedresources")
-
+    implementation project(":data:notifications")
 }

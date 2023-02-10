@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.reusable_components
+package com.pawlowski.commonui
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,7 +11,7 @@ import com.airbnb.lottie.compose.*
 @Composable
 fun LoginLottieAnimation(modifier: Modifier = Modifier)
 {
-    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.pawlowski.sportnite.R.raw.login_lottie_animation))
+    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.pawlowski.sharedresources.R.raw.login_lottie_animation))
     val progress by animateLottieCompositionAsState(
         lottieComposition,
         iterations = LottieConstants.IterateForever,

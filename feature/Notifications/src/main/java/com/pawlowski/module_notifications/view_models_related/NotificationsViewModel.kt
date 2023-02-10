@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.notifications_screen
+package com.pawlowski.module_notifications.view_models_related
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationsViewModel @Inject constructor(
+internal class NotificationsViewModel @Inject constructor(
     getPagedNotificationsUseCase: GetPagedNotificationsUseCase
 ): INotificationsViewModel, ViewModel() {
     override val container: Container<NotificationsState, NotificationsSideEffect>
@@ -18,7 +18,7 @@ class NotificationsViewModel @Inject constructor(
             initialState = NotificationsState()
         )
 
-    override val pagetNotifications by lazy {
+    override val pagedNotifications by lazy {
         getPagedNotificationsUseCase()
             .cachedIn(viewModelScope)
     }

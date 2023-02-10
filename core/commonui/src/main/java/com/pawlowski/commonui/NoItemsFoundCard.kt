@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.reusable_components
+package com.pawlowski.commonui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -29,7 +29,7 @@ fun NoItemsFoundCard()
 @Composable
 fun NoItemsFoundAnimation()
 {
-    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.pawlowski.sportnite.R.raw.search_not_found_animation))
+    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.pawlowski.sharedresources.R.raw.search_not_found_animation))
     val progress by animateLottieCompositionAsState(
         lottieComposition,
         iterations = LottieConstants.IterateForever,

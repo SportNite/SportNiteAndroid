@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.reusable_components
+package com.pawlowski.commonui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
