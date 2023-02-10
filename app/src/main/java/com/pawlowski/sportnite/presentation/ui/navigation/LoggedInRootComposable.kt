@@ -20,7 +20,7 @@ import com.pawlowski.module_notifications.ui.NotificationsScreen
 import com.pawlowski.mymeetings.ui.MyMeetingsScreen
 import com.pawlowski.playerdetails.ui.PlayerDetailsScreen
 import com.pawlowski.settings.ui.SettingsScreen
-import com.pawlowski.sportnite.R
+import com.pawlowski.sharedresources.R
 import com.pawlowski.sports.ui.SportScreen
 
 @OptIn(ExperimentalMaterial3Api::class)

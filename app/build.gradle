@@ -129,15 +129,12 @@ dependencies {
     //Mockk
     testImplementation libs.mockk
 
-
-    //Swipe to refresh
-    implementation libs.swipetorefresh
-
-
     //Modules
     implementation project(":core:utils")
     implementation project(":core:models")
     implementation project(":core:auth")
+    implementation project(":core:sharedresources")
+
 
 
     implementation project(":feature:AddOffer")
