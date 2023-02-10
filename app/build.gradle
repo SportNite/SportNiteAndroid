@@ -129,11 +129,6 @@ dependencies {
     //Mockk
     testImplementation libs.mockk
 
-
-    //Swipe to refresh
-    implementation libs.swipetorefresh
-
-
     //Modules
     implementation project(":core:utils")
     implementation project(":core:models")
