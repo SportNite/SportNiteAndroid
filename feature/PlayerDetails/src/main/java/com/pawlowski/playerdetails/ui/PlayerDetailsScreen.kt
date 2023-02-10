@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.playerdetails.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -23,9 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pawlowski.models.AdvanceLevel
 import com.pawlowski.models.Sport
-import com.pawlowski.sportnite.presentation.view_models_related.player_details.IPlayerDetailsViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.player_details.PlayerDetailsViewModel
+import com.pawlowski.playerdetails.view_model_related.IPlayerDetailsViewModel
+import com.pawlowski.playerdetails.view_model_related.PlayerDetailsViewModel
 import com.pawlowski.utils.dataOrNull
+import com.pawlowski.sharedresources.R
 
 
 @Composable
@@ -69,7 +70,7 @@ fun PlayerDetailsScreen(
                     shape = RectangleShape
                 ) {
                     IconButton(onClick = { onNavigateBack() }) {
-                        Icon(painter = painterResource(id = com.pawlowski.sportnite.R.drawable.back_icon), contentDescription = "")
+                        Icon(painter = painterResource(id = R.drawable.back_icon), contentDescription = "")
                     }
                 }
                 Card(shape = CircleShape, modifier = Modifier

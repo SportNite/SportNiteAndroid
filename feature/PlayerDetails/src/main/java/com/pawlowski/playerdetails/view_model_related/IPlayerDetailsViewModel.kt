@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.player_details
+package com.pawlowski.playerdetails.view_model_related
 
 import org.orbitmvi.orbit.ContainerHost
 

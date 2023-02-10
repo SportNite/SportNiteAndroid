@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.player_details
+package com.pawlowski.playerdetails.view_model_related
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayerDetailsViewModel @Inject constructor(
+internal class PlayerDetailsViewModel @Inject constructor(
     private val getPlayerDetailsUseCase: GetPlayerDetailsUseCase,
     savedStateHandle: SavedStateHandle,
 ): IPlayerDetailsViewModel, ViewModel() {

@@ -203,6 +203,7 @@ dependencies {
     implementation project(":feature:Notifications")
     implementation project(":feature:MeetingDetails")
     implementation project(':feature:Settings')
+    implementation project(':feature:PlayerDetails')
 
 
 }
