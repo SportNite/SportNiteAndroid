@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreRequest
 import com.pawlowski.domainutils.toUiData
-import com.pawlowski.localstorage.intelligent_cache.MeetingsIntelligentInMemoryCache
+import com.pawlowski.meetings.data.cache.MeetingsIntelligentInMemoryCache
 import com.pawlowski.models.Meeting
 import com.pawlowski.models.Sport
 import com.pawlowski.models.params_models.MeetingsFilter

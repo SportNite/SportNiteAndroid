@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pawlowski.models.mappers.getAvailableLevelsForSport
 import com.pawlowski.models.AdvanceLevel
-import com.pawlowski.sportnite.presentation.ui.utils.OrbitMviPreviewViewModel
+import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.models.mappers.getSportForPreview
 import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.ChooseAdvanceLevelScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.choose_advance_level_screen.ChooseAdvanceLevelScreenUiState

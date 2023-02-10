@@ -1,7 +1,6 @@
 package com.pawlowski.sportnite.presentation.ui.screens
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,10 +24,10 @@ import com.pawlowski.models.Sport
 import com.pawlowski.models.User
 import com.pawlowski.models.mappers.getMeetingsListForPreview
 import com.pawlowski.models.mappers.getUserForPreview
-import com.pawlowski.sportnite.presentation.ui.reusable_components.DisappearingSwipeRefresh
-import com.pawlowski.sportnite.presentation.ui.reusable_components.IncomingMeetingsRow
-import com.pawlowski.sportnite.presentation.ui.reusable_components.SportCard
-import com.pawlowski.sportnite.presentation.ui.utils.*
+import com.pawlowski.commonui.DisappearingSwipeRefresh
+import com.pawlowski.commonui.IncomingMeetingsRow
+import com.pawlowski.commonui.SportCard
+import com.pawlowski.commonui.utils.OrbitMviPreviewViewModel
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenSideEffect
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenUiState
 import com.pawlowski.sportnite.presentation.view_models_related.home_screen.HomeScreenViewModel
@@ -195,7 +194,6 @@ fun ProfileSegment(
             Text(text = user?.userName ?: "")
         }
         Spacer(modifier = Modifier.weight(1f))
-        val context = LocalContext.current
         FilledIconButton(onClick = {
             onNotificationsButtonClick()
         }) {

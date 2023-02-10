@@ -67,7 +67,6 @@ dependencies {
 
     //Compose tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
     implementation libs.core.ktx
@@ -75,8 +74,8 @@ dependencies {
     implementation libs.activity.compose
 
     testImplementation libs.junit
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation libs.junit.androidx
+    androidTestImplementation libs.espresso.androidx
 
 
     //Navigation
@@ -91,16 +90,15 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     //Hilt with WorkManager
-    implementation("androidx.hilt:hilt-work:1.0.0")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation(libs.hilt.workmanager)
+    kapt(libs.hilt.workmanager)
 
     //Hilt for Jetpack Compose navigation
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.bundles.coroutines
+    testImplementation libs.coroutines.test
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -135,7 +133,6 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:30.4.1')
-
     //Firebase auth
     implementation 'com.google.firebase:firebase-auth-ktx'
     //Firebase storage
@@ -148,13 +145,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 
     //Firebase coroutines support
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+    implementation libs.firebase.coroutines
 
     //Google sign in
     implementation "com.google.android.gms:play-services-auth:20.4.1"
 
     //Paging
-    implementation("androidx.paging:paging-runtime:3.1.1")
+    implementation(libs.paging.runtime)
     implementation("androidx.paging:paging-compose:1.0.0-alpha17")
 
     //Lottie
@@ -171,7 +168,7 @@ dependencies {
     implementation 'com.github.CanHub:Android-Image-Cropper:4.3.2'
 
     //Store
-    implementation "com.dropbox.mobile.store:store4:4.0.5"
+    implementation libs.store
 
     //Mockk
     testImplementation "io.mockk:mockk:1.13.2"
@@ -189,8 +186,11 @@ dependencies {
     implementation project(":core:network")
     implementation project(":core:auth")
     implementation project(":core:imageupload")
-    implementation project(":data:localstorage")
+    implementation project(":core:commonui")
+
     implementation project(":service:notificationservice")
+
+    implementation project(':data:commoncache')
     implementation project(":data:offers")
     implementation project(":data:meetings")
     implementation project(":data:responses")
@@ -198,6 +198,9 @@ dependencies {
     implementation project(":data:notifications")
     implementation project(":data:user")
 
+    implementation project(":feature:AddOffer")
+    implementation project(":feature:AccountDetails")
+    implementation project(":feature:Notifications")
 
 
 }

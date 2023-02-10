@@ -5,7 +5,7 @@ import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.fresh
 import com.pawlowski.domainutils.toUiData
 import com.pawlowski.localstorage.intelligent_cache.OffersIntelligentInMemoryCache
-import com.pawlowski.localstorage.intelligent_cache.OffersToAcceptIntelligentInMemoryCache
+import com.pawlowski.responses.data.cache.OffersToAcceptIntelligentInMemoryCache
 import com.pawlowski.models.*
 import com.pawlowski.models.params_models.MeetingsFilter
 import com.pawlowski.models.params_models.OffersFilter

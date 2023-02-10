@@ -1,5 +1,7 @@
 package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
 
+import com.pawlowski.addoffer.view_model_related.AddOfferScreenUiState
+import com.pawlowski.addoffer.view_model_related.AddOfferScreenViewModel
 import com.pawlowski.models.mappers.getSportFromSportId
 import com.pawlowski.utils.UiDate
 import io.mockk.mockk

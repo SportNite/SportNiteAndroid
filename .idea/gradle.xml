@@ -15,19 +15,24 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/auth" />
+            <option value="$PROJECT_DIR$/core/cacheutils" />
+            <option value="$PROJECT_DIR$/core/commonui" />
             <option value="$PROJECT_DIR$/core/domainutils" />
             <option value="$PROJECT_DIR$/core/imageupload" />
             <option value="$PROJECT_DIR$/core/models" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/sharedresources" />
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/data" />
-            <option value="$PROJECT_DIR$/data/localstorage" />
+            <option value="$PROJECT_DIR$/data/commoncache" />
             <option value="$PROJECT_DIR$/data/meetings" />
             <option value="$PROJECT_DIR$/data/notifications" />
             <option value="$PROJECT_DIR$/data/offers" />
             <option value="$PROJECT_DIR$/data/players" />
             <option value="$PROJECT_DIR$/data/responses" />
             <option value="$PROJECT_DIR$/data/user" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/AddOffer" />
             <option value="$PROJECT_DIR$/service" />
             <option value="$PROJECT_DIR$/service/notificationservice" />
           </set>

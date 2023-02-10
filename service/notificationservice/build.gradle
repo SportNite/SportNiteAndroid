@@ -40,28 +40,27 @@ dependencies {
 
 
     //Firebase coroutines support
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+    implementation libs.firebase.coroutines
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     //Hilt with WorkManager
-    implementation("androidx.hilt:hilt-work:1.0.0")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation(libs.hilt.workmanager)
+    kapt(libs.hilt.workmanager)
 
     //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.bundles.coroutines
+    testImplementation libs.coroutines.test
 
     //Tests
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation libs.junit
+    androidTestImplementation libs.junit.androidx
+    androidTestImplementation libs.espresso.androidx
 
     //Work Manager
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation(libs.workmanager.runtime)
 
     //Modules
     implementation project(":core:utils")

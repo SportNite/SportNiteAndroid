@@ -8,10 +8,6 @@ import com.pawlowski.models.*
 import com.pawlowski.models.params_models.*
 import com.pawlowski.network.*
 import com.pawlowski.network.mappers.*
-import com.pawlowski.network.mappers.toCreateOfferInput
-import com.pawlowski.network.mappers.toGameOfferList
-import com.pawlowski.network.mappers.toGameOfferToAcceptList
-import com.pawlowski.network.mappers.toUserFilterInput
 import com.pawlowski.network.type.*
 import com.pawlowski.utils.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -191,7 +187,7 @@ internal class GraphQLService @Inject constructor(
                                                 gte = Optional.present(OffsetDateTime.now().toString())
                                             )
                                         )
-                                    )
+                                    ),
                                 ).ifEmpty { null }
                             )
                     )

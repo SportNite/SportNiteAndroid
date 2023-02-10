@@ -142,7 +142,7 @@ internal fun ResponsesQuery.Response.toGameOfferToAccept(): GameOfferToAccept {
 internal fun ResponsesQuery.Data.toGameOfferToAcceptList(): List<GameOfferToAccept>? {
     return this.myOffers?.nodes?.flatMap { node ->
         node.responses.filter {
-            it.status != ResponseStatus.APPROVED
+            it.status != ResponseStatus.APPROVED && it.status != ResponseStatus.REJECTED
         }.map {
             it.toGameOfferToAccept()
         }
