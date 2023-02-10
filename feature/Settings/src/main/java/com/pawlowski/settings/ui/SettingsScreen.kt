@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.ui.screens
+package com.pawlowski.settings.ui
 
 import android.net.Uri
 import android.widget.Toast
@@ -22,11 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.pawlowski.sportnite.R
-import com.pawlowski.sportnite.presentation.view_models_related.settings_screen.ISettingsScreenViewModel
-import com.pawlowski.sportnite.presentation.view_models_related.settings_screen.SettingsScreenSideEffect
-import com.pawlowski.sportnite.presentation.view_models_related.settings_screen.SettingsScreenViewModel
-
+import com.pawlowski.settings.view_model_related.ISettingsScreenViewModel
+import com.pawlowski.settings.view_model_related.SettingsScreenSideEffect
+import com.pawlowski.settings.view_model_related.SettingsScreenViewModel
+import com.pawlowski.sharedresources.R
 
 @Composable
 fun SettingsScreen(
@@ -77,7 +76,7 @@ fun SettingsScreen(
 }
 
 @Composable
-fun OptionsCard(
+internal fun OptionsCard(
     modifier: Modifier = Modifier,
     onMyAccountClick: () -> Unit,
     onLogOutClick: () -> Unit
@@ -115,7 +114,7 @@ fun OptionsCard(
 }
 
 @Composable
-fun OptionRow(
+internal fun OptionRow(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(),
     iconId: Int,
@@ -170,7 +169,7 @@ fun OptionRow(
 }
 
 @Composable
-fun AccountCard(
+internal fun AccountCard(
     modifier: Modifier = Modifier,
     displayName: String,
     mail: String,

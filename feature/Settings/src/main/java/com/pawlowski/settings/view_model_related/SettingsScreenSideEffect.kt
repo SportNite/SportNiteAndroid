@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.settings_screen
+package com.pawlowski.settings.view_model_related
 
 sealed interface SettingsScreenSideEffect {
     object NavigateToLoginScreen: SettingsScreenSideEffect
