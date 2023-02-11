@@ -82,6 +82,9 @@ dependencies {
     //Image cropper
     implementation libs.imagecropper
 
+    //Mockk
+    testImplementation libs.mockk
+
     //Modules
     implementation project(":core:models")
     implementation project(":core:utils")

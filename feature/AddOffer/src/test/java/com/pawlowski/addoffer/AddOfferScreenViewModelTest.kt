@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite.presentation.view_models_related.add_offer_screen
+package com.pawlowski.addoffer
 
 import com.pawlowski.addoffer.view_model_related.AddOfferScreenUiState
 import com.pawlowski.addoffer.view_model_related.AddOfferScreenViewModel

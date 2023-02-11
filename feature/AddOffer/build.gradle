@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.orbit)
     testImplementation(libs.orbit.tests)
 
+    //Mockk
+    testImplementation libs.mockk
+
     //Modules
     implementation project(":core:models")
     implementation project(":core:utils")

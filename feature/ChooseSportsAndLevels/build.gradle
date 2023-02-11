@@ -83,6 +83,9 @@ dependencies {
     //Coil
     implementation(libs.coil)
 
+    //Mockk
+    testImplementation libs.mockk
+
     //Modules
     implementation project(":core:models")
     implementation project(":core:utils")
