@@ -161,5 +161,6 @@ dependencies {
     implementation project(':feature:WaitingForUserInfo')
 
     androidTestImplementation project(":core:network")
+    androidTestImplementation project(":data:user")
 
 }

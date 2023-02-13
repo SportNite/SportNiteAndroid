@@ -7,6 +7,6 @@ fun NavHostController.currentRoute(): String? {
     return currentBackStackEntry?.destination?.route
 }
 
-fun NavHostController.assertCurrentRouteEquals(expectedRoute: String) {
-    return assertThat(currentRoute()).isEqualTo(expectedRoute)
+fun NavHostController.assertCurrentRouteContains(expectedRoute: String) {
+    return assertThat(currentRoute()).contains(expectedRoute)
 }

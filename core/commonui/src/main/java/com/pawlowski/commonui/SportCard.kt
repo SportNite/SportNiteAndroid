@@ -12,9 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.pawlowski.models.Sport
+import com.pawlowski.utils.TestTag
 
 @Composable
 fun SportCard(
@@ -25,6 +27,7 @@ fun SportCard(
     Card(modifier = modifier
         .height(80.dp)
         .width(130.dp)
+        .testTag(TestTag.SPORT_CARD.name)
         .clickable {
             onSportClick(sport)
         }) {

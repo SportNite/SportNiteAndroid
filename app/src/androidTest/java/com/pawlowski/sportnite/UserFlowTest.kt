@@ -4,19 +4,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.google.common.truth.Truth.assertThat
 import com.pawlowski.sportnite.presentation.ui.navigation.LoggedInRootComposable
-import com.pawlowski.sportnite.utils.assertCurrentRouteEquals
-import com.pawlowski.sportnite.utils.currentRoute
+import com.pawlowski.sportnite.utils.assertCurrentRouteContains
+import com.pawlowski.utils.TestTag
+import com.pawlowski.utils.TestTag.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +27,7 @@ class UserFlowTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    lateinit var navController: TestNavHostController
+    private lateinit var navController: TestNavHostController
 
     @Before
     fun setUp() {
@@ -49,10 +46,38 @@ class UserFlowTest {
     }
 
     @Test
-    fun appNavHost_verifyStartDestination() {
+    fun startDestination_equalsHome() {
         composeTestRule
-            .onNodeWithText("Home")
+            .onNodeWithTag(NAVIGATION_HOME.name)
             .assertIsDisplayed()
-        navController.assertCurrentRouteEquals(expectedRoute = "Home")
+
+        navController.assertCurrentRouteContains(expectedRoute = "Home")
+    }
+
+    @Test
+    fun verifyBottomNavBarNavigation() {
+        performClick(NAVIGATION_MY_MEETINGS)
+        navController.assertCurrentRouteContains(expectedRoute = "MyMeetings")
+
+        performClick(NAVIGATION_FIND_PLAYERS)
+        navController.assertCurrentRouteContains(expectedRoute = "FindPlayers")
+
+        performClick(NAVIGATION_HOME)
+        navController.assertCurrentRouteContains(expectedRoute = "Home")
+
+    }
+
+    @Test
+    fun verifyNavigateToSportScreen() {
+        performClick(SPORT_CARD)
+        navController.assertCurrentRouteContains(expectedRoute = "Sport")
+
+    }
+
+    private fun performClick(testTag: TestTag) {
+        composeTestRule
+            .onNodeWithTag(testTag.name)
+            .assertIsDisplayed()
+            .performClick()
     }
 }

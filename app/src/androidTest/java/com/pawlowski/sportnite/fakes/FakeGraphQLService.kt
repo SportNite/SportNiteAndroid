@@ -16,8 +16,22 @@ object FakeGraphQLService: IGraphQLService {
         )
     }
 
-    private fun <T>successSinglePageResource(data: List<T>): Resource<PaginationPage<T>> {
+    private fun <T>emptyPage(): PaginationPage<T> {
+        return PaginationPage(
+            hasNextPage = false,
+            endCursor = null,
+            data = listOf()
+        )
+    }
+
+    private fun <T>successSinglePageResource(
+        data: List<T>
+    ): Resource<PaginationPage<T>> {
         return Resource.Success(singlePage(data = data))
+    }
+
+    private fun <T>successEmptyPageResource(): Resource<PaginationPage<T>> {
+        return Resource.Success(emptyPage())
     }
 
     override suspend fun getOffers(
@@ -25,15 +39,22 @@ object FakeGraphQLService: IGraphQLService {
         cursor: String?,
         pageSize: Int
     ): Resource<PaginationPage<GameOffer>> {
-        return successSinglePageResource(listOf())
-    }
+        return if(cursor == null) {
+            successSinglePageResource(listOf())
+        }
+        else
+            successEmptyPageResource()    }
 
     override suspend fun getPlayers(
         filters: PlayersFilter,
         cursor: String?,
         pageSize: Int
     ): Resource<PaginationPage<Player>> {
-        return successSinglePageResource(listOf())
+        return if(cursor == null) {
+            successSinglePageResource(listOf())
+        }
+        else
+            successEmptyPageResource()
     }
 
     override suspend fun getOffersToAccept(
@@ -41,8 +62,11 @@ object FakeGraphQLService: IGraphQLService {
         cursor: String?,
         pageSize: Int
     ): Resource<PaginationPage<GameOfferToAccept>> {
-        return successSinglePageResource(listOf())
-    }
+        return if(cursor == null) {
+            successSinglePageResource(listOf())
+        }
+        else
+            successEmptyPageResource()    }
 
     override suspend fun getPlayerDetails(playerUid: String): Resource<PlayerDetails> {
         TODO("Not yet implemented")
@@ -63,8 +87,11 @@ object FakeGraphQLService: IGraphQLService {
         cursor: String?,
         pageSize: Int
     ): Resource<PaginationPage<UserNotification>> {
-        return successSinglePageResource(listOf())
-    }
+        return if(cursor == null) {
+            successSinglePageResource(listOf())
+        }
+        else
+            successEmptyPageResource()    }
 
     override suspend fun createOffer(offerParams: AddGameOfferParams): Resource<String> {
         TODO("Not yet implemented")

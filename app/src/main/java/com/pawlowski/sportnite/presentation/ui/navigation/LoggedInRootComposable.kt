@@ -23,6 +23,7 @@ import com.pawlowski.playerdetails.ui.PlayerDetailsScreen
 import com.pawlowski.settings.ui.SettingsScreen
 import com.pawlowski.sharedresources.R
 import com.pawlowski.sports.ui.SportScreen
+import com.pawlowski.utils.TestTag
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,17 +42,20 @@ fun LoggedInRootComposable(
         NavigationItem(
             text = "Home",
             iconId = R.drawable.home_icon,
-            route = "Home"
+            route = "Home",
+            testTag = TestTag.NAVIGATION_HOME
         ),
         NavigationItem(
             text = "Moje spotkania",
             iconId = R.drawable.my_meetings_icon,
-            route = "MyMeetings"
+            route = "MyMeetings",
+            testTag = TestTag.NAVIGATION_MY_MEETINGS
         ),
         NavigationItem(
             text = "Szukaj ludzi",
             iconId = R.drawable.person_search_icon,
-            route = "FindPlayers"
+            route = "FindPlayers",
+            testTag = TestTag.NAVIGATION_FIND_PLAYERS
         )
     )
     val currentNavigationItem = remember {

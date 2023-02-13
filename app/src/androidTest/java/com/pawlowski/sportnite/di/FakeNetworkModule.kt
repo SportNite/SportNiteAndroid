@@ -1,4 +1,4 @@
-package com.pawlowski.sportnite
+package com.pawlowski.sportnite.di
 
 import com.pawlowski.network.data.IGraphQLService
 import com.pawlowski.network.di.NetworkModule
