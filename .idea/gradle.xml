@@ -35,6 +35,7 @@
             <option value="$PROJECT_DIR$/feature/AccountDetails" />
             <option value="$PROJECT_DIR$/feature/AddOffer" />
             <option value="$PROJECT_DIR$/feature/Authentication" />
+            <option value="$PROJECT_DIR$/feature/ChooseCity" />
             <option value="$PROJECT_DIR$/feature/ChooseSportsAndLevels" />
             <option value="$PROJECT_DIR$/feature/FindPlayerrs" />
             <option value="$PROJECT_DIR$/feature/FullScreenList" />

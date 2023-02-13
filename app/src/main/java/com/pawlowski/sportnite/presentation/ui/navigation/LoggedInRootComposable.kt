@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,8 +28,8 @@ import com.pawlowski.sports.ui.SportScreen
 @Composable
 fun LoggedInRootComposable(
     onNavigateToSignInScreen: () -> Unit,
+    navController: NavHostController = rememberNavController()
 ) {
-    val navController = rememberNavController()
     val navBackStackEntryState = navController.currentBackStackEntryAsState()
     val currentRoute = remember(navBackStackEntryState) {
         derivedStateOf {
